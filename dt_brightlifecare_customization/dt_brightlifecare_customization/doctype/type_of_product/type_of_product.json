@@ -4,9 +4,15 @@
  "autoname": "field:name1",
  "creation": "2025-03-25 17:01:43.175355",
  "doctype": "DocType",
+ "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "name1"
+  "name1",
+  "lft",
+  "rgt",
+  "is_group",
+  "old_parent",
+  "parent_type_of_product"
  ],
  "fields": [
   {
@@ -15,15 +21,51 @@
    "fieldtype": "Data",
    "label": "Name",
    "unique": 1
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "Old Parent",
+   "options": "Type Of Product"
+  },
+  {
+   "fieldname": "parent_type_of_product",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "Parent Type Of Product",
+   "options": "Type Of Product"
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_tree": 1,
  "links": [],
- "modified": "2025-03-25 17:02:08.191595",
+ "modified": "2025-03-26 14:54:54.412844",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Type Of Product",
  "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_type_of_product",
  "owner": "Administrator",
  "permissions": [
   {
@@ -39,7 +81,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
