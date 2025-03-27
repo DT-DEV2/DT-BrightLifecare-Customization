@@ -249,3 +249,10 @@ fixtures = [
         "filters": [["module", "in", ["DT-BrightLifecare-Customization"]]]
     },
 ]
+
+
+doc_events = {
+    "Contact": {
+        "before_save": "dt_brightlifecare_customization.public.py.contact.create_user_if_not_exists"
+    }
+}
