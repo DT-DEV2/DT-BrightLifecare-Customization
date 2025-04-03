@@ -1,0 +1,210 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-04-03 14:23:43.944928",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "document_type",
+  "update_existing_role",
+  "column_break_otsw",
+  "role",
+  "column_break_mtqo",
+  "level",
+  "section_break_zpui",
+  "select_",
+  "create_",
+  "cancel_",
+  "email_",
+  "export_",
+  "column_break_zwvn",
+  "read_",
+  "delete_",
+  "amend_",
+  "report_",
+  "share_",
+  "column_break_agur",
+  "write_",
+  "submit_",
+  "print_",
+  "import_",
+  "section_break_fejk",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_fejk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "DT Role Permission Manager",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Link",
+   "label": "Document Type",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_otsw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_mtqo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "update_existing_role",
+   "fieldtype": "Check",
+   "is_virtual": 1,
+   "label": "Update Existing Role"
+  },
+  {
+   "fieldname": "section_break_zpui",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_zwvn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_agur",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "role",
+   "fieldtype": "Link",
+   "label": "Role",
+   "options": "Role",
+   "reqd": 1
+  },
+  {
+   "fieldname": "level",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Level",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "select_",
+   "fieldtype": "Check",
+   "label": "Select"
+  },
+  {
+   "default": "0",
+   "fieldname": "create_",
+   "fieldtype": "Check",
+   "label": "Create"
+  },
+  {
+   "default": "0",
+   "fieldname": "cancel_",
+   "fieldtype": "Check",
+   "label": "Cancel"
+  },
+  {
+   "default": "0",
+   "fieldname": "email_",
+   "fieldtype": "Check",
+   "label": "Email"
+  },
+  {
+   "default": "0",
+   "fieldname": "export_",
+   "fieldtype": "Check",
+   "label": "Export"
+  },
+  {
+   "default": "0",
+   "fieldname": "read_",
+   "fieldtype": "Check",
+   "label": "Read"
+  },
+  {
+   "default": "0",
+   "fieldname": "delete_",
+   "fieldtype": "Check",
+   "label": "Delete"
+  },
+  {
+   "default": "0",
+   "fieldname": "amend_",
+   "fieldtype": "Check",
+   "label": "Amend"
+  },
+  {
+   "default": "0",
+   "fieldname": "report_",
+   "fieldtype": "Check",
+   "label": "Report"
+  },
+  {
+   "default": "0",
+   "fieldname": "share_",
+   "fieldtype": "Check",
+   "label": "Share"
+  },
+  {
+   "default": "0",
+   "fieldname": "write_",
+   "fieldtype": "Check",
+   "label": "Write"
+  },
+  {
+   "default": "0",
+   "fieldname": "submit_",
+   "fieldtype": "Check",
+   "label": "Submit"
+  },
+  {
+   "default": "0",
+   "fieldname": "print_",
+   "fieldtype": "Check",
+   "label": "Print"
+  },
+  {
+   "default": "0",
+   "fieldname": "import_",
+   "fieldtype": "Check",
+   "label": "Import"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-04-03 14:30:48.468076",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "DT Role Permission Manager",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
