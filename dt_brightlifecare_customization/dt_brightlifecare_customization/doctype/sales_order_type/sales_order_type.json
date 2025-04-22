@@ -1,0 +1,46 @@
+{
+ "actions": [],
+ "autoname": "field:sales_order_type",
+ "creation": "2025-04-21 16:15:13.636454",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sales_order_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "sales_order_type",
+   "fieldtype": "Data",
+   "label": "Sales Order Type",
+   "unique": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-04-21 16:17:11.862059",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Sales Order Type",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
