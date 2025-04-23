@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Purchase Invoice",
+  "enabled": 1,
+  "modified": "2025-04-23 13:23:47.344238",
+  "module": "DT-BrightLifecare-Customization",
+  "name": "Fetching Supplier Invoice Number and Delivery Note Date",
+  "script": "frappe.ui.form.on('Purchase Invoice', {\n    before_load: function(frm) {\n        if (frm.doc.items && frm.doc.items[0].purchase_receipt) {\n            // Get the purchase_receipt from the first item\n            var purchase_receipt = frm.doc.items[0].purchase_receipt;\n            \n            // Fetch the required fields from the Purchase Receipt document\n            frappe.db.get_value('Purchase Receipt', purchase_receipt, ['supplier_delivery_note', 'custom_supplier_delivery_note_date'])\n                .then(r => {\n                    var purchase_receipt_doc = r.message;\n                    if (purchase_receipt_doc) {\n                        // Set these fetched values to fields in the doc\n                        frm.set_value('bill_no', purchase_receipt_doc.supplier_delivery_note);\n                        frm.set_value('bill_date', purchase_receipt_doc.custom_supplier_delivery_note_date);\n                        // Refresh the fields to ensure they are updated in the UI\n                        frm.refresh_field('bill_no');\n                        frm.refresh_field('bill_date');\n                    }\n                });\n        }\n    }\n});",
+  "view": "Form"
+ }
+]

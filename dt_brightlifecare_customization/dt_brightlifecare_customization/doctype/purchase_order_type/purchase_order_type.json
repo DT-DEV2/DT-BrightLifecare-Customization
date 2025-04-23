@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:purchase_order_type",
- "creation": "2025-04-21 16:20:45.611689",
+ "creation": "2025-04-22 21:44:35.728874",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -12,7 +12,6 @@
   {
    "fieldname": "purchase_order_type",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Purchase Order Type",
    "unique": 1
   }
@@ -20,7 +19,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-21 16:21:25.077588",
+ "modified": "2025-04-22 21:45:14.617127",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Purchase Order Type",

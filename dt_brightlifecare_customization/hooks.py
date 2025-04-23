@@ -242,17 +242,32 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+doctype_js = {
+    "Sales Order" : "public/js/sales_order.js",
+    "Purchase Order" : "public/js/purchase_order.js",
+    "Warehouse" : "public/js/warehouse.js",
+    "Stock Entry": "public/js/stock_entry.js",
+}
+
 
 fixtures = [
     {
         "dt": "Custom Field", 
         "filters": [["module", "in", ["DT-BrightLifecare-Customization"]]]
     },
+    {
+        "dt": "Client Script", 
+        "filters": [["module", "in", ["DT-BrightLifecare-Customization"]]]
+    }
 ]
 
 
 doc_events = {
     "Contact": {
         "before_save": "dt_brightlifecare_customization.public.py.contact.create_user_if_not_exists"
-    }
+    },
+    "Purchase Receipt": {
+        "validate": "dt_brightlifecare_customization.public.py.purchase_receipt.validate_supplier_delivery_note"
+        }
+
 }
