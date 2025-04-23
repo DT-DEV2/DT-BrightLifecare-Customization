@@ -1,28 +1,27 @@
 {
  "actions": [],
- "autoname": "field:sales_order_type",
- "creation": "2025-04-22 21:37:28.051901",
+ "allow_rename": 1,
+ "creation": "2025-04-22 20:42:25.375273",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "sales_order_type"
+  "terms_and_conditions"
  ],
  "fields": [
   {
-   "fieldname": "sales_order_type",
-   "fieldtype": "Data",
-   "label": "Sales Order Type",
-   "unique": 1
+   "fieldname": "terms_and_conditions",
+   "fieldtype": "Table",
+   "label": "Terms and Condtions",
+   "options": "Terms and conditions Details"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-22 21:42:50.182136",
+ "modified": "2025-04-22 20:48:54.815934",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Sales Order Type",
- "naming_rule": "By fieldname",
+ "name": "Terms and Conditions Group",
  "owner": "Administrator",
  "permissions": [
   {
