@@ -268,6 +268,9 @@ doc_events = {
     },
     "Purchase Receipt": {
         "validate": "dt_brightlifecare_customization.public.py.purchase_receipt.validate_supplier_delivery_note"
-        }
+    },
+    "Purchase Order": {
+        "before_save": "dt_brightlifecare_customization.public.py.purchase_order.before_save"
+    }
 
 }
