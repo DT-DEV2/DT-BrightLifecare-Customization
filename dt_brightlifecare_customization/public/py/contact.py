@@ -33,9 +33,54 @@ def create_user_if_not_exists(self, method):
             "middle_name": self.middle_name,
             "last_name": self.last_name,
             "gender": self.gender,
-            "send_welcome_email": 0,  # Avoid sending email automatically
+            "send_welcome_email": 1,  # Avoid sending email automatically
             "roles": [{"role": "ZDT Merchant Onboarding"}],  # Assign the Supplier role
-            "enabled": 1
+            "enabled": 1,
+            "module_profile": "",  # This ensures no modules are ticked
+            "block_modules": [  # Explicitly block all modules
+                {"module": "Accounts"},
+                {"module": "Assets"},
+                {"module": "Audit Trail"},
+                {"module": "Automation"},
+                {"module": "Bulk Transaction"},
+                {"module": "Buying"},
+                {"module": "Communication"},
+                {"module": "Contacts"},
+                {"module": "Core"},
+                {"module": "CRM"},
+                {"module": "Custom"},
+                {"module": "Desk"},
+                {"module": "DT-BrightLifecare-Customization"},
+                {"module": "EDI"},
+                {"module": "Email"},
+                {"module": "ERPNext Integrations"},
+                {"module": "Geo"},
+                {"module": "GST India"},
+                {"module": "HR"},
+                {"module": "Income Tax India"},
+                {"module": "Integrations"},
+                {"module": "Maintenance"},
+                {"module": "Manufacturing"},
+                {"module": "Payment Gateways"},
+                {"module": "Payments"},
+                {"module": "Payroll"},
+                {"module": "Portal"},
+                {"module": "Printing"},
+                {"module": "Projects"},
+                {"module": "Quality Management"},
+                {"module": "Regional"},
+                {"module": "Selling"},
+                {"module": "Setup"},
+                {"module": "Social"},
+                {"module": "Stock"},
+                {"module": "Subcontracting"},
+                {"module": "Support"},
+                {"module": "Telephony"},
+                {"module": "Utilities"},
+                {"module": "VAT India"},
+                {"module": "Website"},
+                {"module": "Workflow"},
+            ]
         })
         user.insert(ignore_permissions=True)
         frappe.msgprint(f"User {self.email_id} created successfully.")
