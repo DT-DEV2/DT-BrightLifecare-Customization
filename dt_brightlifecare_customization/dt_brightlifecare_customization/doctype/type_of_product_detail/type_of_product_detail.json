@@ -6,7 +6,10 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "type"
+  "type",
+  "fssai_license",
+  "ayush_license",
+  "drugs_and_cosmetic_license"
  ],
  "fields": [
   {
@@ -16,18 +19,46 @@
    "label": "Type",
    "options": "Type Of Product",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "type.custom_fssai_license",
+   "fieldname": "fssai_license",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "FSSAI License",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "type.custom_ayush_license",
+   "fieldname": "ayush_license",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "AYUSH License",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "type.custom_drugs__cosmetic_license",
+   "fieldname": "drugs_and_cosmetic_license",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Drugs and Cosmetic License",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-03-26 14:54:03.458828",
+ "modified": "2025-04-25 13:41:56.756882",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Type Of Product Detail",
  "owner": "Administrator",
  "permissions": [],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

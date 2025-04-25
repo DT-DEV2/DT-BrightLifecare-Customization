@@ -247,6 +247,7 @@ doctype_js = {
     "Purchase Order" : "public/js/purchase_order.js",
     "Warehouse" : "public/js/warehouse.js",
     "Stock Entry": "public/js/stock_entry.js",
+    "Supplier" : "public/js/supplier.js",
 }
 
 
@@ -271,6 +272,9 @@ doc_events = {
     },
     "Purchase Order": {
         "before_save": "dt_brightlifecare_customization.public.py.purchase_order.before_save"
+    },
+    "Supplier": {
+        "before_save": "dt_brightlifecare_customization.public.py.supplier.before_save"
     }
 
 }
