@@ -278,4 +278,4 @@ def before_save(doc, method):
                 "subject": subject,
                 "content": content,
                 "comment_by": comment_by
-            }).insert(ignore_permissions=True)
+            }).insert()

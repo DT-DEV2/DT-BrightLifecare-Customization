@@ -82,7 +82,7 @@ def create_user_if_not_exists(self, method):
                 {"module": "Workflow"},
             ]
         })
-        user.insert(ignore_permissions=True)
+        user.insert()
         frappe.msgprint(f"User {self.email_id} created successfully.")
 
 
@@ -100,6 +100,6 @@ def create_user_if_not_exists(self, method):
                 "for_value": supplier_name,  # Assign the Supplier from links
                 "apply_to_all_doctypes": 1,  # Optional: restrict to specific doctypes
             })
-            user_perm.insert(ignore_permissions=True)
+            user_perm.insert()
             frappe.msgprint(f"User Permission for Supplier {supplier_name} created.")
 
