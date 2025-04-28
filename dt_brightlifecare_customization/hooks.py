@@ -248,6 +248,7 @@ doctype_js = {
     "Warehouse" : "public/js/warehouse.js",
     "Stock Entry": "public/js/stock_entry.js",
     "Supplier" : "public/js/supplier.js",
+    "Custom Field" : "public/js/custom_field.js",
 }
 
 
