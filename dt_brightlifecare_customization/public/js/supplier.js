@@ -86,6 +86,29 @@ frappe.ui.form.on('Supplier', {
 
 
 
+
+    onload_post_render: function(frm) {
+        toggle_fssai_license_field(frm);
+
+        // Safe to use .grid.on now
+        if (frm.fields_dict.custom_type_of_product.grid) {
+            frm.fields_dict.custom_type_of_product.grid.on('after_add', function () {
+                toggle_fssai_license_field(frm);
+            });
+
+            frm.fields_dict.custom_type_of_product.grid.on('after_delete', function () {
+                setTimeout(() => {
+                    toggle_fssai_license_field(frm);
+                }, 100); // Let deletion reflect first
+            });
+        }
+    },
+
+    refresh: function(frm) {
+        toggle_fssai_license_field(frm);
+    },
+    
+
     
 
     
@@ -372,3 +395,28 @@ frappe.ui.form.on('Supplier', {
 
 
 
+// frappe.ui.form.on('Type Of Product Detail', {
+//     custom_type_of_product: function(frm, cdt, cdn) {
+//         check_fssai_requirement(frm);
+//     },
+    
+// });
+
+
+
+
+
+frappe.ui.form.on('Type Of Product Detail', {
+    fssai_license: function(frm, cdt, cdn) {
+        // Run check every time fssai_license is changed in any row
+        toggle_fssai_license_field(frm);
+    }
+});
+
+
+function toggle_fssai_license_field(frm) {
+    const rows = frm.doc.custom_type_of_product || [];
+    const any_checked = rows.some(row => row.fssai_license === 1);
+
+    frm.toggle_display('custom_fssai_licence_number', any_checked);
+}
