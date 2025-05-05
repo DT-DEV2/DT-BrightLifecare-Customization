@@ -148,6 +148,27 @@
 import frappe
 
 def before_save(doc, method):
+    if not doc.custom_fssai_licence_number:
+        doc.custom_fssai_licence_attachment = ""
+        doc.custom_fssai_licence_valid_from = ""
+        doc.custom_fssai_licence_valid_till = ""
+        doc.custom_product_common_name_as_per_fssai = ""
+        doc.custom_hsn_for_common_name = ""
+        doc.custom_fssai_signed_declaration_attachment = ""
+
+    if not doc.custom_ayush_license_number:
+        doc.custom_ayush_license_attachment = ""
+        doc.custom_ayush_license_valid_from = ""
+        doc.custom_ayush_license_valid_till = ""
+        doc.custom_ayush_signed_declaration_attachment = ""
+
+    if not doc.custom_drugs__cosmetic_license_number:
+        doc.custom_drugs__cosmetic_license_attachment = ""
+        doc.custom_drugs__cosmetic_license_valid_from = ""
+        doc.custom_drugs__cosmetic_license_valid_till = ""
+        doc.custom_dcl_signed_declaration_attachment = ""
+
+
     approvals = [
         ("custom_coip_approval", "custom_coip_remarks", "COI/P"),
         ("custom_br_approval", "custom_br_remarks", "BR"),
