@@ -69,14 +69,14 @@
 
 
 
-frappe.ui.form.on('Supplier Quotation', {
-    refresh: function(frm) {
-        frm.fields_dict['items'].grid.get_field('item_code').get_query = function(doc, cdt, cdn) {
-            // Custom code for displaying a message when "Create" -> "Purchase Order" button is clicked
-            frm.page.add_action_icon('octicon octicon-info', function() {
-                frappe.msgprint(__('This is your custom message!'));
-            });
-        }
-    }
-});
+// frappe.ui.form.on('Supplier Quotation', {
+//     refresh: function(frm) {
+//         frm.fields_dict['items'].grid.get_field('item_code').get_query = function(doc, cdt, cdn) {
+//             // Custom code for displaying a message when "Create" -> "Purchase Order" button is clicked
+//             frm.page.add_action_icon('octicon octicon-info', function() {
+//                 frappe.msgprint(__('This is your custom message!'));
+//             });
+//         }
+//     }
+// });
 
