@@ -8,6 +8,8 @@
  "field_order": [
   "type",
   "fssai_license",
+  "relabeller_fssai_license",
+  "distributer_fssai_license",
   "ayush_license",
   "drugs_and_cosmetic_license"
  ],
@@ -46,13 +48,31 @@
    "in_list_view": 1,
    "label": "Drugs and Cosmetic License",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "type.custom_relabeller_fssai_license",
+   "fieldname": "relabeller_fssai_license",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Relabeller FSSAI License",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "type.custom_distributer_fssai_license",
+   "fieldname": "distributer_fssai_license",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Distributer FSSAI License",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-04-25 13:41:56.756882",
+ "modified": "2025-05-15 16:01:03.478977",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Type Of Product Detail",

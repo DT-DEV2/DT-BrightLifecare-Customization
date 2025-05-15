@@ -103,3 +103,29 @@ def create_user_if_not_exists(self, method):
             user_perm.insert()
             frappe.msgprint(f"User Permission for Supplier {supplier_name} created.")
 
+
+
+
+
+
+
+
+
+
+
+from frappe.exceptions import DuplicateEntryError
+
+def share_contact_with_email(doc, method):
+    # Skip if no email
+    if not doc.email_id:
+        return
+
+    # Skip if Contact document doesn't actually exist yet
+    if not frappe.db.exists("Contact", doc.name):
+        return
+
+    # Try to share the Contact with the email_id
+    try:
+        frappe.share.add("Contact", doc.name, doc.email_id, read=1, write=0)
+    except DuplicateEntryError:
+        pass  # Already shared, ignore

@@ -114,12 +114,116 @@ frappe.ui.form.on('Supplier', {
         toggle_fssai_license_field(frm);
         toggle_ayush_license_field(frm);
         toggle_dc_license_field(frm);
+        toggle_relabeller_license_field(frm);
+        toggle_distributer_license_field(frm);
     },
 
     refresh: function(frm) {
+        frm.remove_custom_button('Get Supplier Group Details', 'Actions');
+        frm.remove_custom_button('Link with Customer', 'Actions');
+
         toggle_fssai_license_field(frm);
         toggle_ayush_license_field(frm);
         toggle_dc_license_field(frm);
+        toggle_relabeller_license_field(frm);
+        toggle_distributer_license_field(frm);
+
+
+    },
+
+    custom_download_fssai_declaration: function(frm) {
+        // Get the single FSSAI Declaration document
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Download FSSAI Declaration',
+                fieldname: 'declaration'
+            },
+            callback: function(response) {
+                if (response.message && response.message.declaration) {
+                    // Open the file URL in new tab to trigger download
+                    window.open(response.message.declaration, '_blank');
+                } else {
+                    frappe.msgprint(__('No FSSAI Declaration file found'));
+                }
+            }
+        });
+    },
+
+    custom_download_ayush_declaration: function(frm) {
+        // Get the single FSSAI Declaration document
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Download AYUSH Declaration',
+                fieldname: 'declaration'
+            },
+            callback: function(response) {
+                if (response.message && response.message.declaration) {
+                    // Open the file URL in new tab to trigger download
+                    window.open(response.message.declaration, '_blank');
+                } else {
+                    frappe.msgprint(__('No AYUSH Declaration file found'));
+                }
+            }
+        });
+    },
+
+    custom_download_dcl_declaration: function(frm) {
+        // Get the single FSSAI Declaration document
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Download DCL Declaration',
+                fieldname: 'declaration'
+            },
+            callback: function(response) {
+                if (response.message && response.message.declaration) {
+                    // Open the file URL in new tab to trigger download
+                    window.open(response.message.declaration, '_blank');
+                } else {
+                    frappe.msgprint(__('No DCL Declaration file found'));
+                }
+            }
+        });
+    },
+
+    custom_relabeller_download_fssai_declaration: function(frm) {
+        // Get the single FSSAI Declaration document
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Download Relabeller FSSAI Declaration',
+                fieldname: 'declaration'
+            },
+            callback: function(response) {
+                if (response.message && response.message.declaration) {
+                    // Open the file URL in new tab to trigger download
+                    window.open(response.message.declaration, '_blank');
+                } else {
+                    frappe.msgprint(__('No Relabeller FSSAI Declaration file found'));
+                }
+            }
+        });
+    },
+
+    custom_distributer_download_fssai_declaration: function(frm) {
+        // Get the single FSSAI Declaration document
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Download Distributer FSSAI Declaration',
+                fieldname: 'declaration'
+            },
+            callback: function(response) {
+                if (response.message && response.message.declaration) {
+                    // Open the file URL in new tab to trigger download
+                    window.open(response.message.declaration, '_blank');
+                } else {
+                    frappe.msgprint(__('No Distributer FSSAI Declaration file found'));
+                }
+            }
+        });
     },
 
     
@@ -442,6 +546,14 @@ frappe.ui.form.on('Type Of Product Detail', {
         toggle_dc_license_field(frm)
     },
 
+    relabeller_fssai_license: function(frm, cdt, cdn) {
+        toggle_relabeller_license_field(frm)
+    },
+
+    distributer_fssai_license: function(frm, cdt, cdn) {
+        toggle_distributer_license_field(frm)
+    },
+
     custom_type_of_product_remove: function(frm) {
         toggle_fssai_license_field(frm);
         toggle_ayush_license_field(frm);
@@ -453,6 +565,8 @@ frappe.ui.form.on('Type Of Product Detail', {
         toggle_fssai_license_field(frm);
         toggle_ayush_license_field(frm);
         toggle_dc_license_field(frm);
+        toggle_relabeller_license_field(frm);
+        toggle_distributer_license_field(frm);
     }
 });
 
@@ -472,4 +586,16 @@ function toggle_dc_license_field(frm) {
     const rows = frm.doc.custom_type_of_product || [];
     const any_checked = rows.some(row => row.drugs_and_cosmetic_license === 1);
     frm.toggle_display('custom_drugs__cosmetic_license_number', any_checked);
+}
+
+function toggle_relabeller_license_field(frm) {
+    const rows = frm.doc.custom_type_of_product || [];
+    const any_checked = rows.some(row => row.relabeller_fssai_license === 1);
+    frm.toggle_display('custom_relabeller_fssai_licence_number', any_checked);
+}
+
+function toggle_distributer_license_field(frm) {
+    const rows = frm.doc.custom_type_of_product || [];
+    const any_checked = rows.some(row => row.distributer_fssai_license === 1);
+    frm.toggle_display('custom_distributer_fssai_license_number', any_checked);
 }
