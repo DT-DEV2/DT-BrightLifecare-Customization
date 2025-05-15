@@ -249,6 +249,8 @@ doctype_js = {
     "Stock Entry": "public/js/stock_entry.js",
     "Supplier" : "public/js/supplier.js",
     "Custom Field" : "public/js/custom_field.js",
+    "Request for Quotation" : "public/js/rfq.js",
+    "Supplier Quotation" : "public/js/supplier_quotation.js",
 }
 
 
@@ -266,7 +268,8 @@ fixtures = [
 
 doc_events = {
     "Contact": {
-        "before_save": "dt_brightlifecare_customization.public.py.contact.create_user_if_not_exists"
+        "before_save": "dt_brightlifecare_customization.public.py.contact.create_user_if_not_exists",
+        "after_insert": "dt_brightlifecare_customization.public.py.contact.share_contact_with_email",
     },
     "Purchase Receipt": {
         "validate": "dt_brightlifecare_customization.public.py.purchase_receipt.validate_supplier_delivery_note"
@@ -276,6 +279,9 @@ doc_events = {
     },
     "Supplier": {
         "before_save": "dt_brightlifecare_customization.public.py.supplier.before_save"
+    },
+    "Request for Quotation": {
+        "before_save": "dt_brightlifecare_customization.public.py.rfq.validate_supplier_items"
     }
 
 }
