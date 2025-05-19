@@ -10,6 +10,8 @@
   "fssai_license",
   "relabeller_fssai_license",
   "distributer_fssai_license",
+  "importer_fssai_license",
+  "trader_fssai_license",
   "ayush_license",
   "drugs_and_cosmetic_license"
  ],
@@ -24,7 +26,7 @@
   },
   {
    "default": "0",
-   "fetch_from": "type.custom_fssai_license",
+   "fetch_from": "type.fssai_license",
    "fieldname": "fssai_license",
    "fieldtype": "Check",
    "in_list_view": 1,
@@ -33,7 +35,7 @@
   },
   {
    "default": "0",
-   "fetch_from": "type.custom_ayush_license",
+   "fetch_from": "type.ayush_license",
    "fieldname": "ayush_license",
    "fieldtype": "Check",
    "in_list_view": 1,
@@ -42,7 +44,7 @@
   },
   {
    "default": "0",
-   "fetch_from": "type.custom_drugs__cosmetic_license",
+   "fetch_from": "type.drugs_and_cosmetic_license",
    "fieldname": "drugs_and_cosmetic_license",
    "fieldtype": "Check",
    "in_list_view": 1,
@@ -51,7 +53,7 @@
   },
   {
    "default": "0",
-   "fetch_from": "type.custom_relabeller_fssai_license",
+   "fetch_from": "type.relabeller_fssai_license",
    "fieldname": "relabeller_fssai_license",
    "fieldtype": "Check",
    "in_list_view": 1,
@@ -60,11 +62,29 @@
   },
   {
    "default": "0",
-   "fetch_from": "type.custom_distributer_fssai_license",
+   "fetch_from": "type.distributer_fssai_license",
    "fieldname": "distributer_fssai_license",
    "fieldtype": "Check",
    "in_list_view": 1,
    "label": "Distributer FSSAI License",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "type.importer_fssai_license",
+   "fieldname": "importer_fssai_license",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Importer FSSAI License",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "type.trader_fssai_license",
+   "fieldname": "trader_fssai_license",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Trader FSSAI License",
    "read_only": 1
   }
  ],
@@ -72,7 +92,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-15 16:01:03.478977",
+ "modified": "2025-05-19 15:21:40.868428",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Type Of Product Detail",

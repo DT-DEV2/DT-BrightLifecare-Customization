@@ -148,13 +148,46 @@
 import frappe
 
 def before_save(doc, method):
+    if not doc.custom_gmp_certificate_number:
+        doc.custom_gmp_certificate_attachment = ""
+        doc.custom_gmp_certificate_valid_from = ""
+        doc.custom_gmp_certificate_valid_till = ""
+
     if not doc.custom_fssai_licence_number:
         doc.custom_fssai_licence_attachment = ""
         doc.custom_fssai_licence_valid_from = ""
         doc.custom_fssai_licence_valid_till = ""
-        doc.custom_product_common_name_as_per_fssai = ""
-        doc.custom_hsn_for_common_name = ""
         doc.custom_fssai_signed_declaration_attachment = ""
+
+    if not doc.custom_relabeller_fssai_licence_number:
+        doc.custom_relabeller_fssai_licence_attachment = ""
+        doc.custom_relabeller_fssai_license_valid_from = ""
+        doc.custom_relabeller_fssai_license_valid_till = ""
+        doc.custom_relabeller_fssai_signed_declaration_attachment = ""
+
+    if not doc.custom_oem_fssai_license_number:
+        doc.custom_oem_fssai_license_attachment = ""
+        doc.custom_oem_fssai_license_valid_from = ""
+        doc.custom_oem_fssai_license_valid_till = ""
+        doc.custom_oem_fssai_signed_declaration_attachment = ""
+
+    if not doc.custom_distributer_fssai_license_number:
+        doc.custom_distributer_fssai_licence_attachment = ""
+        doc.custom_distributer_fssai_license_valid_from = ""
+        doc.custom_distributer_fssai_license_valid_till = ""
+        doc.custom_distributer_fssai_signed_declaration_attachment = ""
+
+    if not doc.custom_importer_fssai_license_number:
+        doc.custom_importer_fssai_license_attachment = ""
+        doc.custom_importer_fssai_license_valid_from = ""
+        doc.custom_importer_fssai_license_valid_till = ""
+        doc.custom_importer_fssai_signed_declaration_attachment = ""
+
+    if not doc.custom_trader_fssai_license_number:
+        doc.custom_trader_fssai_license_attachment = ""
+        doc.custom_trader_fssai_license_valid_from = ""
+        doc.custom_trader_fssai_license_valid_till = ""
+        doc.custom_trader_fssai_signed_declaration_attachment = ""
 
     if not doc.custom_ayush_license_number:
         doc.custom_ayush_license_attachment = ""
@@ -177,6 +210,11 @@ def before_save(doc, method):
         ("custom_authorised_signatory_pan_approval", "custom_authorised_signatory_pan_remarks", "Authorised Signatory PAN"),
         ("custom_authorised_dealer_approval", "custom_authorised_dealer_remarks", "Authorised Dealer"),
         ("custom_fssai_approval", "custom_fssai_remarks", "FSSAI"),
+        ("custom_relabeller_fssai_approval", "custom_relabeller_fssai_remarks", "Relabeller"),
+        ("custom_oem_fssai_approval", "custom_oem_fssai_remarks", "OEM"),
+        ("custom_distributer_fssai_approval", "custom_distributer_fssai_remarks", "Distributer"),
+        ("custom_importer_fssai_approval", "custom_importer_fssai_remarks", "Importer"),
+        ("custom_trader_fssai_approval", "custom_trader_fssai_remarks", "Trader"),
         ("custom_ayush_approval", "custom_ayush_remarks", "AYUSH"),
         ("custom_gmp_approval", "custom_gmp_remarks", "GMP"),
         ("custom_dcl_approval", "custom_dcl_remarks", "Drugs & Cosmetic License"),
