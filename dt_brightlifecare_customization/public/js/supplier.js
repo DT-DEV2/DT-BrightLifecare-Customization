@@ -60,6 +60,46 @@ frappe.ui.form.on('Supplier', {
         }
     },
 
+    custom_relabeller_fssai_approval: function(frm) {
+        if (frm.doc.custom_relabeller_fssai_approval === "Approve") {
+            frm.set_value('custom_relabeller_fssai_remarks', 'Approved');
+        } else {
+            frm.set_value('custom_relabeller_fssai_remarks', '');
+        }
+    },
+
+    custom_oem_fssai_approval: function(frm) {
+        if (frm.doc.custom_oem_fssai_approval === "Approve") {
+            frm.set_value('custom_oem_fssai_remarks', 'Approved');
+        } else {
+            frm.set_value('custom_oem_fssai_remarks', '');
+        }
+    },
+
+    custom_distributer_fssai_approval: function(frm) {
+        if (frm.doc.custom_distributer_fssai_approval === "Approve") {
+            frm.set_value('custom_distributer_fssai_remarks', 'Approved');
+        } else {
+            frm.set_value('custom_distributer_fssai_remarks', '');
+        }
+    },
+
+    custom_importer_fssai_approval: function(frm) {
+        if (frm.doc.custom_importer_fssai_approval === "Approve") {
+            frm.set_value('custom_importer_fssai_remarks', 'Approved');
+        } else {
+            frm.set_value('custom_importer_fssai_remarks', '');
+        }
+    },
+
+    custom_trader_fssai_approval: function(frm) {
+        if (frm.doc.custom_trader_fssai_approval === "Approve") {
+            frm.set_value('custom_trader_fssai_remarks', 'Approved');
+        } else {
+            frm.set_value('custom_trader_fssai_remarks', '');
+        }
+    },
+
     custom_ayush_approval: function(frm) {
         if (frm.doc.custom_ayush_approval === "Approve") {
             frm.set_value('custom_ayush_remarks', 'Approved');
@@ -84,29 +124,6 @@ frappe.ui.form.on('Supplier', {
         }
     },
 
-
-
-
-    // onload_post_render: function(frm) {
-    //     toggle_fssai_license_field(frm);
-
-    //     // Safe to use .grid.on now
-    //     if (frm.fields_dict.custom_type_of_product.grid) {
-    //         frm.fields_dict.custom_type_of_product.grid.on('after_add', function () {
-    //             toggle_fssai_license_field(frm);
-    //         });
-
-    //         frm.fields_dict.custom_type_of_product.grid.on('after_delete', function () {
-    //             setTimeout(() => {
-    //                 toggle_fssai_license_field(frm);
-    //             }, 100); // Let deletion reflect first
-    //         });
-    //     }
-    // },
-
-    // refresh: function(frm) {
-    //     toggle_fssai_license_field(frm);
-    // },
     
     
 
@@ -116,6 +133,9 @@ frappe.ui.form.on('Supplier', {
         toggle_dc_license_field(frm);
         toggle_relabeller_license_field(frm);
         toggle_distributer_license_field(frm);
+        toggle_importer_license_field(frm);
+        toggle_trader_license_field(frm);
+        toggle_oem_license_field(frm);
     },
 
     refresh: function(frm) {
@@ -127,6 +147,9 @@ frappe.ui.form.on('Supplier', {
         toggle_dc_license_field(frm);
         toggle_relabeller_license_field(frm);
         toggle_distributer_license_field(frm);
+        toggle_importer_license_field(frm);
+        toggle_trader_license_field(frm);
+        toggle_oem_license_field(frm);
 
 
     },
@@ -188,7 +211,7 @@ frappe.ui.form.on('Supplier', {
         });
     },
 
-    custom_relabeller_download_fssai_declaration: function(frm) {
+    custom_download_relabeller_fssai_declaration: function(frm) {
         // Get the single FSSAI Declaration document
         frappe.call({
             method: 'frappe.client.get_value',
@@ -207,7 +230,7 @@ frappe.ui.form.on('Supplier', {
         });
     },
 
-    custom_distributer_download_fssai_declaration: function(frm) {
+    custom_download_distributer_fssai_declaration: function(frm) {
         // Get the single FSSAI Declaration document
         frappe.call({
             method: 'frappe.client.get_value',
@@ -221,6 +244,64 @@ frappe.ui.form.on('Supplier', {
                     window.open(response.message.declaration, '_blank');
                 } else {
                     frappe.msgprint(__('No Distributer FSSAI Declaration file found'));
+                }
+            }
+        });
+    },
+
+    custom_download_importer_fssai_declaration: function(frm) {
+        // Get the single FSSAI Declaration document
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Download Importer FSSAI Declaration',
+                fieldname: 'declaration'
+            },
+            callback: function(response) {
+                if (response.message && response.message.declaration) {
+                    // Open the file URL in new tab to trigger download
+                    window.open(response.message.declaration, '_blank');
+                } else {
+                    frappe.msgprint(__('No Distributer Importer FSSAI Declaration file found'));
+                }
+            }
+        });
+    },
+
+    custom_download_trader_fssai_declaration: function(frm) {
+        // Get the single FSSAI Declaration document
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Download Trader FSSAI Declaration',
+                fieldname: 'declaration'
+            },
+            callback: function(response) {
+                if (response.message && response.message.declaration) {
+                    // Open the file URL in new tab to trigger download
+                    window.open(response.message.declaration, '_blank');
+                } else {
+                    frappe.msgprint(__('No Distributer Trader FSSAI Declaration file found'));
+                }
+            }
+        });
+    },
+
+
+    custom_download_oem_fssai_declaration: function(frm) {
+        // Get the single FSSAI Declaration document
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Download OEM FSSAI Declaration',
+                fieldname: 'declaration'
+            },
+            callback: function(response) {
+                if (response.message && response.message.declaration) {
+                    // Open the file URL in new tab to trigger download
+                    window.open(response.message.declaration, '_blank');
+                } else {
+                    frappe.msgprint(__('No Distributer OEM FSSAI Declaration file found'));
                 }
             }
         });
@@ -280,7 +361,7 @@ frappe.ui.form.on('Supplier', {
                 { field: 'custom_authorised_signatory_pan', message: __('<b>Mandatory field:</b><br>Authorised Signatory PAN') },
                 { field: 'custom_authorised_signatory_pan_attachment', message: __('<b>Mandatory field:</b><br>Authorised Signatory PAN Attachment') },
                 { field: 'custom_in_case_of_authorised_dealer', message: __('<b>Mandatory field:</b><br>Authorised Dealer') },
-                { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
+                // { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
 
             ];
 
@@ -307,6 +388,34 @@ frappe.ui.form.on('Supplier', {
                         frm.scroll_to_field('custom_fssai_licence_number');
                         frm.focus_on_first_input('custom_fssai_licence_number');
                         frappe.throw(__('<b>Mandatory field:</b><br>FSSAI Licence Number'));
+                    }
+
+                    if (row.relabeller_fssai_license && !frm.doc.custom_relabeller_fssai_licence_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_relabeller_fssai_licence_number');
+                        frm.focus_on_first_input('custom_relabeller_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Relabeller FSSAI License Number'));
+                    }
+
+                    if (row.distributer_fssai_license && !frm.doc.custom_distributer_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_distributer_fssai_license_number');
+                        frm.focus_on_first_input('custom_distributer_fssai_license_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Distributer FSSAI License Number '));
+                    }
+
+                    if (row.importer_fssai_license && !frm.doc.custom_importer_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_importer_fssai_license_number');
+                        frm.focus_on_first_input('custom_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Importer FSSAI License Number '));
+                    }
+
+                    if (row.trader_fssai_license && !frm.doc.custom_trader_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_trader_fssai_license_number');
+                        frm.focus_on_first_input('custom_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Trader FSSAI License Number '));
                     }
                     
                     if (row.ayush_license && !frm.doc.custom_ayush_license_number) {
@@ -338,7 +447,7 @@ frappe.ui.form.on('Supplier', {
                 { field: 'custom_authorised_signatory_pan', message: __('<b>Mandatory field:</b><br>Authorised Signatory PAN') },
                 { field: 'custom_authorised_signatory_pan_attachment', message: __('<b>Mandatory field:</b><br>Authorised Signatory PAN Attachment') },
                 { field: 'custom_in_case_of_authorised_dealer', message: __('<b>Mandatory field:</b><br>Authorised Dealer') },
-                { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
+                // { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
 
             ];
 
@@ -366,6 +475,34 @@ frappe.ui.form.on('Supplier', {
                         frm.scroll_to_field('custom_fssai_licence_number');
                         frm.focus_on_first_input('custom_fssai_licence_number');
                         frappe.throw(__('<b>Mandatory field:</b><br>FSSAI Licence Number'));
+                    }
+
+                    if (row.relabeller_fssai_license && !frm.doc.custom_relabeller_fssai_licence_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_relabeller_fssai_licence_number');
+                        frm.focus_on_first_input('custom_relabeller_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Relabeller FSSAI License Number'));
+                    }
+
+                    if (row.distributer_fssai_license && !frm.doc.custom_distributer_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_distributer_fssai_license_number');
+                        frm.focus_on_first_input('custom_distributer_fssai_license_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Distributer FSSAI License Number '));
+                    }
+
+                    if (row.importer_fssai_license && !frm.doc.custom_importer_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_importer_fssai_license_number');
+                        frm.focus_on_first_input('custom_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Importer FSSAI License Number '));
+                    }
+
+                    if (row.trader_fssai_license && !frm.doc.custom_trader_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_trader_fssai_license_number');
+                        frm.focus_on_first_input('custom_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Trader FSSAI License Number '));
                     }
                     
                     if (row.ayush_license && !frm.doc.custom_ayush_license_number) {
@@ -399,7 +536,7 @@ frappe.ui.form.on('Supplier', {
                 { field: 'custom_authorised_signatory_pan', message: __('<b>Mandatory field:</b><br>Authorised Signatory PAN') },
                 { field: 'custom_authorised_signatory_pan_attachment', message: __('<b>Mandatory field:</b><br>Authorised Signatory PAN Attachment') },
                 { field: 'custom_in_case_of_authorised_dealer', message: __('<b>Mandatory field:</b><br>Authorised Dealer') },
-                { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
+                // { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
             ];
 
             // Loop through the fields and check if they are filled
@@ -425,6 +562,34 @@ frappe.ui.form.on('Supplier', {
                         frm.scroll_to_field('custom_fssai_licence_number');
                         frm.focus_on_first_input('custom_fssai_licence_number');
                         frappe.throw(__('<b>Mandatory field:</b><br>FSSAI Licence Number'));
+                    }
+
+                    if (row.relabeller_fssai_license && !frm.doc.custom_relabeller_fssai_licence_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_relabeller_fssai_licence_number');
+                        frm.focus_on_first_input('custom_relabeller_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Relabeller FSSAI License Number'));
+                    }
+
+                    if (row.distributer_fssai_license && !frm.doc.custom_distributer_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_distributer_fssai_license_number');
+                        frm.focus_on_first_input('custom_distributer_fssai_license_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Distributer FSSAI License Number '));
+                    }
+
+                    if (row.importer_fssai_license && !frm.doc.custom_importer_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_importer_fssai_license_number');
+                        frm.focus_on_first_input('custom_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Importer FSSAI License Number '));
+                    }
+
+                    if (row.trader_fssai_license && !frm.doc.custom_trader_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_trader_fssai_license_number');
+                        frm.focus_on_first_input('custom_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Trader FSSAI License Number '));
                     }
                     
                     if (row.ayush_license && !frm.doc.custom_ayush_license_number) {
@@ -458,7 +623,7 @@ frappe.ui.form.on('Supplier', {
                 { field: 'custom_authorised_signatory_pan', message: __('<b>Mandatory field:</b><br>Authorised Signatory PAN') },
                 { field: 'custom_authorised_signatory_pan_attachment', message: __('<b>Mandatory field:</b><br>Authorised Signatory PAN Attachment') },
                 { field: 'custom_in_case_of_authorised_dealer', message: __('<b>Mandatory field:</b><br>Authorised Dealer') },
-                { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
+                // { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
 
             ];
 
@@ -484,6 +649,34 @@ frappe.ui.form.on('Supplier', {
                         frm.scroll_to_field('custom_fssai_licence_number');
                         frm.focus_on_first_input('custom_fssai_licence_number');
                         frappe.throw(__('<b>Mandatory field:</b><br>FSSAI Licence Number'));
+                    }
+
+                    if (row.relabeller_fssai_license && !frm.doc.custom_relabeller_fssai_licence_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_relabeller_fssai_licence_number');
+                        frm.focus_on_first_input('custom_relabeller_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Relabeller FSSAI License Number'));
+                    }
+
+                    if (row.distributer_fssai_license && !frm.doc.custom_distributer_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_distributer_fssai_license_number');
+                        frm.focus_on_first_input('custom_distributer_fssai_license_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Distributer FSSAI License Number '));
+                    }
+
+                    if (row.importer_fssai_license && !frm.doc.custom_importer_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_importer_fssai_license_number');
+                        frm.focus_on_first_input('custom_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Importer FSSAI License Number '));
+                    }
+
+                    if (row.trader_fssai_license && !frm.doc.custom_trader_fssai_license_number) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_trader_fssai_license_number');
+                        frm.focus_on_first_input('custom_fssai_licence_number');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Trader FSSAI License Number '));
                     }
                     
                     if (row.ayush_license && !frm.doc.custom_ayush_license_number) {
@@ -547,17 +740,30 @@ frappe.ui.form.on('Type Of Product Detail', {
     },
 
     relabeller_fssai_license: function(frm, cdt, cdn) {
-        toggle_relabeller_license_field(frm)
+        toggle_relabeller_license_field(frm);
+        toggle_oem_license_field(frm);
     },
 
     distributer_fssai_license: function(frm, cdt, cdn) {
         toggle_distributer_license_field(frm)
     },
 
+    importer_fssai_license: function(frm, cdt, cdn) {
+        toggle_trader_license_field(frm);
+    },
+
+    trader_fssai_license: function(frm, cdt, cdn) {
+        toggle_trader_license_field(frm);
+    },
+
     custom_type_of_product_remove: function(frm) {
         toggle_fssai_license_field(frm);
         toggle_ayush_license_field(frm);
         toggle_dc_license_field(frm);
+        toggle_relabeller_license_field(frm);
+        toggle_distributer_license_field(frm);
+        toggle_importer_license_field(frm);
+        toggle_trader_license_field(frm);
     },
 
     // Optional: run after any row is added
@@ -567,6 +773,8 @@ frappe.ui.form.on('Type Of Product Detail', {
         toggle_dc_license_field(frm);
         toggle_relabeller_license_field(frm);
         toggle_distributer_license_field(frm);
+        toggle_importer_license_field(frm);
+        toggle_trader_license_field(frm);
     }
 });
 
@@ -598,4 +806,22 @@ function toggle_distributer_license_field(frm) {
     const rows = frm.doc.custom_type_of_product || [];
     const any_checked = rows.some(row => row.distributer_fssai_license === 1);
     frm.toggle_display('custom_distributer_fssai_license_number', any_checked);
+}
+
+function toggle_importer_license_field(frm) {
+    const rows = frm.doc.custom_type_of_product || [];
+    const any_checked = rows.some(row => row.importer_fssai_license === 1);
+    frm.toggle_display('custom_importer_fssai_license_number', any_checked);
+}
+
+function toggle_trader_license_field(frm) {
+    const rows = frm.doc.custom_type_of_product || [];
+    const any_checked = rows.some(row => row.trader_fssai_license === 1);
+    frm.toggle_display('custom_trader_fssai_license_number', any_checked);
+}
+
+function toggle_oem_license_field(frm) {
+    const rows = frm.doc.custom_type_of_product || [];
+    const any_checked = rows.some(row => row.relabeller_fssai_license === 1);
+    frm.toggle_display('custom_oem_fssai_license_number', any_checked);
 }

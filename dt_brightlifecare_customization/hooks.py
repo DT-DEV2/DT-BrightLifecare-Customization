@@ -249,7 +249,7 @@ doctype_js = {
     "Stock Entry": "public/js/stock_entry.js",
     "Supplier" : "public/js/supplier.js",
     "Custom Field" : "public/js/custom_field.js",
-    "Request for Quotation" : "public/js/rfq.js",
+    # "Request for Quotation" : "public/js/rfq.js",
     "Supplier Quotation" : "public/js/supplier_quotation.js",
 }
 
