@@ -158,48 +158,56 @@ def before_save(doc, method):
         doc.custom_fssai_licence_valid_from = ""
         doc.custom_fssai_licence_valid_till = ""
         doc.custom_fssai_signed_declaration_attachment = ""
+        doc.custom_product_details = ""
 
     if not doc.custom_relabeller_fssai_licence_number:
         doc.custom_relabeller_fssai_licence_attachment = ""
         doc.custom_relabeller_fssai_license_valid_from = ""
         doc.custom_relabeller_fssai_license_valid_till = ""
         doc.custom_relabeller_fssai_signed_declaration_attachment = ""
+        doc.custom_relabeller_product_details = ""
 
     if not doc.custom_oem_fssai_license_number:
         doc.custom_oem_fssai_license_attachment = ""
         doc.custom_oem_fssai_license_valid_from = ""
         doc.custom_oem_fssai_license_valid_till = ""
         doc.custom_oem_fssai_signed_declaration_attachment = ""
+        doc.custom_oem_product_details = ""
 
     if not doc.custom_distributer_fssai_license_number:
         doc.custom_distributer_fssai_licence_attachment = ""
         doc.custom_distributer_fssai_license_valid_from = ""
         doc.custom_distributer_fssai_license_valid_till = ""
         doc.custom_distributer_fssai_signed_declaration_attachment = ""
+        doc.custom_distributer_product_detail = ""
 
     if not doc.custom_importer_fssai_license_number:
         doc.custom_importer_fssai_license_attachment = ""
         doc.custom_importer_fssai_license_valid_from = ""
         doc.custom_importer_fssai_license_valid_till = ""
         doc.custom_importer_fssai_signed_declaration_attachment = ""
+        doc.custom_importer_product_details = ""
 
     if not doc.custom_trader_fssai_license_number:
         doc.custom_trader_fssai_license_attachment = ""
         doc.custom_trader_fssai_license_valid_from = ""
         doc.custom_trader_fssai_license_valid_till = ""
         doc.custom_trader_fssai_signed_declaration_attachment = ""
+        doc.custom_trader_product_details = ""
 
     if not doc.custom_ayush_license_number:
         doc.custom_ayush_license_attachment = ""
         doc.custom_ayush_license_valid_from = ""
         doc.custom_ayush_license_valid_till = ""
         doc.custom_ayush_signed_declaration_attachment = ""
+        doc.custom_ayush_product_approval = ""
 
     if not doc.custom_drugs__cosmetic_license_number:
         doc.custom_drugs__cosmetic_license_attachment = ""
         doc.custom_drugs__cosmetic_license_valid_from = ""
         doc.custom_drugs__cosmetic_license_valid_till = ""
         doc.custom_dcl_signed_declaration_attachment = ""
+        doc.custom_dcl_product_approval = ""
 
 
     approvals = [
