@@ -433,6 +433,30 @@ frappe.ui.form.on('Supplier', {
                     }
                 });
             }
+
+
+
+            if (frm.doc.custom_ayush_product_approval && frm.doc.custom_ayush_product_approval.length > 0) {
+                frm.doc.custom_ayush_product_approval.forEach((row, index) => {
+                    if (row.product_name && !frm.doc.product_approval_copy) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_ayush_product_approval');
+                        frm.focus_on_first_input('custom_ayush_product_approval');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Product Approval Copy'));
+                    }
+                });
+            }
+
+            if (frm.doc.custom_dcl_product_approval && frm.doc.custom_dcl_product_approval.length > 0) {
+                frm.doc.custom_dcl_product_approval.forEach((row, index) => {
+                    if (row.product_name && !frm.doc.product_approval_copy) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_dcl_product_approval');
+                        frm.focus_on_first_input('custom_dcl_product_approval');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Product Approval Copy'));
+                    }
+                });
+            }
         }
 
 
@@ -517,6 +541,28 @@ frappe.ui.form.on('Supplier', {
                         frm.scroll_to_field('custom_drugs__cosmetic_license_number');
                         frm.focus_on_first_input('custom_drugs__cosmetic_license_number');
                         frappe.throw(__('<b>Mandatory field:</b><br>Drugs & Cosmetic License Number'));
+                    }
+                });
+            }
+
+            if (frm.doc.custom_ayush_product_approval && frm.doc.custom_ayush_product_approval.length > 0) {
+                frm.doc.custom_ayush_product_approval.forEach((row, index) => {
+                    if (row.product_name && !frm.doc.product_approval_copy) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_ayush_product_approval');
+                        frm.focus_on_first_input('custom_ayush_product_approval');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Product Approval Copy'));
+                    }
+                });
+            }
+
+            if (frm.doc.custom_dcl_product_approval && frm.doc.custom_dcl_product_approval.length > 0) {
+                frm.doc.custom_dcl_product_approval.forEach((row, index) => {
+                    if (row.product_name && !frm.doc.product_approval_copy) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_dcl_product_approval');
+                        frm.focus_on_first_input('custom_dcl_product_approval');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Product Approval Copy'));
                     }
                 });
             }
@@ -607,6 +653,28 @@ frappe.ui.form.on('Supplier', {
                     }
                 });
             }
+
+            if (frm.doc.custom_ayush_product_approval && frm.doc.custom_ayush_product_approval.length > 0) {
+                frm.doc.custom_ayush_product_approval.forEach((row, index) => {
+                    if (row.product_name && !frm.doc.product_approval_copy) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_ayush_product_approval');
+                        frm.focus_on_first_input('custom_ayush_product_approval');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Product Approval Copy'));
+                    }
+                });
+            }
+
+            if (frm.doc.custom_dcl_product_approval && frm.doc.custom_dcl_product_approval.length > 0) {
+                frm.doc.custom_dcl_product_approval.forEach((row, index) => {
+                    if (row.product_name && !frm.doc.product_approval_copy) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_dcl_product_approval');
+                        frm.focus_on_first_input('custom_dcl_product_approval');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Product Approval Copy'));
+                    }
+                });
+            }
         }
 
 
@@ -691,6 +759,28 @@ frappe.ui.form.on('Supplier', {
                         frm.scroll_to_field('custom_drugs__cosmetic_license_number');
                         frm.focus_on_first_input('custom_drugs__cosmetic_license_number');
                         frappe.throw(__('<b>Mandatory field:</b><br>Drugs & Cosmetic License Number'));
+                    }
+                });
+            }
+
+            if (frm.doc.custom_ayush_product_approval && frm.doc.custom_ayush_product_approval.length > 0) {
+                frm.doc.custom_ayush_product_approval.forEach((row, index) => {
+                    if (row.product_name && !frm.doc.product_approval_copy) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_ayush_product_approval');
+                        frm.focus_on_first_input('custom_ayush_product_approval');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Product Approval Copy'));
+                    }
+                });
+            }
+
+            if (frm.doc.custom_dcl_product_approval && frm.doc.custom_dcl_product_approval.length > 0) {
+                frm.doc.custom_dcl_product_approval.forEach((row, index) => {
+                    if (row.product_name && !frm.doc.product_approval_copy) {
+                        frappe.dom.unfreeze();
+                        frm.scroll_to_field('custom_dcl_product_approval');
+                        frm.focus_on_first_input('custom_dcl_product_approval');
+                        frappe.throw(__('<b>Mandatory field:</b><br>Product Approval Copy'));
                     }
                 });
             }
