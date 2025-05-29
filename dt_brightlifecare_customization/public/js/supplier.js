@@ -139,6 +139,36 @@ frappe.ui.form.on('Supplier', {
     },
 
     refresh: function(frm) {
+        const fields_to_color = [
+            'custom_coip_approval',
+            'custom_br_approval',
+            'custom_moa__aoa_approval',
+            'custom_authorised_signatory_aadhar_card_approval',
+            'custom_authorised_signatory_pan_approval',
+            'custom_authorised_dealer_approval',
+            'custom_gmp_approval',
+            'custom_fssai_approval',
+            'custom_relabeller_fssai_approval',
+            'custom_oem_fssai_approval',
+            'custom_distributer_fssai_approval',
+            'custom_importer_fssai_approval',
+            'custom_trader_fssai_approval',
+            'custom_ayush_approval',
+            'custom_dcl_approval'
+        ];
+
+        setTimeout(() => {
+            fields_to_color.forEach(fieldname => {
+                if (frm.fields_dict[fieldname]) {
+                    frm.fields_dict[fieldname].$wrapper
+                        .closest('.frappe-control')
+                        .find('label')
+                        .css('color', 'orange');
+                }
+            });
+        }, 100);
+
+        // $("label[for='custom_coip_approval']").css("color", "orange");
         frm.remove_custom_button('Get Supplier Group Details', 'Actions');
         frm.remove_custom_button('Link with Customer', 'Actions');
 
@@ -262,7 +292,7 @@ frappe.ui.form.on('Supplier', {
                     // Open the file URL in new tab to trigger download
                     window.open(response.message.declaration, '_blank');
                 } else {
-                    frappe.msgprint(__('No Distributer Importer FSSAI Declaration file found'));
+                    frappe.msgprint(__('No Importer FSSAI Declaration file found'));
                 }
             }
         });
@@ -281,7 +311,7 @@ frappe.ui.form.on('Supplier', {
                     // Open the file URL in new tab to trigger download
                     window.open(response.message.declaration, '_blank');
                 } else {
-                    frappe.msgprint(__('No Distributer Trader FSSAI Declaration file found'));
+                    frappe.msgprint(__('No Trader FSSAI Declaration file found'));
                 }
             }
         });
@@ -301,7 +331,7 @@ frappe.ui.form.on('Supplier', {
                     // Open the file URL in new tab to trigger download
                     window.open(response.message.declaration, '_blank');
                 } else {
-                    frappe.msgprint(__('No Distributer OEM FSSAI Declaration file found'));
+                    frappe.msgprint(__('No OEM FSSAI Declaration file found'));
                 }
             }
         });

@@ -105,6 +105,20 @@ def create_user_if_not_exists(self, method):
 
 
 
+        # ✅ Add user to Supplier's `custom_connected_users` child table
+        supplier = frappe.get_doc("Supplier", supplier_name)
+
+        # Check if user already exists in the child table (optional)
+        if not any(row.user == user.name for row in supplier.custom_connected_users):
+            supplier.append("custom_connected_users", {
+                "user": user.name,
+                # "email": user.email  # assuming your child table has fields `user` and `email`
+            })
+            supplier.save()
+            frappe.msgprint(f"User {user.name} added to Supplier {supplier_name}'s custom_connected_users table.")
+
+
+
 
 
 
