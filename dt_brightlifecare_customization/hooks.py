@@ -251,7 +251,8 @@ doctype_js = {
     "Custom Field" : "public/js/custom_field.js",
     # "Request for Quotation" : "public/js/rfq.js",
     "Supplier Quotation" : "public/js/supplier_quotation.js",
-    # "Contract": "public/js/contract.js"
+    "Contract": "public/js/contract.js",
+    "Material Request": "public/js/material_request.js"
 }
 
 
@@ -281,8 +282,11 @@ doc_events = {
     "Supplier": {
         "before_save": "dt_brightlifecare_customization.public.py.supplier.before_save"
     },
-    "Request for Quotation": {
-        "before_save": "dt_brightlifecare_customization.public.py.rfq.validate_supplier_items"
+    # "Request for Quotation": {
+    #     "before_save": "dt_brightlifecare_customization.public.py.rfq.validate_supplier_items"
+    # },
+    "Material Request": {
+        "before_save": "dt_brightlifecare_customization.public.py.material_request.before_save"
     }
 
 }
