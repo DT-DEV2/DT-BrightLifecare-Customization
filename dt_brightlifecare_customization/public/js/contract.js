@@ -18,5 +18,50 @@ frappe.ui.form.on('Contract', {
                 }
             };
         });
+    },
+
+
+
+    custom_supplier_approval: function(frm) {
+        if (frm.doc.custom_supplier_approval) {
+            // Set the current user's name in the custom_user field
+            frappe.call({
+                method: 'frappe.client.get',
+                args: {
+                    doctype: 'User',
+                    name: frappe.session.user
+                },
+                callback: function(response) {
+                    if (response.message) {
+                        frm.set_value('custom_supplier_approver', response.message.name);
+                    }
+                }
+            });
+        } else {
+            // Optionally clear the field if unchecked
+            frm.set_value('custom_supplier_approver', '');
+        }
+    },
+
+    custom_healthkart_approval: function(frm){
+        if (frm.doc.custom_healthkart_approval) {
+            frappe.call({
+                method: 'frappe.client.get',
+                args: {
+                    doctype: "User",
+                    name: frappe.session.user
+                },
+                callback: function(response) {
+                    if (response.message) {
+                        frm.set_value('custom_healthkart_approver', response.message.name);
+                    }
+                }
+            });
+        }else{
+            frm.set_value('custom_healthkart_approver', "")
+        }
     }
+
+
+    
 });
