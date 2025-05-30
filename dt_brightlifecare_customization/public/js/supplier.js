@@ -163,7 +163,10 @@ frappe.ui.form.on('Supplier', {
                     frm.fields_dict[fieldname].$wrapper
                         .closest('.frappe-control')
                         .find('label')
-                        .css('color', 'orange');
+                        .css({
+                            'color': 'orange',
+                            'font-weight': 'bold'
+                        });
                 }
             });
         }, 100);

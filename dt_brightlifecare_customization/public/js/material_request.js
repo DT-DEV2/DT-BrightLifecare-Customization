@@ -23,22 +23,6 @@
 // });
 
 
-// frappe.ui.form.on("Material Request", {
-//     refresh: function(frm) {
-//         // Add a button to create RFQs
-//         frm.add_custom_button("Create RFQs", function() {
-//             frappe.call({
-//                 method: "dt_brightlifecare_customization.public.py.material_request.create_rfqs",
-//                 args: {
-//                     material_request: frm.doc.name
-//                 },
-//                 callback: function(response) {
-//                     frappe.msgprint(response.message);
-//                 }
-//             });
-//         });
-//     }
-// });
 
 
 
