@@ -1,0 +1,48 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-05-30 12:10:06.578054",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "license",
+  "contract_term",
+  "terms_and_conditions"
+ ],
+ "fields": [
+  {
+   "fieldname": "license",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "License"
+  },
+  {
+   "fieldname": "contract_term",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Contract Term",
+   "options": "Contract Template"
+  },
+  {
+   "fetch_from": "contract_term.contract_terms",
+   "fieldname": "terms_and_conditions",
+   "fieldtype": "Text Editor",
+   "label": "Terms and Conditions"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-05-30 12:12:11.419784",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Contract Terms and Template",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
