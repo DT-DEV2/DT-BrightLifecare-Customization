@@ -67,7 +67,8 @@ def create_rfq_from_suppliers(docname):
                     "warehouse": item.warehouse,
                     "conversion_factor": item.conversion_factor,
                     "uom": item.uom,
-                    "material_request": doc.name
+                    "material_request": doc.name,
+                    "material_request_item": item.name
                 })
 
     for supplier, items in supplier_items.items():
