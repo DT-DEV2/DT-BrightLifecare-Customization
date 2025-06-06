@@ -175,6 +175,7 @@ frappe.ui.form.on('Supplier', {
         frm.remove_custom_button('Get Supplier Group Details', 'Actions');
         frm.remove_custom_button('Link with Customer', 'Actions');
 
+        
         toggle_fssai_license_field(frm);
         toggle_ayush_license_field(frm);
         toggle_dc_license_field(frm);
@@ -183,6 +184,26 @@ frappe.ui.form.on('Supplier', {
         toggle_importer_license_field(frm);
         toggle_trader_license_field(frm);
         toggle_oem_license_field(frm);
+
+
+
+        frappe.call({
+            method: 'dt_brightlifecare_customization.public.py.supplier.has_supplier_visibility_role',
+            callback: function(r) {
+                if (r.message) {
+                    // Hide Accounting Ledger button if user has restricted role
+                    frm.remove_custom_button('Accounting Ledger', 'View');
+                    frm.remove_custom_button('Accounts Payable', 'View');
+                    // frm.remove_custom_button('Help', 'Actions');
+                    setTimeout(() => {
+                        frm.page.actions.find('[data-label="Help"]').parent().parent().remove();
+                    }, 100);
+
+
+                }
+            }
+        });
+
 
 
     },

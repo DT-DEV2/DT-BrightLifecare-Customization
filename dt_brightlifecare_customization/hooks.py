@@ -287,6 +287,18 @@ doc_events = {
     # },
     "Material Request": {
         "before_save": "dt_brightlifecare_customization.public.py.material_request.before_save"
+    },
+    "Address":{
+        "on_update": "dt_brightlifecare_customization.public.py.address.before_save",
+    },
+    "Bank Account":{
+        "on_update": "dt_brightlifecare_customization.public.py.bank_account.before_save",
+    },
+    "Contract":{
+        "on_update": "dt_brightlifecare_customization.public.py.contract.before_save",
+    },
+    "Role": {
+        "before_save": "dt_brightlifecare_customization.public.py.role.create_role_config"
     }
 
 }
