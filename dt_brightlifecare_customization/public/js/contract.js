@@ -60,6 +60,17 @@ frappe.ui.form.on('Contract', {
         }else{
             frm.set_value('custom_healthkart_approver', "")
         }
+    },
+
+
+    // to make the field readonly after saved so that none can change it again
+    refresh(frm) {
+        if (frm.doc.custom_supplier_approval == 1) {
+            frm.set_df_property('custom_supplier_approval', 'read_only', 1);
+        }
+        if (frm.doc.custom_healthkart_approval == 1) {
+            frm.set_df_property('custom_healthkart_approval', 'read_only', 1);
+        }
     }
 
 

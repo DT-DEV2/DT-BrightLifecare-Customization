@@ -198,13 +198,88 @@ frappe.ui.form.on('Supplier', {
                     setTimeout(() => {
                         frm.page.actions.find('[data-label="Help"]').parent().parent().remove();
                     }, 100);
-
-
                 }
             }
         });
 
 
+
+
+
+        frappe.call({
+            method: 'dt_brightlifecare_customization.public.py.supplier.has_supplier_visibility_role',
+            callback: function(response) {
+                if (!response.message) {
+                    // User does NOT have the role with supplier_visibility = 1
+                    frm.add_custom_button(__('Create Contract'), function() {
+                        frappe.model.with_doctype('Contract', function() {
+                            var contract = frappe.model.get_new_doc('Contract');
+                            
+                            // Set basic fields
+                            contract.party_type = 'Supplier';
+                            contract.party_name = frm.doc.name;
+                            
+                            // Add terms if they exist
+                            if(frm.doc.custom_fssai_contract_term) {
+                                var child = frappe.model.add_child(contract, 'custom_contract_terms_and_template');
+                                frappe.model.set_value(child.doctype, child.name, 'contract_term', frm.doc.custom_fssai_contract_term);
+                                // Set other child fields
+                            }
+                            
+                            if(frm.doc.custom_relabeller_fssai_contract_term) {
+                                var child = frappe.model.add_child(contract, 'custom_contract_terms_and_template');
+                                frappe.model.set_value(child.doctype, child.name, 'contract_term', frm.doc.custom_relabeller_fssai_contract_term);
+                                // Set other child fields
+                            }
+
+                            if(frm.doc.custom_oem_fssai_contract_term) {
+                                var child = frappe.model.add_child(contract, 'custom_contract_terms_and_template');
+                                frappe.model.set_value(child.doctype, child.name, 'contract_term', frm.doc.custom_oem_fssai_contract_term);
+                                // Set other child fields
+                            }
+
+
+                            if(frm.doc.custom_distributer_fssai_contract_term) {
+                                var child = frappe.model.add_child(contract, 'custom_contract_terms_and_template');
+                                frappe.model.set_value(child.doctype, child.name, 'contract_term', frm.doc.custom_distributer_fssai_contract_term);
+                                // Set other child fields
+                            }
+
+                            if(frm.doc.custom_importer_fssai_contract_term) {
+                                var child = frappe.model.add_child(contract, 'custom_contract_terms_and_template');
+                                frappe.model.set_value(child.doctype, child.name, 'contract_term', frm.doc.custom_importer_fssai_contract_term);
+                                // Set other child fields
+                            }
+
+                            if(frm.doc.custom_trader_fssai_contract_term) {
+                                var child = frappe.model.add_child(contract, 'custom_contract_terms_and_template');
+                                frappe.model.set_value(child.doctype, child.name, 'contract_term', frm.doc.custom_trader_fssai_contract_term);
+                                // Set other child fields
+                            }
+
+                            if(frm.doc.custom_ayush_contract_term) {
+                                var child = frappe.model.add_child(contract, 'custom_contract_terms_and_template');
+                                frappe.model.set_value(child.doctype, child.name, 'contract_term', frm.doc.custom_ayush_contract_term);
+                                // Set other child fields
+                            }
+
+                            if(frm.doc.custom_dcl_contract_term) {
+                                var child = frappe.model.add_child(contract, 'custom_contract_terms_and_template');
+                                frappe.model.set_value(child.doctype, child.name, 'contract_term', frm.doc.custom_dcl_contract_term);
+                                // Set other child fields
+                            }
+                            
+                            // Open in edit mode
+                            frappe.set_route('Form', 'Contract', contract.name);
+                        });
+                    }, __('Create'));
+                }
+            }
+        });
+        
+
+        
+        
 
     },
 
