@@ -6,17 +6,10 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "license",
   "contract_term",
   "terms_and_conditions"
  ],
  "fields": [
-  {
-   "fieldname": "license",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "License"
-  },
   {
    "fieldname": "contract_term",
    "fieldtype": "Link",
@@ -35,7 +28,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-30 12:12:11.419784",
+ "modified": "2025-06-06 11:32:26.310729",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Contract Terms and Template",

@@ -24,6 +24,32 @@ def create_user_if_not_exists(self, method):
     # Check if a User already exists with this email
     existing_user = frappe.db.exists("User", self.email_id)
 
+    # Step 1: Get all active roles
+    active_roles = frappe.get_all(
+        "Role",
+        filters={"disabled": 0},
+        fields=["name"]
+    )
+
+    # Extract only the names for comparison
+    active_role_names = [r["name"] for r in active_roles]
+
+
+    # Step 2: Get roles from Role Configuration with supplier_visibility = 1
+    visible_roles_config = frappe.get_all(
+        "Role Configuration",
+        filters={"supplier_visibility": 1},
+        fields=["role"]  # assuming "role" is the link to Role in Role Configuration
+    )
+
+    # Convert to list of dicts with "role" key
+    final_visible_roles = [
+        {"role": r["role"]}
+        for r in visible_roles_config
+        if r["role"] in active_role_names
+    ]
+
+
     if not existing_user:
         # Create a new User
         user = frappe.get_doc({
@@ -34,7 +60,7 @@ def create_user_if_not_exists(self, method):
             "last_name": self.last_name,
             "gender": self.gender,
             "send_welcome_email": 1,  # Avoid sending email automatically
-            "roles": [{"role": "ZDT Merchant Onboarding"}],  # Assign the Supplier role
+            "roles": final_visible_roles,  # Assign the Supplier role
             "enabled": 1,
             "module_profile": "",  # This ensures no modules are ticked
             "block_modules": [  # Explicitly block all modules
