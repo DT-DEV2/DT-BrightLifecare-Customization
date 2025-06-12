@@ -211,7 +211,7 @@ frappe.ui.form.on('Supplier', {
             callback: function(response) {
                 if (!response.message) {
                     // User does NOT have the role with supplier_visibility = 1
-                    frm.add_custom_button(__('Create Contract'), function() {
+                    frm.add_custom_button(__('Contract'), function() {
                         frappe.model.with_doctype('Contract', function() {
                             var contract = frappe.model.get_new_doc('Contract');
                             
@@ -271,6 +271,29 @@ frappe.ui.form.on('Supplier', {
                             
                             // Open in edit mode
                             frappe.set_route('Form', 'Contract', contract.name);
+                        });
+                    }, __('Create'));
+                }
+            }
+        });
+
+
+
+
+        frappe.call({
+            method: 'dt_brightlifecare_customization.public.py.supplier.has_supplier_visibility_role',
+            callback: function(response) {
+                if (!response.message) {
+                    // User does NOT have the role with supplier_visibility = 1
+                    frm.add_custom_button(__('Supplier-Item Linking'), function() {
+                        frappe.model.with_doctype('Supplier Item Link', function() {
+                            var linking = frappe.model.get_new_doc('Supplier Item Link');
+                            
+                            // Set basic fields
+                            linking.supplier = frm.doc.name;
+                            
+                            // Open in edit mode
+                            frappe.set_route('Form', 'Supplier Item Link', linking.name);
                         });
                     }, __('Create'));
                 }
