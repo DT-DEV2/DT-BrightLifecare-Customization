@@ -299,6 +299,9 @@ doc_events = {
     },
     "Role": {
         "before_save": "dt_brightlifecare_customization.public.py.role.create_role_config"
+    },
+    "Supplier Item Link": {
+        "on_submit": "dt_brightlifecare_customization.dt_brightlifecare_customization.doctype.supplier_item_link.supplier_item_link.on_submit"
     }
 
 }

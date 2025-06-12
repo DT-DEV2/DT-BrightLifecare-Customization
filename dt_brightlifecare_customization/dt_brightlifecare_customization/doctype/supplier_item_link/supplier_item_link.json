@@ -1,0 +1,575 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{supplier}-{item}-{####} ",
+ "creation": "2025-06-12 10:02:23.111301",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "details_section",
+  "supplier",
+  "supplier_name",
+  "column_break_agni",
+  "item",
+  "item_name",
+  "item_group",
+  "item_sub_category",
+  "raw_material_tab",
+  "document_collection_section",
+  "certificate_of_analysis",
+  "match_vendors_coa_with_internal_specifications",
+  "initial_sample_evaluation_section",
+  "request_one_batch_sample_from_the_vendor",
+  "submit_sample_and_coa_and_internal_specifications_to_rnd",
+  "basic_parameter_testing_section",
+  "rnd_conducts_initial_parameter_testing",
+  "conduct_sensory_trials_with_the_brand_team",
+  "advanced_evaluation_section",
+  "if_the_initial_trail_is_successful",
+  "conduct_detailed_analysis_on_parameters_and_stability",
+  "commercial_trial_route_section",
+  "if_detail_analysis_is_ok",
+  "if_a_commercial_batch_meets_expectations",
+  "compliance_route_section",
+  "if_detail_anaylis_is_ok",
+  "on_document_clearance",
+  "packaging_material_tab",
+  "common_required_documents_section",
+  "vendor_registration_form_vrf",
+  "msme_certificate",
+  "material_specification_sheet",
+  "certificate_of_analysis_coa",
+  "labels_section",
+  "artwork_finalized_internally",
+  "sample_shared",
+  "rnd_packaging_team",
+  "post_approval",
+  "jar_section",
+  "nexk_size_and_dimensions_confirmed_via_rcd_replicadrawing",
+  "initial_sample_developed_and_submitted",
+  "upon_approval_commercial_supply_begins",
+  "sippercorrugated_box_section",
+  "spec_and_dimensions_shared",
+  "fitment_check_via_samples",
+  "design_and_mechanical_engineering_dme_team_reviews",
+  "final_approval",
+  "laminate_section",
+  "specifications_shared",
+  "proofing_of_cylinder",
+  "final_sample_approval",
+  "attachments_tab",
+  "share_owner_name_contact_details",
+  "rm_coas",
+  "ingredient_name_declaration_section",
+  "for_botanical_ingredient",
+  "for_vitaminminerals",
+  "for_compound_ingredients",
+  "section_break_pxyn",
+  "fssai_license_copy",
+  "storage_condition_declarationshelf_life",
+  "method_of_analysis_moa",
+  "wada_nada",
+  "rm_technical_sheet",
+  "food_grade_declaration",
+  "naturalsynthetic_declaration",
+  "source_of_ingredient",
+  "msds",
+  "allergen_and_cross_contamination_declaration",
+  "halal_and_kosher_certificate",
+  "non_gmovegannatural_declaration",
+  "_6th_month_foscos_test_report",
+  "pds_and_tds",
+  "process_flow_chart",
+  "gluten_free",
+  "stability_data",
+  "country_of_origin_declaration",
+  "clinical_studies_and_publications",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "column_break_agni",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "raw_material_tab",
+   "fieldtype": "Tab Break",
+   "label": "Raw Material"
+  },
+  {
+   "fieldname": "packaging_material_tab",
+   "fieldtype": "Tab Break",
+   "label": "Packaging Material"
+  },
+  {
+   "fieldname": "attachments_tab",
+   "fieldtype": "Tab Break",
+   "label": "Attachments"
+  },
+  {
+   "fieldname": "share_owner_name_contact_details",
+   "fieldtype": "Attach",
+   "label": "Share Owner Name, Contact Details",
+   "options": "{\"allowed_file_types\": [\".pdf\"]}"
+  },
+  {
+   "fetch_from": "item.item_name",
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name"
+  },
+  {
+   "fetch_from": "item.item_group",
+   "fieldname": "item_group",
+   "fieldtype": "Data",
+   "label": "Item Group"
+  },
+  {
+   "fetch_from": "item.custom_item_sub_category",
+   "fieldname": "item_sub_category",
+   "fieldtype": "Data",
+   "label": "Item Sub Category"
+  },
+  {
+   "description": "(3 Batch)",
+   "fieldname": "rm_coas",
+   "fieldtype": "Attach",
+   "label": "RM COAs"
+  },
+  {
+   "fieldname": "ingredient_name_declaration_section",
+   "fieldtype": "Section Break",
+   "label": "Ingredient Name Declaration"
+  },
+  {
+   "description": "(Mention scientific/common name)",
+   "fieldname": "for_botanical_ingredient",
+   "fieldtype": "Attach",
+   "label": "For Botanical Ingredient"
+  },
+  {
+   "description": "(Mention salt form/common name)",
+   "fieldname": "for_vitaminminerals",
+   "fieldtype": "Attach",
+   "label": "For Vitamin/Minerals"
+  },
+  {
+   "description": "(Provide the breakup of ingredients list)",
+   "fieldname": "for_compound_ingredients",
+   "fieldtype": "Attach",
+   "label": "For Compound Ingredients"
+  },
+  {
+   "fieldname": "section_break_pxyn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "(MFG/Trader/Importer, etc. whichever applicable)",
+   "fieldname": "fssai_license_copy",
+   "fieldtype": "Attach",
+   "label": "FSSAI License Copy"
+  },
+  {
+   "fieldname": "storage_condition_declarationshelf_life",
+   "fieldtype": "Attach",
+   "label": "Storage Condition Declaration/Shelf Life"
+  },
+  {
+   "fieldname": "method_of_analysis_moa",
+   "fieldtype": "Attach",
+   "label": "Method Of Analysis (MOA)"
+  },
+  {
+   "fieldname": "wada_nada",
+   "fieldtype": "Attach",
+   "label": "WADA NADA"
+  },
+  {
+   "fieldname": "rm_technical_sheet",
+   "fieldtype": "Attach",
+   "label": "RM Technical Sheet"
+  },
+  {
+   "fieldname": "food_grade_declaration",
+   "fieldtype": "Attach",
+   "label": "Food Grade Declaration"
+  },
+  {
+   "fieldname": "naturalsynthetic_declaration",
+   "fieldtype": "Attach",
+   "label": "Natural/Synthetic Declaration"
+  },
+  {
+   "description": "(Veg/Non-veg Declaration)",
+   "fieldname": "source_of_ingredient",
+   "fieldtype": "Attach",
+   "label": "Source of Ingredient"
+  },
+  {
+   "fieldname": "msds",
+   "fieldtype": "Attach",
+   "label": "MSDS"
+  },
+  {
+   "fieldname": "allergen_and_cross_contamination_declaration",
+   "fieldtype": "Attach",
+   "label": "Allergen and Cross Contamination Declaration"
+  },
+  {
+   "fieldname": "halal_and_kosher_certificate",
+   "fieldtype": "Attach",
+   "label": "Halal and Kosher Certificate"
+  },
+  {
+   "fieldname": "pds_and_tds",
+   "fieldtype": "Attach",
+   "label": "PDS and TDS"
+  },
+  {
+   "fieldname": "process_flow_chart",
+   "fieldtype": "Attach",
+   "label": "Process Flow Chart"
+  },
+  {
+   "fieldname": "gluten_free",
+   "fieldtype": "Attach",
+   "label": "Gluten Free"
+  },
+  {
+   "fieldname": "stability_data",
+   "fieldtype": "Attach",
+   "label": "Stability Data"
+  },
+  {
+   "fieldname": "country_of_origin_declaration",
+   "fieldtype": "Attach",
+   "label": "Country of Origin Declaration"
+  },
+  {
+   "fieldname": "clinical_studies_and_publications",
+   "fieldtype": "Attach",
+   "label": "Clinical Studies and Publications"
+  },
+  {
+   "description": "(Wherever Applicable)",
+   "fieldname": "non_gmovegannatural_declaration",
+   "fieldtype": "Attach",
+   "label": "Non GMO/Vegan/Natural Declaration"
+  },
+  {
+   "fetch_from": "supplier.supplier_name",
+   "fieldname": "supplier_name",
+   "fieldtype": "Data",
+   "label": "Supplier Name"
+  },
+  {
+   "fieldname": "document_collection_section",
+   "fieldtype": "Section Break",
+   "label": "Document Collection"
+  },
+  {
+   "fieldname": "initial_sample_evaluation_section",
+   "fieldtype": "Section Break",
+   "label": "Initial Sample Evaluation"
+  },
+  {
+   "fieldname": "common_required_documents_section",
+   "fieldtype": "Section Break",
+   "label": "Common Required Documents"
+  },
+  {
+   "description": "(In case of new Vendor)",
+   "fieldname": "vendor_registration_form_vrf",
+   "fieldtype": "Attach",
+   "label": "Vendor Registration Form (VRF)"
+  },
+  {
+   "description": "(In case of new Vendor)",
+   "fieldname": "msme_certificate",
+   "fieldtype": "Attach",
+   "label": "MSME Certificate"
+  },
+  {
+   "description": "(Specific to new PM to Supplier Transaction)",
+   "fieldname": "material_specification_sheet",
+   "fieldtype": "Attach",
+   "label": "Material Specification Sheet"
+  },
+  {
+   "description": "(From Vendor and it should match params as per our specifications shared against the requisition)",
+   "fieldname": "certificate_of_analysis_coa",
+   "fieldtype": "Attach",
+   "label": "Certificate of Analysis (COA)"
+  },
+  {
+   "fieldname": "labels_section",
+   "fieldtype": "Section Break",
+   "label": "Labels"
+  },
+  {
+   "fieldname": "artwork_finalized_internally",
+   "fieldtype": "Select",
+   "label": "Artwork Finalized Internally",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "jar_section",
+   "fieldtype": "Section Break",
+   "label": "Jar"
+  },
+  {
+   "fieldname": "nexk_size_and_dimensions_confirmed_via_rcd_replicadrawing",
+   "fieldtype": "Select",
+   "label": "Nexk size and Dimensions confirmed via RCD replica/drawing",
+   "options": "\nYes\nNo"
+  },
+  {
+   "description": "(Shade Match + Print Effects)",
+   "fieldname": "sample_shared",
+   "fieldtype": "Select",
+   "label": "Sample Shared",
+   "options": "\nYes\nNo"
+  },
+  {
+   "description": "(PO Raised - Commercial Supply Starts)",
+   "fieldname": "post_approval",
+   "fieldtype": "Select",
+   "label": "Post Approval",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "initial_sample_developed_and_submitted",
+   "fieldtype": "Select",
+   "label": "Initial Sample Developed and Submitted",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "upon_approval_commercial_supply_begins",
+   "fieldtype": "Select",
+   "label": "Upon Approval Commercial Supply Begins",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "sippercorrugated_box_section",
+   "fieldtype": "Section Break",
+   "label": "Sipper/Corrugated Box"
+  },
+  {
+   "fieldname": "spec_and_dimensions_shared",
+   "fieldtype": "Select",
+   "label": "Spec and Dimensions Shared",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "fitment_check_via_samples",
+   "fieldtype": "Select",
+   "label": "Fitment Check via Samples",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "design_and_mechanical_engineering_dme_team_reviews",
+   "fieldtype": "Select",
+   "label": "Design and Mechanical Engineering (DME) Team Reviews",
+   "options": "\nYes\nNo"
+  },
+  {
+   "description": "(PO - Commerical Supply)",
+   "fieldname": "final_approval",
+   "fieldtype": "Select",
+   "label": "Final Approval",
+   "options": "\nApproved\nReject"
+  },
+  {
+   "fieldname": "laminate_section",
+   "fieldtype": "Section Break",
+   "label": "Laminate"
+  },
+  {
+   "description": "(Cylinder Development Initiated)",
+   "fieldname": "specifications_shared",
+   "fieldtype": "Select",
+   "label": "Specifications Shared",
+   "options": "\nYes\nNo"
+  },
+  {
+   "fieldname": "proofing_of_cylinder",
+   "fieldtype": "Select",
+   "label": "Proofing of Cylinder",
+   "options": "\nYes\nNo"
+  },
+  {
+   "description": "Commercialisation",
+   "fieldname": "final_sample_approval",
+   "fieldtype": "Select",
+   "label": "Final Sample Approval",
+   "options": "\nYes\nNo"
+  },
+  {
+   "description": "(Collect COA and required supporting documents from the vendor)",
+   "fieldname": "certificate_of_analysis",
+   "fieldtype": "Select",
+   "label": "Certificate of Analysis",
+   "options": "\nDone\nPending"
+  },
+  {
+   "fieldname": "match_vendors_coa_with_internal_specifications",
+   "fieldtype": "Select",
+   "label": "Match Vendor's COA with Internal Specifications",
+   "options": "\nDone\nPending"
+  },
+  {
+   "fieldname": "request_one_batch_sample_from_the_vendor",
+   "fieldtype": "Select",
+   "label": "Request one batch sample from the vendor",
+   "options": "\nDone\nPending"
+  },
+  {
+   "fieldname": "basic_parameter_testing_section",
+   "fieldtype": "Section Break",
+   "label": "Basic Parameter Testing"
+  },
+  {
+   "fieldname": "rnd_conducts_initial_parameter_testing",
+   "fieldtype": "Select",
+   "label": "RnD Conducts Initial Parameter Testing",
+   "options": "\nDone\nPending"
+  },
+  {
+   "fieldname": "submit_sample_and_coa_and_internal_specifications_to_rnd",
+   "fieldtype": "Select",
+   "label": "Submit Sample and COA and Internal Specifications to RnD",
+   "options": "\nDone\nPending"
+  },
+  {
+   "description": "(Reviews and Submits to Brand for final Approval)",
+   "fieldname": "rnd_packaging_team",
+   "fieldtype": "Select",
+   "label": "RnD Packaging Team",
+   "options": "\nDone\nPending"
+  },
+  {
+   "fieldname": "conduct_sensory_trials_with_the_brand_team",
+   "fieldtype": "Select",
+   "label": "Conduct Sensory Trials with the Brand Team",
+   "options": "\nDone\nPending"
+  },
+  {
+   "fieldname": "advanced_evaluation_section",
+   "fieldtype": "Section Break",
+   "label": "Advanced Evaluation"
+  },
+  {
+   "description": "(Ask the vendor for two more batches)",
+   "fieldname": "if_the_initial_trail_is_successful",
+   "fieldtype": "Select",
+   "label": "If The Initial Trail is Successful",
+   "options": "\nDone\nPending"
+  },
+  {
+   "fieldname": "conduct_detailed_analysis_on_parameters_and_stability",
+   "fieldtype": "Select",
+   "label": "Conduct detailed Analysis on Parameters and Stability",
+   "options": "\nDone\nPending"
+  },
+  {
+   "fieldname": "commercial_trial_route_section",
+   "fieldtype": "Section Break",
+   "label": "Commercial Trial Route"
+  },
+  {
+   "description": "(Conduct a commercial trial with small quantities)",
+   "fieldname": "if_detail_analysis_is_ok",
+   "fieldtype": "Select",
+   "label": "If Detail Analysis is OK",
+   "options": "\nDone\nPending"
+  },
+  {
+   "description": "(Material is commercially listed)",
+   "fieldname": "if_a_commercial_batch_meets_expectations",
+   "fieldtype": "Select",
+   "label": "If a Commercial Batch meets expectations",
+   "options": "\nDone\nPending"
+  },
+  {
+   "fieldname": "compliance_route_section",
+   "fieldtype": "Section Break",
+   "label": "Compliance Route"
+  },
+  {
+   "description": "(Request full documentation (legal, quality, certifications))",
+   "fieldname": "if_detail_anaylis_is_ok",
+   "fieldtype": "Select",
+   "label": "If Detail Anaylis is OK",
+   "options": "\nDone\nPending"
+  },
+  {
+   "description": "(Material is commercially listed)",
+   "fieldname": "on_document_clearance",
+   "fieldtype": "Select",
+   "label": "On Document Clearance",
+   "options": "\nDone\nPending"
+  },
+  {
+   "description": "(Including Contaminant, Residue and toxinn Report as per FSSAI)",
+   "fieldname": "_6th_month_foscos_test_report",
+   "fieldtype": "Attach",
+   "label": "6th Month Foscos Test Report"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Supplier Item Link",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-06-12 16:19:56.329130",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Supplier Item Link",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
