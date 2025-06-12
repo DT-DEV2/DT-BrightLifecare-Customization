@@ -1,0 +1,206 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-05-30 14:18:37.810307",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_ajpu",
+  "naming_series",
+  "company",
+  "get_items_from",
+  "column_break_hgqf",
+  "posting_date",
+  "material_request_detail_section",
+  "material_requests",
+  "select_items_to_manufacture_section",
+  "assembly_items",
+  "sub_assembly_items_section",
+  "column_break_qmsd",
+  "column_break_ppdg",
+  "get_sub_assembly_items",
+  "section_break_yzpg",
+  "sub_assembly_items",
+  "material_request_planning_section",
+  "column_break_nsyr",
+  "column_break_ixuk",
+  "raw_materials_warehouse",
+  "get_raw_materials",
+  "section_break_mnqm",
+  "raw_materials",
+  "section_break_jzcr",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_ajpu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "MRP",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_hgqf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Posting Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_jzcr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "MFG-MRP-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "select_items_to_manufacture_section",
+   "fieldtype": "Section Break",
+   "label": "Select Items to Manufacture"
+  },
+  {
+   "fieldname": "assembly_items",
+   "fieldtype": "Table",
+   "label": "Assembly Items",
+   "options": "MRP Item"
+  },
+  {
+   "fieldname": "sub_assembly_items_section",
+   "fieldtype": "Section Break",
+   "hide_border": 1,
+   "label": "Sub Assembly Items"
+  },
+  {
+   "fieldname": "sub_assembly_items",
+   "fieldtype": "Table",
+   "label": "Sub Assembly Items",
+   "options": "MRP Sub Assembly Item"
+  },
+  {
+   "fieldname": "material_request_planning_section",
+   "fieldtype": "Section Break",
+   "hide_border": 1,
+   "label": "Material Request Planning"
+  },
+  {
+   "fieldname": "column_break_nsyr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ixuk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "raw_materials_warehouse",
+   "fieldtype": "Link",
+   "label": "Raw Materials Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "get_raw_materials",
+   "fieldtype": "Button",
+   "label": "Get Raw Materials"
+  },
+  {
+   "fieldname": "section_break_mnqm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_qmsd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ppdg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "get_sub_assembly_items",
+   "fieldtype": "Button",
+   "label": "Get Sub Assembly Items"
+  },
+  {
+   "fieldname": "section_break_yzpg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "get_items_from",
+   "fieldtype": "Select",
+   "label": "Get Items From",
+   "options": "Material Request"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "material_request_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Material Request Detail"
+  },
+  {
+   "fieldname": "material_requests",
+   "fieldtype": "Table",
+   "label": "Material Requests",
+   "options": "MRP Material Request"
+  },
+  {
+   "fieldname": "raw_materials",
+   "fieldtype": "Table",
+   "label": "Raw Materials",
+   "options": "MRP Raw Material"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-06-04 23:28:40.004981",
+ "modified_by": "Administrator",
+ "module": "MRP",
+ "name": "MRP",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1
+}

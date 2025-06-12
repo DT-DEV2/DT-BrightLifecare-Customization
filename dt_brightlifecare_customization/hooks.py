@@ -251,7 +251,8 @@ doctype_js = {
     "Custom Field" : "public/js/custom_field.js",
     # "Request for Quotation" : "public/js/rfq.js",
     "Supplier Quotation" : "public/js/supplier_quotation.js",
-    # "Contract": "public/js/contract.js"
+    # "Contract": "public/js/contract.js",
+    "Material Request": "public/js/material_request.js",
 }
 
 
