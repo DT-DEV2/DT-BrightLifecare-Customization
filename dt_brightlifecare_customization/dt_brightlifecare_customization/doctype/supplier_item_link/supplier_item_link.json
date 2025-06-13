@@ -13,6 +13,8 @@
   "item",
   "item_name",
   "item_group",
+  "rm",
+  "pm",
   "item_sub_category",
   "raw_material_tab",
   "document_collection_section",
@@ -109,11 +111,13 @@
    "options": "Item"
   },
   {
+   "depends_on": "eval:doc.rm",
    "fieldname": "raw_material_tab",
    "fieldtype": "Tab Break",
    "label": "Raw Material"
   },
   {
+   "depends_on": "eval:doc.pm",
    "fieldname": "packaging_material_tab",
    "fieldtype": "Tab Break",
    "label": "Packaging Material"
@@ -134,12 +138,6 @@
    "fieldname": "item_name",
    "fieldtype": "Data",
    "label": "Item Name"
-  },
-  {
-   "fetch_from": "item.item_group",
-   "fieldname": "item_group",
-   "fieldtype": "Data",
-   "label": "Item Group"
   },
   {
    "fetch_from": "item.custom_item_sub_category",
@@ -541,13 +539,36 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fetch_from": "item.item_group",
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "label": "Item Group",
+   "options": "Item Group"
+  },
+  {
+   "default": "0",
+   "fetch_from": "item_group.custom_rm_for_supplier_item_link",
+   "fieldname": "rm",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "RM"
+  },
+  {
+   "default": "0",
+   "fetch_from": "item_group.custom_pm_for_supplier_item_link",
+   "fieldname": "pm",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "PM"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-06-12 16:19:56.329130",
+ "modified": "2025-06-13 13:26:59.244314",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Item Link",
