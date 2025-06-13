@@ -1,0 +1,40 @@
+[
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Save",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2025-06-13 10:14:34.712745",
+  "module": "DT-BrightLifecare-Customization",
+  "name": "DT Set Source Warehouse in BOM",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": "BOM",
+  "script": "if doc.custom_target_warehouse:\n    if doc.items:\n        for d in doc.items:\n            d.source_warehouse = doc.custom_target_warehouse",
+  "script_type": "DocType Event"
+ },
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Save",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2025-06-13 10:14:26.349763",
+  "module": "DT-BrightLifecare-Customization",
+  "name": "DT Set Batch Size in Work Order",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": "Work Order",
+  "script": "if doc.bom_no:\n    batch_size = frappe.db.get_value('BOM', doc.bom_no, 'custom_fg_batch_size')\n    \n    if batch_size:\n        doc.batch_size = batch_size",
+  "script_type": "DocType Event"
+ }
+]

@@ -264,6 +264,10 @@ fixtures = [
     {
         "dt": "Client Script", 
         "filters": [["module", "in", ["DT-BrightLifecare-Customization"]]]
+    },
+    {
+        "dt": "Server Script", 
+        "filters": [["module", "in", ["DT-BrightLifecare-Customization"]]]
     }
 ]
 
