@@ -29,7 +29,7 @@
 
 frappe.ui.form.on('Material Request', {  // Replace with your doctype
     refresh(frm) {
-        if (frm.doc.docstatus === 1 && frm.doc.custom_suppliers?.length) {
+        if (frm.doc.docstatus === 1 && frm.doc.custom_suppliers?.length && frm.doc.material_request_type == "Purchase") {
             frm.add_custom_button("Create RFQs", () => {
                 frappe.call({
                     method: "dt_brightlifecare_customization.public.py.material_request.create_rfq_from_suppliers",
