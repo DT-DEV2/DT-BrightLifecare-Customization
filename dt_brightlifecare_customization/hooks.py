@@ -286,9 +286,9 @@ doc_events = {
     "Supplier": {
         "before_save": "dt_brightlifecare_customization.public.py.supplier.before_save"
     },
-    # "Request for Quotation": {
-    #     "before_save": "dt_brightlifecare_customization.public.py.rfq.validate_supplier_items"
-    # },
+    "Request for Quotation": {
+        "on_update": "dt_brightlifecare_customization.public.py.rfq.before_save"
+    },
     "Material Request": {
         "before_save": "dt_brightlifecare_customization.public.py.material_request.before_save"
     },
