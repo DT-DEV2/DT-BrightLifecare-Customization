@@ -2658,7 +2658,7 @@
   "modified": "2025-05-29 15:10:15.401115",
   "module": "DT-BrightLifecare-Customization",
   "name": "Supplier-custom_connected_users",
-  "no_copy": 0,
+  "no_copy": 1,
   "non_negative": 0,
   "options": "Connected Users",
   "permlevel": 0,
