@@ -9,19 +9,15 @@
   "section_break_ajpu",
   "naming_series",
   "company",
-  "get_items_from",
   "column_break_hgqf",
   "posting_date",
   "material_request_detail_section",
   "material_requests",
   "select_items_to_manufacture_section",
-  "assembly_items",
-  "sub_assembly_items_section",
-  "column_break_qmsd",
-  "column_break_ppdg",
-  "get_sub_assembly_items",
-  "section_break_yzpg",
-  "sub_assembly_items",
+  "material_request_items",
+  "allocation_to_bom_section",
+  "warehouse",
+  "column_break_mltx",
   "material_request_planning_section",
   "column_break_nsyr",
   "column_break_ixuk",
@@ -84,24 +80,6 @@
    "label": "Select Items to Manufacture"
   },
   {
-   "fieldname": "assembly_items",
-   "fieldtype": "Table",
-   "label": "Assembly Items",
-   "options": "MRP Item"
-  },
-  {
-   "fieldname": "sub_assembly_items_section",
-   "fieldtype": "Section Break",
-   "hide_border": 1,
-   "label": "Sub Assembly Items"
-  },
-  {
-   "fieldname": "sub_assembly_items",
-   "fieldtype": "Table",
-   "label": "Sub Assembly Items",
-   "options": "MRP Sub Assembly Item"
-  },
-  {
    "fieldname": "material_request_planning_section",
    "fieldtype": "Section Break",
    "hide_border": 1,
@@ -131,29 +109,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "column_break_qmsd",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_ppdg",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "get_sub_assembly_items",
-   "fieldtype": "Button",
-   "label": "Get Sub Assembly Items"
-  },
-  {
-   "fieldname": "section_break_yzpg",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "get_items_from",
-   "fieldtype": "Select",
-   "label": "Get Items From",
-   "options": "Material Request"
-  },
-  {
    "collapsible": 1,
    "fieldname": "material_request_detail_section",
    "fieldtype": "Section Break",
@@ -170,13 +125,34 @@
    "fieldtype": "Table",
    "label": "Raw Materials",
    "options": "MRP Raw Material"
+  },
+  {
+   "fieldname": "material_request_items",
+   "fieldtype": "Table",
+   "label": "Material Request Items",
+   "options": "MRP Material Request Item"
+  },
+  {
+   "fieldname": "allocation_to_bom_section",
+   "fieldtype": "Section Break",
+   "label": "Allocation to BOM"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "column_break_mltx",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-06-04 23:28:40.004981",
+ "modified": "2025-06-20 16:08:07.237974",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",

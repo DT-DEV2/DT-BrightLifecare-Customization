@@ -7,16 +7,11 @@
  "engine": "InnoDB",
  "field_order": [
   "item_code",
-  "bom_no",
   "column_break_eoxj",
   "planned_qty",
   "uom",
-  "warehouse",
   "planned_start_date",
-  "quantity_and_description_section",
-  "pending_qty",
-  "ordered_qty",
-  "column_break_xjar",
+  "description_section",
   "description",
   "reference_section",
   "material_request",
@@ -29,14 +24,6 @@
    "in_list_view": 1,
    "label": "Item Code",
    "options": "Item",
-   "reqd": 1
-  },
-  {
-   "fieldname": "bom_no",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "BOM No",
-   "options": "BOM",
    "reqd": 1
   },
   {
@@ -58,27 +45,6 @@
    "options": "UOM",
    "read_only": 1,
    "reqd": 1
-  },
-  {
-   "fieldname": "quantity_and_description_section",
-   "fieldtype": "Section Break",
-   "label": "Quantity and Description"
-  },
-  {
-   "fieldname": "pending_qty",
-   "fieldtype": "Float",
-   "label": "Pending Qty",
-   "read_only": 1
-  },
-  {
-   "fieldname": "ordered_qty",
-   "fieldtype": "Float",
-   "label": "Ordered Qty",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_xjar",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "description",
@@ -105,29 +71,27 @@
    "read_only": 1
   },
   {
-   "fieldname": "warehouse",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Finished Goods Warehouse",
-   "options": "Warehouse"
-  },
-  {
    "default": "Today",
    "fieldname": "planned_start_date",
    "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "Planned Start Date",
    "reqd": 1
+  },
+  {
+   "fieldname": "description_section",
+   "fieldtype": "Section Break",
+   "label": "Description"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-05-30 14:55:15.693868",
+ "modified": "2025-06-20 15:08:18.482845",
  "modified_by": "Administrator",
  "module": "MRP",
- "name": "MRP Item",
+ "name": "MRP Material Request Item",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",

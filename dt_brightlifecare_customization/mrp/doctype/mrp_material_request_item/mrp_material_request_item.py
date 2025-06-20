@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class MRPSubAssemblyItem(Document):
+class MRPMaterialRequestItem(Document):
 	pass

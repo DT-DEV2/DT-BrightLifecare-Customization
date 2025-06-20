@@ -12,45 +12,6 @@ class MRP(Document):
 	def validate(doc):
 		pass
 
-	@frappe.whitelist()
-	def get_sub_assembly_items(self):
-		if not self.get("assembly_items"):
-			frappe.throw("No Assembly Items found.")
-
-		self.set("sub_assembly_items", [])  # Clear existing
-
-		sub_assembly_map = {}
-
-		for row in self.assembly_items:
-			if not row.bom_no or not row.item_code:
-				continue
-
-			if not frappe.db.exists("BOM", row.bom_no):
-				frappe.msgprint(f"Invalid BOM: {row.bom_no} for item {row.item_code}")
-				continue
-
-			sub_assemblies = get_sub_assemblies_from_bom(row.bom_no, row.planned_qty)
-
-			for sub in sub_assemblies:
-				key = (sub.item_code, sub.bom, sub.warehouse, row.item_code)
-
-				if key in sub_assembly_map:
-					sub_assembly_map[key]["qty"] += sub.qty
-				else:
-					sub_assembly_map[key] = {
-						"production_item": sub.item_code,
-						"item_name": sub.item_name,
-						"qty": sub.qty,
-						"bom_no": sub.bom,
-						"fg_warehouse": sub.warehouse,
-						"parent_item_code": row.item_code,
-						"type_of_manufacturing": "Material Request"
-					}
-
-		for item in sub_assembly_map.values():
-			self.append("sub_assembly_items", item)
-
-
 
 	@frappe.whitelist()
 	def get_raw_materials(self):
@@ -85,36 +46,6 @@ class MRP(Document):
 
 		for val in material_map.values():
 			self.append("raw_materials", val)
-
-
-
-
-
-
-
-
-def get_sub_assemblies_from_bom(bom_name, quantity=1):
-    sub_items = []
-    bom_doc = frappe.get_doc("BOM", bom_name)
-
-    for row in bom_doc.items:
-        # Only add if this is a sub-assembly (has its own BOM)
-        sub_bom = frappe.get_value("BOM", {
-            "item": row.item_code,
-            "is_default": 1,
-            "is_active": 1
-        })
-
-        if sub_bom:
-            sub_items.append(frappe._dict({
-                "item_code": row.item_code,
-                "item_name": row.item_name,
-                "qty": flt(row.qty) * flt(quantity),
-                "bom": sub_bom,
-                "warehouse": row.source_warehouse or ""
-            }))
-
-    return sub_items
 
 
 
