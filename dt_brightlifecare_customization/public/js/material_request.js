@@ -23,5 +23,19 @@ frappe.ui.form.on('Material Request', {
                 });
             }
         }
-    },
+
+        if (frm.doc.docstatus === 1 && frm.doc.custom_suppliers?.length && frm.doc.material_request_type == "Purchase") {
+            frm.add_custom_button("Create RFQs", () => {
+                frappe.call({
+                    method: "dt_brightlifecare_customization.public.py.material_request.create_rfq_from_suppliers",
+                    args: { docname: frm.doc.name },
+                    callback(r) {
+                        if (r.message) {
+                            frappe.msgprint("RFQs Created: " + r.message.join(", "));
+                        }
+                    }
+                });
+            });
+        }
+    }
 });

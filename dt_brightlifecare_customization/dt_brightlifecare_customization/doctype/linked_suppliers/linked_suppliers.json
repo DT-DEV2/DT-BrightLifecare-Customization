@@ -1,43 +1,30 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-05-15 16:30:34.521197",
+ "creation": "2025-05-30 10:25:46.338432",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "common_name",
-  "brand_name",
-  "hsn"
+  "supplier"
  ],
  "fields": [
   {
-   "fieldname": "brand_name",
-   "fieldtype": "Data",
+   "fieldname": "supplier",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Brand Name"
-  },
-  {
-   "fieldname": "common_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Common Name"
-  },
-  {
-   "fieldname": "hsn",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "HSN"
+   "label": "Supplier",
+   "options": "Supplier"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-05 12:00:08.549611",
+ "modified": "2025-05-30 10:29:32.171141",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Product Details",
+ "name": "Linked Suppliers",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",

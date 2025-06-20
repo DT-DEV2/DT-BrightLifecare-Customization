@@ -1,43 +1,37 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-05-15 16:30:34.521197",
+ "creation": "2025-05-30 12:10:06.578054",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "common_name",
-  "brand_name",
-  "hsn"
+  "contract_term",
+  "terms_and_conditions"
  ],
  "fields": [
   {
-   "fieldname": "brand_name",
-   "fieldtype": "Data",
+   "fieldname": "contract_term",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Brand Name"
+   "label": "Contract Term",
+   "options": "Contract Template"
   },
   {
-   "fieldname": "common_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Common Name"
-  },
-  {
-   "fieldname": "hsn",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "HSN"
+   "fetch_from": "contract_term.contract_terms",
+   "fieldname": "terms_and_conditions",
+   "fieldtype": "Text Editor",
+   "label": "Terms and Conditions"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-05 12:00:08.549611",
+ "modified": "2025-06-06 11:32:26.310729",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Product Details",
+ "name": "Contract Terms and Template",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",

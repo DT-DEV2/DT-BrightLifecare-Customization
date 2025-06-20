@@ -255,3 +255,22 @@ def before_save(doc, method):
                     "content": content,
                     "comment_by": comment_by
                 }).insert()
+
+
+
+@frappe.whitelist()
+def has_supplier_visibility_role():
+    """Check if current user has any directly assigned role with supplier_visibility"""
+    # Get only roles explicitly assigned in User doctype
+    user_assigned_roles = frappe.db.sql_list("""
+        SELECT role FROM `tabHas Role`
+        WHERE parent = %s AND parenttype = 'User'
+    """, frappe.session.user)
+    
+    roles_with_visibility = frappe.db.sql_list("""
+        SELECT DISTINCT role 
+        FROM `tabRole Configuration` 
+        WHERE supplier_visibility = 1
+    """)
+    
+    return bool(set(user_assigned_roles) & set(roles_with_visibility))

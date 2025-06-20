@@ -251,8 +251,9 @@ doctype_js = {
     "Custom Field" : "public/js/custom_field.js",
     # "Request for Quotation" : "public/js/rfq.js",
     "Supplier Quotation" : "public/js/supplier_quotation.js",
-    # "Contract": "public/js/contract.js",
     "Material Request": "public/js/material_request.js",
+    "Contract": "public/js/contract.js",
+    "Material Request": "public/js/material_request.js"
 }
 
 
@@ -263,6 +264,10 @@ fixtures = [
     },
     {
         "dt": "Client Script", 
+        "filters": [["module", "in", ["DT-BrightLifecare-Customization"]]]
+    },
+    {
+        "dt": "Server Script", 
         "filters": [["module", "in", ["DT-BrightLifecare-Customization"]]]
     }
 ]
@@ -283,7 +288,25 @@ doc_events = {
         "before_save": "dt_brightlifecare_customization.public.py.supplier.before_save"
     },
     "Request for Quotation": {
-        "before_save": "dt_brightlifecare_customization.public.py.rfq.validate_supplier_items"
+        "on_update": "dt_brightlifecare_customization.public.py.rfq.before_save"
+    },
+    "Material Request": {
+        "before_save": "dt_brightlifecare_customization.public.py.material_request.before_save"
+    },
+    "Address":{
+        "on_update": "dt_brightlifecare_customization.public.py.address.before_save",
+    },
+    "Bank Account":{
+        "on_update": "dt_brightlifecare_customization.public.py.bank_account.before_save",
+    },
+    "Contract":{
+        "on_update": "dt_brightlifecare_customization.public.py.contract.before_save",
+    },
+    "Role": {
+        "on_update": "dt_brightlifecare_customization.public.py.role.create_role_config"
+    },
+    "Supplier Item Link": {
+        "on_submit": "dt_brightlifecare_customization.dt_brightlifecare_customization.doctype.supplier_item_link.supplier_item_link.on_submit"
     }
 
 }
