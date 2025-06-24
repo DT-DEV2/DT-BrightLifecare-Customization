@@ -74,5 +74,24 @@
   "reference_doctype": "Serial and Batch Bundle",
   "script": "if doc.voucher_type == \"Purchase Receipt\" and doc.voucher_no:\n    for row in doc.entries:\n        if row.batch_no:\n            if not row.custom_batch_expiry_date:\n                frappe.throw(\n                    f\"Expiry Date is required in row {row.idx} for batch {row.batch_no} in Serial and Batch Bundle\"\n                )\n",
   "script_type": "DocType Event"
+ },
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Save",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2025-06-24 11:58:11.514987",
+  "module": "DT-BrightLifecare-Customization",
+  "name": "DT Calculate Total Operation Time for BOM Qty and Batch Size",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": "BOM",
+  "script": "if doc.operations and doc.with_operations == 1:\n    total_time = 0\n    for d in doc.operations:\n        total_time = total_time + d.time_in_mins\n    \n    doc.custom_total_operation_time_for_bom_qty = total_time\n\n\nif doc.quantity != 0:\n    if doc.custom_total_operation_time_for_bom_qty:\n        doc.custom_total_operation_time_for_batch_size = (doc.custom_total_operation_time_for_bom_qty * doc.custom_fg_batch_size) / doc.quantity",
+  "script_type": "DocType Event"
  }
 ]

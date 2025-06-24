@@ -16,13 +16,9 @@
   "select_items_to_manufacture_section",
   "material_request_items",
   "allocation_to_bom_section",
-  "warehouse",
-  "column_break_mltx",
-  "material_request_planning_section",
-  "column_break_nsyr",
-  "column_break_ixuk",
-  "raw_materials_warehouse",
-  "get_raw_materials",
+  "allocate_to_bom",
+  "section_break_kolc",
+  "mrp_bom_exploded_items",
   "section_break_mnqm",
   "raw_materials",
   "section_break_jzcr",
@@ -80,33 +76,9 @@
    "label": "Select Items to Manufacture"
   },
   {
-   "fieldname": "material_request_planning_section",
-   "fieldtype": "Section Break",
-   "hide_border": 1,
-   "label": "Material Request Planning"
-  },
-  {
-   "fieldname": "column_break_nsyr",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_ixuk",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "raw_materials_warehouse",
-   "fieldtype": "Link",
-   "label": "Raw Materials Warehouse",
-   "options": "Warehouse"
-  },
-  {
-   "fieldname": "get_raw_materials",
-   "fieldtype": "Button",
-   "label": "Get Raw Materials"
-  },
-  {
    "fieldname": "section_break_mnqm",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "FEFO Allocation"
   },
   {
    "collapsible": 1,
@@ -138,21 +110,26 @@
    "label": "Allocation to BOM"
   },
   {
-   "fieldname": "warehouse",
-   "fieldtype": "Link",
-   "label": "Warehouse",
-   "options": "Warehouse"
+   "fieldname": "section_break_kolc",
+   "fieldtype": "Section Break"
   },
   {
-   "fieldname": "column_break_mltx",
-   "fieldtype": "Column Break"
+   "fieldname": "mrp_bom_exploded_items",
+   "fieldtype": "Table",
+   "label": "MRP BOM Exploded Items",
+   "options": "MRP BOM Exploded Items"
+  },
+  {
+   "fieldname": "allocate_to_bom",
+   "fieldtype": "Button",
+   "label": "Allocate to BOM"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-06-20 16:08:07.237974",
+ "modified": "2025-06-23 19:53:04.578479",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",

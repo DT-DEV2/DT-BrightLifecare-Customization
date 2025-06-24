@@ -10,7 +10,7 @@
   "column_break_eoxj",
   "planned_qty",
   "uom",
-  "planned_start_date",
+  "required_by",
   "description_section",
   "description",
   "reference_section",
@@ -71,24 +71,21 @@
    "read_only": 1
   },
   {
-   "default": "Today",
-   "fieldname": "planned_start_date",
-   "fieldtype": "Datetime",
-   "in_list_view": 1,
-   "label": "Planned Start Date",
-   "reqd": 1
-  },
-  {
    "fieldname": "description_section",
    "fieldtype": "Section Break",
    "label": "Description"
+  },
+  {
+   "fieldname": "required_by",
+   "fieldtype": "Date",
+   "label": "Required By"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-20 15:08:18.482845",
+ "modified": "2025-06-23 20:14:58.275586",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP Material Request Item",

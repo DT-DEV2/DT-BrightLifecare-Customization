@@ -24,15 +24,16 @@ def create_mrp(material_request, use_defaults=False):
     
     new_mrp_doc.append('material_requests', {
         'material_request': material_request_doc.name,
-        'material_request_date': material_request_doc.transaction_date
+        'material_request_date': material_request_doc.transaction_date,
+        'required_by' : material_request_doc.required_by,
     })
 
     for item in material_request_doc.items:
         new_mrp_doc.append('material_request_items', {
             'item_code': item.item_code,
             'planned_qty': item.qty,
-            'schedule_date': item.schedule_date,
-            'warehouse': item.warehouse,
+            'required_by': item.schedule_date,
+            # 'warehouse': item.warehouse,
             'uom': item.uom,
             'material_request': material_request_doc.name,
             'material_request_item': item.name,
