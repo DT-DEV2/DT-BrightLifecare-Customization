@@ -81,13 +81,6 @@
    "options": "Warehouse"
   },
   {
-   "fetch_from": "bom.custom_priority",
-   "fieldname": "bom_priority",
-   "fieldtype": "Link",
-   "label": "BOM Priority",
-   "options": "Priority"
-  },
-  {
    "fieldname": "column_break_qnaf",
    "fieldtype": "Column Break"
   },
@@ -123,12 +116,18 @@
    "fieldname": "total_operation_time",
    "fieldtype": "Float",
    "label": "Total Operation Time"
+  },
+  {
+   "fetch_from": "bom.custom_priority",
+   "fieldname": "bom_priority",
+   "fieldtype": "Int",
+   "label": "BOM Priority"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-23 21:02:55.689963",
+ "modified": "2025-06-24 14:36:07.274253",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "BOM Allocation Log",
