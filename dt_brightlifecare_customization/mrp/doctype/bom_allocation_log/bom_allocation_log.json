@@ -1,0 +1,155 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-23 20:09:51.650537",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "mrp",
+  "material_requested",
+  "required_qty",
+  "column_break_wsus",
+  "mrp_date",
+  "material_requested_detail",
+  "required_by",
+  "section_break_rajr",
+  "bom",
+  "bom_fg_batch_size",
+  "operation_time_per_batch_size",
+  "column_break_qnaf",
+  "bom_priority",
+  "bom_warehouse",
+  "section_break_icwb",
+  "total_number_of_batches",
+  "column_break_vpzx",
+  "total_operation_time"
+ ],
+ "fields": [
+  {
+   "fieldname": "mrp",
+   "fieldtype": "Link",
+   "label": "MRP",
+   "options": "MRP"
+  },
+  {
+   "fieldname": "column_break_wsus",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "(Item Code)",
+   "fieldname": "material_requested",
+   "fieldtype": "Link",
+   "label": "Material Requested",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "mrp.posting_date",
+   "fieldname": "mrp_date",
+   "fieldtype": "Date",
+   "label": "MRP Date"
+  },
+  {
+   "fieldname": "material_requested_detail",
+   "fieldtype": "Data",
+   "label": "Material Requested Detail"
+  },
+  {
+   "fieldname": "required_by",
+   "fieldtype": "Date",
+   "label": "Required By"
+  },
+  {
+   "fieldname": "required_qty",
+   "fieldtype": "Float",
+   "label": "Required Qty"
+  },
+  {
+   "fieldname": "section_break_rajr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "bom",
+   "fieldtype": "Link",
+   "label": "BOM",
+   "options": "BOM"
+  },
+  {
+   "fetch_from": "bom.custom_target_warehouse",
+   "fieldname": "bom_warehouse",
+   "fieldtype": "Link",
+   "label": "BOM Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fetch_from": "bom.custom_priority",
+   "fieldname": "bom_priority",
+   "fieldtype": "Link",
+   "label": "BOM Priority",
+   "options": "Priority"
+  },
+  {
+   "fieldname": "column_break_qnaf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "bom.custom_fg_batch_size",
+   "fieldname": "bom_fg_batch_size",
+   "fieldtype": "Float",
+   "label": "BOM FG Batch Size"
+  },
+  {
+   "description": "In minutes",
+   "fetch_from": "bom.custom_total_operation_time_for_batch_size",
+   "fieldname": "operation_time_per_batch_size",
+   "fieldtype": "Float",
+   "label": "Operation Time Per Batch Size"
+  },
+  {
+   "fieldname": "section_break_icwb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Required Qty / BOM FG Batch Size",
+   "fieldname": "total_number_of_batches",
+   "fieldtype": "Float",
+   "label": "Total Number of Batches"
+  },
+  {
+   "fieldname": "column_break_vpzx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Total Operation Time required for production. Total Number of Batches X Operation Time Per Batch Size (in mins)",
+   "fieldname": "total_operation_time",
+   "fieldtype": "Float",
+   "label": "Total Operation Time"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-23 21:02:55.689963",
+ "modified_by": "Administrator",
+ "module": "MRP",
+ "name": "BOM Allocation Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

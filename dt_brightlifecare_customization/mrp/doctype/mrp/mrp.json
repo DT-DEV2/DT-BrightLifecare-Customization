@@ -1,0 +1,159 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-05-30 14:18:37.810307",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_ajpu",
+  "naming_series",
+  "company",
+  "column_break_hgqf",
+  "posting_date",
+  "material_request_detail_section",
+  "material_requests",
+  "select_items_to_manufacture_section",
+  "material_request_items",
+  "allocation_to_bom_section",
+  "allocate_to_bom",
+  "section_break_kolc",
+  "mrp_bom_exploded_items",
+  "section_break_mnqm",
+  "raw_materials",
+  "section_break_jzcr",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_ajpu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "MRP",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_hgqf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Posting Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_jzcr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "MFG-MRP-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "select_items_to_manufacture_section",
+   "fieldtype": "Section Break",
+   "label": "Select Items to Manufacture"
+  },
+  {
+   "fieldname": "section_break_mnqm",
+   "fieldtype": "Section Break",
+   "label": "FEFO Allocation"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "material_request_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Material Request Detail"
+  },
+  {
+   "fieldname": "material_requests",
+   "fieldtype": "Table",
+   "label": "Material Requests",
+   "options": "MRP Material Request"
+  },
+  {
+   "fieldname": "raw_materials",
+   "fieldtype": "Table",
+   "label": "Raw Materials",
+   "options": "MRP Raw Material"
+  },
+  {
+   "fieldname": "material_request_items",
+   "fieldtype": "Table",
+   "label": "Material Request Items",
+   "options": "MRP Material Request Item"
+  },
+  {
+   "fieldname": "allocation_to_bom_section",
+   "fieldtype": "Section Break",
+   "label": "Allocation to BOM"
+  },
+  {
+   "fieldname": "section_break_kolc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "mrp_bom_exploded_items",
+   "fieldtype": "Table",
+   "label": "MRP BOM Exploded Items",
+   "options": "MRP BOM Exploded Items"
+  },
+  {
+   "fieldname": "allocate_to_bom",
+   "fieldtype": "Button",
+   "label": "Allocate to BOM"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-06-23 19:53:04.578479",
+ "modified_by": "Administrator",
+ "module": "MRP",
+ "name": "MRP",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1
+}
