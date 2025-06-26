@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestBOMAllocationLog(FrappeTestCase):
+class TestMRPBOMAllocationLog(FrappeTestCase):
 	pass

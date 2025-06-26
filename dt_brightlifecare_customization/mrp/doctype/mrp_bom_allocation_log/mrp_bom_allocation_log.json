@@ -5,24 +5,35 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "section_break_zyvv",
+  "bom_allocation_log_datetime",
+  "section_break_eqwn",
   "mrp",
   "material_requested",
-  "required_qty",
   "column_break_wsus",
   "mrp_date",
   "material_requested_detail",
   "required_by",
+  "section_break_copb",
+  "required_qty",
+  "qty_in_stock_uom",
+  "uom_conversion_factor",
+  "column_break_vizc",
+  "uom",
+  "stock_uom",
   "section_break_rajr",
   "bom",
   "bom_fg_batch_size",
   "operation_time_per_batch_size",
+  "ideal_production_start_datetime",
+  "ideal_production_end_datetime",
   "column_break_qnaf",
   "bom_priority",
   "bom_warehouse",
-  "section_break_icwb",
   "total_number_of_batches",
-  "column_break_vpzx",
-  "total_operation_time"
+  "total_operation_time",
+  "section_break_plme",
+  "mrp_bom_allocation_log_workstation"
  ],
  "fields": [
   {
@@ -98,18 +109,10 @@
    "label": "Operation Time Per Batch Size"
   },
   {
-   "fieldname": "section_break_icwb",
-   "fieldtype": "Section Break"
-  },
-  {
-   "description": "Required Qty / BOM FG Batch Size",
+   "description": "Qty in Stock UOM / BOM FG Batch Size",
    "fieldname": "total_number_of_batches",
    "fieldtype": "Float",
    "label": "Total Number of Batches"
-  },
-  {
-   "fieldname": "column_break_vpzx",
-   "fieldtype": "Column Break"
   },
   {
    "description": "Total Operation Time required for production. Total Number of Batches X Operation Time Per Batch Size (in mins)",
@@ -122,15 +125,80 @@
    "fieldname": "bom_priority",
    "fieldtype": "Int",
    "label": "BOM Priority"
+  },
+  {
+   "fieldname": "section_break_copb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "qty_in_stock_uom",
+   "fieldtype": "Float",
+   "label": "Qty in Stock UOM"
+  },
+  {
+   "fieldname": "column_break_vizc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "label": "UOM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "stock_uom",
+   "fieldtype": "Link",
+   "label": "Stock UOM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "uom_conversion_factor",
+   "fieldtype": "Float",
+   "label": "UOM Conversion Factor"
+  },
+  {
+   "fieldname": "section_break_zyvv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Creation Datetime",
+   "fieldname": "bom_allocation_log_datetime",
+   "fieldtype": "Datetime",
+   "label": "BOM Allocation Log Datetime"
+  },
+  {
+   "fieldname": "section_break_eqwn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_plme",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "mrp_bom_allocation_log_workstation",
+   "fieldtype": "Table",
+   "label": "MRP BOM Allocation Log Workstation",
+   "options": "MRP BOM Allocation Log Workstation"
+  },
+  {
+   "fieldname": "ideal_production_start_datetime",
+   "fieldtype": "Datetime",
+   "label": "Ideal Production Start Datetime"
+  },
+  {
+   "fieldname": "ideal_production_end_datetime",
+   "fieldtype": "Datetime",
+   "label": "Ideal Production End Datetime"
   }
  ],
  "grid_page_length": 50,
+ "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-24 14:36:07.274253",
+ "modified": "2025-06-25 21:19:25.972488",
  "modified_by": "Administrator",
  "module": "MRP",
- "name": "BOM Allocation Log",
+ "name": "MRP BOM Allocation Log",
  "owner": "Administrator",
  "permissions": [
   {
