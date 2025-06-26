@@ -13,10 +13,14 @@
   "posting_date",
   "material_request_detail_section",
   "material_requests",
-  "select_items_to_manufacture_section",
-  "material_request_items",
   "allocation_to_bom_section",
+  "bom_allocation_condition",
+  "column_break_gpio",
   "allocate_to_bom",
+  "section_break_xkul",
+  "material_request_items",
+  "section_break_ciym",
+  "mrp_bom_allocation_detail",
   "section_break_kolc",
   "mrp_bom_exploded_items",
   "section_break_mnqm",
@@ -71,17 +75,11 @@
    "reqd": 1
   },
   {
-   "fieldname": "select_items_to_manufacture_section",
-   "fieldtype": "Section Break",
-   "label": "Select Items to Manufacture"
-  },
-  {
    "fieldname": "section_break_mnqm",
    "fieldtype": "Section Break",
    "label": "FEFO Allocation"
   },
   {
-   "collapsible": 1,
    "fieldname": "material_request_detail_section",
    "fieldtype": "Section Break",
    "label": "Material Request Detail"
@@ -102,7 +100,8 @@
    "fieldname": "material_request_items",
    "fieldtype": "Table",
    "label": "Material Request Items",
-   "options": "MRP Material Request Item"
+   "options": "MRP Material Request Item",
+   "read_only": 1
   },
   {
    "fieldname": "allocation_to_bom_section",
@@ -123,13 +122,38 @@
    "fieldname": "allocate_to_bom",
    "fieldtype": "Button",
    "label": "Allocate to BOM"
+  },
+  {
+   "fieldname": "column_break_gpio",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Minimum Number of Batches",
+   "fieldname": "bom_allocation_condition",
+   "fieldtype": "Select",
+   "label": "BOM Allocation Condition",
+   "options": "Minimum Number of Batches\nMinimum Operation Time"
+  },
+  {
+   "fieldname": "section_break_ciym",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "mrp_bom_allocation_detail",
+   "fieldtype": "Table",
+   "label": "MRP BOM Allocation Detail",
+   "options": "MRP BOM Allocation Detail"
+  },
+  {
+   "fieldname": "section_break_xkul",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-06-23 19:53:04.578479",
+ "modified": "2025-06-25 20:42:53.252093",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",

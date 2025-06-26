@@ -25,7 +25,7 @@ def create_mrp(material_request, use_defaults=False):
     new_mrp_doc.append('material_requests', {
         'material_request': material_request_doc.name,
         'material_request_date': material_request_doc.transaction_date,
-        'required_by' : material_request_doc.required_by,
+        'required_by' : material_request_doc.schedule_date,
     })
 
     for item in material_request_doc.items:
