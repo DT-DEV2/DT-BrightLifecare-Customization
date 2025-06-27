@@ -31,13 +31,16 @@ def create_mrp(material_request, use_defaults=False):
     for item in material_request_doc.items:
         new_mrp_doc.append('material_request_items', {
             'item_code': item.item_code,
-            'planned_qty': item.qty,
+            'material_requested_qty': item.qty,
             'required_by': item.schedule_date,
-            # 'warehouse': item.warehouse,
+            'warehouse': item.warehouse,
             'uom': item.uom,
             'material_request': material_request_doc.name,
-            'material_request_item': item.name,
-            # 'bom_no': item.bom_no or 0,
+            'material_request_item_detail': item.name,
+            'qty_in_stock_uom': item.stock_qty,
+            'uom_conversion_factor': item.conversion_factor,
+            'stock_uom': item.stock_uom,
+            'description': item.description,           
         })
 
     new_mrp_doc.insert()
