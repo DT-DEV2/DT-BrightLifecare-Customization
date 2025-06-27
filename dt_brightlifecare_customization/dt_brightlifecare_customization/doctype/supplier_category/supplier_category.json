@@ -8,7 +8,8 @@
   "category",
   "type_of_product_required",
   "nda_sign_required",
-  "iso_required"
+  "iso_required",
+  "cancelled_cheque_required"
  ],
  "fields": [
   {
@@ -33,12 +34,18 @@
    "fieldname": "iso_required",
    "fieldtype": "Check",
    "label": "ISO Required"
+  },
+  {
+   "default": "0",
+   "fieldname": "cancelled_cheque_required",
+   "fieldtype": "Check",
+   "label": "Cancelled Cheque Required"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-27 15:09:42.280974",
+ "modified": "2025-06-27 16:14:32.185017",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Category",
