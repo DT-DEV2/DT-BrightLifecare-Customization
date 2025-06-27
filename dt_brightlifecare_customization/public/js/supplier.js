@@ -186,6 +186,10 @@ frappe.ui.form.on('Supplier', {
         toggle_oem_license_field(frm);
 
 
+        toggle_custom_type_of_product(frm);
+
+
+
 
         frappe.call({
             method: 'dt_brightlifecare_customization.public.py.supplier.has_supplier_visibility_role',
@@ -1066,4 +1070,42 @@ function toggle_oem_license_field(frm) {
     const rows = frm.doc.custom_type_of_product || [];
     const any_checked = rows.some(row => row.relabeller_fssai_license === 1);
     frm.toggle_display('custom_oem_fssai_license_number', any_checked);
+}
+
+
+
+
+
+
+
+
+
+
+frappe.ui.form.on('Supplier Categories', {
+    type_of_product_required(frm, cdt, cdn) {
+        toggle_custom_type_of_product(frm);
+    }
+});
+
+function toggle_custom_type_of_product(frm) {
+    let show = false;
+    let iso = false;
+    cc = false;
+    if (frm.doc.custom_supplier_category && frm.doc.custom_supplier_category.length > 0) {
+        frm.doc.custom_supplier_category.forEach(row => {
+            if (row.type_of_product_required) {
+                show = true;
+            }
+            if (row.iso_required) {
+                iso = true;
+            }
+            if (row.cancelled_cheque_required) {
+                cc = true;
+            }
+        });
+    }
+
+    frm.toggle_display('custom_type_of_product', show);
+    frm.toggle_display('custom_iso_certificate', iso);
+    frm.toggle_display('custom_cancelled_cheque', cc)
 }
