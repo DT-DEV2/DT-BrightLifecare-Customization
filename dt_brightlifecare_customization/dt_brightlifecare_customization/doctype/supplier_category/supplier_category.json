@@ -1,7 +1,6 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:category",
  "creation": "2025-06-27 12:33:42.139306",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -15,8 +14,7 @@
   {
    "fieldname": "category",
    "fieldtype": "Data",
-   "label": "Category",
-   "unique": 1
+   "label": "Category"
   },
   {
    "default": "0",
@@ -40,11 +38,10 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-27 13:41:50.907951",
+ "modified": "2025-06-27 15:09:42.280974",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Category",
- "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
