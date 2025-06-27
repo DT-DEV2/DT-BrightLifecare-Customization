@@ -253,7 +253,8 @@ doctype_js = {
     "Supplier Quotation" : "public/js/supplier_quotation.js",
     "Material Request": "public/js/material_request.js",
     "Contract": "public/js/contract.js",
-    "Material Request": "public/js/material_request.js"
+    "Material Request": "public/js/material_request.js",
+    "Item": "public/js/item.js",
 }
 
 
