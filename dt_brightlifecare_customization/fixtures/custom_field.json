@@ -354,7 +354,7 @@
   "docstatus": 0,
   "doctype": "Custom Field",
   "dt": "BOM Item",
-  "fetch_from": "bom_no.custom_total_operation_time_for_bom_qty",
+  "fetch_from": "bom_no.custom_operation_time_for_this_bom_qty",
   "fetch_if_empty": 0,
   "fieldname": "custom_total_of_operation_time_for_bom",
   "fieldtype": "Float",

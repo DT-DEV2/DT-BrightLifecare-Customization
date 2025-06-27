@@ -15,4 +15,20 @@ frappe.ui.form.on("MRP", {
 			},
 		});
 	},
+
+	allocate_to_bom: function (frm) {
+		// frm.dirty();
+
+		frappe.call({
+			method: "dt_brightlifecare_customization.mrp.doctype.mrp.mrp.allocate_to_bom",
+			args: {
+				mrp_name: frm.doc.name
+			},
+			callback: function(r) {
+				if (!r.exc) {
+					frappe.msgprint("Allocation logs created");
+				}
+			}
+		});
+	}
 });

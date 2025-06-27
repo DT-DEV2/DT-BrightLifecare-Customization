@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_copy": 1,
  "allow_rename": 1,
  "creation": "2025-06-23 20:09:51.650537",
  "doctype": "DocType",
@@ -50,6 +51,7 @@
    "description": "(Item Code)",
    "fieldname": "material_requested",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Material Requested",
    "options": "Item"
   },
@@ -192,10 +194,11 @@
   }
  ],
  "grid_page_length": 50,
+ "hide_toolbar": 1,
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-25 21:19:25.972488",
+ "modified": "2025-06-27 00:46:29.885345",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Log",
@@ -204,19 +207,17 @@
   {
    "create": 1,
    "delete": 1,
-   "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "share": 1,
+   "select": 1,
    "write": 1
   }
  ],
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
- "track_changes": 1
+ "states": []
 }

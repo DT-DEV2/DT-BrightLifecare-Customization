@@ -5,7 +5,7 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils import flt
 from frappe import _
-
+from frappe.utils import now_datetime, flt, ceil
 
 
 class MRP(Document):
@@ -72,3 +72,48 @@ def get_raw_materials_from_bom(bom_name, qty=1, parent_item=None):
             })
 
     return raw_items
+
+
+
+
+import frappe
+from frappe.utils import now_datetime, flt, ceil
+
+@frappe.whitelist()
+def allocate_to_bom(mrp_name):
+	mrp_doc = frappe.get_doc("MRP", mrp_name)
+
+	for row in mrp_doc.material_request_items:
+		# 🔁 Fetch all active BOMs for the item
+		bom_list = frappe.get_all(
+			"BOM",
+			filters={"item": row.item_code, "is_active": 1},
+			fields=["name", "custom_priority", "custom_fg_batch_size", 
+			        "custom_total_operation_time_for_batch_size", "custom_target_warehouse"]
+		)
+
+		# 🔁 Create a log per BOM
+		for bom in bom_list:
+			log = frappe.new_doc("MRP BOM Allocation Log")
+			log.mrp = mrp_doc.name
+			log.mrp_date = mrp_doc.posting_date
+			log.material_requested = row.item_code
+			log.material_requested_detail = row.name
+			log.required_by = row.required_by
+			log.uom = row.uom
+			log.required_qty = row.material_requested_qty
+			log.uom_conversion_factor = row.uom_conversion_factor
+			log.qty_in_stock_uom = row.qty_in_stock_uom
+			log.stock_uom = row.stock_uom
+			log.bom_allocation_log_datetime = now_datetime()
+
+			# 🔁 BOM details
+			log.bom = bom.name
+			log.bom_priority = bom.custom_priority
+			log.bom_fg_batch_size = bom.custom_fg_batch_size
+			log.operation_time_per_batch_size = bom.custom_total_operation_time_for_batch_size
+			log.bom_warehouse = bom.custom_target_warehouse
+
+			log.save()
+
+	frappe.msgprint("MRP BOM Allocation Logs created for all active BOMs.")
