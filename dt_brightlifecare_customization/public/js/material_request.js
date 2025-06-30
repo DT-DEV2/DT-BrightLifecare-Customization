@@ -39,3 +39,39 @@ frappe.ui.form.on('Material Request', {
         }
     }
 });
+
+
+
+
+
+
+frappe.ui.form.on('Material Request Item', {
+    item_code: function (frm, cdt, cdn) {
+        let row = locals[cdt][cdn];
+
+        if (!row.item_code) {
+            frappe.model.set_value(cdt, cdn, 'custom_linked_supplier', '[]');
+            return;
+        }
+
+        frappe.db.get_doc('Item', row.item_code)
+            .then(doc => {
+                if (doc && doc.supplier_items && doc.supplier_items.length > 0) {
+                    let suppliers = doc.supplier_items
+                        .filter(s => s.supplier)
+                        .map(s => s.supplier);
+
+                    let supplier_json = JSON.stringify(suppliers, null, 2);
+
+                    frappe.model.set_value(cdt, cdn, 'custom_linked_supplier', supplier_json);
+                } else {
+                    frappe.model.set_value(cdt, cdn, 'custom_linked_supplier', '[]');
+                }
+            })
+            .catch(() => {
+                frappe.model.set_value(cdt, cdn, 'custom_linked_supplier', '[]');
+            });
+    }
+});
+
+
