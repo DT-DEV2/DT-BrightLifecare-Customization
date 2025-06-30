@@ -37,6 +37,13 @@ frappe.ui.form.on('Material Request', {
                 });
             });
         }
+
+        frm.remove_custom_button('Request for Quotation', 'Create');
+
+
+        // setTimeout(() => {
+        //     frm.page.actions.find('[data-label="Request for Quotation"]').parent().parent().remove();
+        // }, 100);
     }
 });
 
