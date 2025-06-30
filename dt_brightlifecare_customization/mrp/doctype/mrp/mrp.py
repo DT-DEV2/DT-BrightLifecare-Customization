@@ -77,14 +77,49 @@ def get_raw_materials_from_bom(bom_name, qty=1, parent_item=None):
 
 
 import frappe
-from frappe.utils import now_datetime, flt, ceil
+from frappe.utils import now_datetime, flt, get_time, getdate
+from datetime import datetime, timedelta
+
+def get_shift_config(warehouse):
+	shift_type = frappe.db.get_value("Warehouse", warehouse, "custom_shift_type")
+	if not shift_type:
+		return {
+			"start_time": get_time("00:00:00"),
+			"end_time": get_time("23:59:00"),
+			"working_minutes": 1440,
+			"holidays": set()
+		}
+
+	shift = frappe.get_doc("Shift Type", shift_type)
+	start_time = get_time(shift.start_time) if shift.start_time else get_time("00:00:00")
+	end_time = get_time(shift.end_time) if shift.end_time else get_time("23:59:00")
+
+	working_minutes = int(
+		(datetime.combine(datetime.today(), end_time) - datetime.combine(datetime.today(), start_time)).total_seconds() / 60
+	)
+
+	holidays = set()
+	if shift.holiday_list:
+		holidays = {
+			h.holiday_date for h in frappe.get_all(
+				"Holiday",
+				filters={"parent": shift.holiday_list},
+				fields=["holiday_date"]
+			)
+		}
+
+	return {
+		"start_time": start_time,
+		"end_time": end_time,
+		"working_minutes": working_minutes,
+		"holidays": holidays
+	}
 
 @frappe.whitelist()
 def allocate_to_bom(mrp_name):
 	mrp_doc = frappe.get_doc("MRP", mrp_name)
 
 	for row in mrp_doc.material_request_items:
-		# 🔁 Fetch all active BOMs for the item
 		bom_list = frappe.get_all(
 			"BOM",
 			filters={"item": row.item_code, "is_active": 1},
@@ -92,7 +127,6 @@ def allocate_to_bom(mrp_name):
 			        "custom_total_operation_time_for_batch_size", "custom_target_warehouse"]
 		)
 
-		# 🔁 Create a log per BOM
 		for bom in bom_list:
 			log = frappe.new_doc("MRP BOM Allocation Log")
 			log.mrp = mrp_doc.name
@@ -107,13 +141,61 @@ def allocate_to_bom(mrp_name):
 			log.stock_uom = row.stock_uom
 			log.bom_allocation_log_datetime = now_datetime()
 
-			# 🔁 BOM details
 			log.bom = bom.name
 			log.bom_priority = bom.custom_priority
 			log.bom_fg_batch_size = bom.custom_fg_batch_size
 			log.operation_time_per_batch_size = bom.custom_total_operation_time_for_batch_size
 			log.bom_warehouse = bom.custom_target_warehouse
 
+			if log.operation_time_per_batch_size and log.qty_in_stock_uom:
+				log.total_number_of_batches = flt(log.qty_in_stock_uom) / flt(log.operation_time_per_batch_size)
+
+			if log.total_number_of_batches and log.operation_time_per_batch_size:
+				log.total_operation_time = flt(log.total_number_of_batches) * flt(log.operation_time_per_batch_size)
+
+			total_operation_minutes = flt(log.total_operation_time or 0)
+
+			if total_operation_minutes > 0 and row.required_by:
+				if isinstance(row.required_by, str):
+					required_by = datetime.strptime(row.required_by, "%Y-%m-%d")
+				elif isinstance(row.required_by, datetime):
+					required_by = row.required_by
+				else:
+					required_by = row.required_by
+
+				shift_info = get_shift_config(log.bom_warehouse)
+				start_time = shift_info["start_time"]
+				end_time = shift_info["end_time"]
+				working_minutes_per_day = shift_info["working_minutes"]
+				holidays = shift_info["holidays"]
+
+				# Calculate ideal production end datetime (day before required_by)
+				ideal_end_date = getdate(required_by) - timedelta(days=1)
+				ideal_production_end_datetime = datetime.combine(ideal_end_date, end_time)
+
+				remaining_minutes = total_operation_minutes
+				current_date = ideal_end_date
+				ideal_start_datetime = None
+
+				while True:
+					if current_date in holidays or current_date.weekday() >= 5:
+						current_date -= timedelta(days=1)
+						continue
+
+					if remaining_minutes <= working_minutes_per_day:
+						# Partial or full-day usage
+						start_time_actual = (datetime.combine(current_date, end_time) - timedelta(minutes=remaining_minutes)).time()
+						ideal_start_datetime = datetime.combine(current_date, start_time_actual)
+						break
+
+					# If not break, consume full day
+					remaining_minutes -= working_minutes_per_day
+					current_date -= timedelta(days=1)
+
+
+				log.ideal_production_start_datetime = ideal_start_datetime
+				log.ideal_production_end_datetime = ideal_production_end_datetime
+
 			log.save()
 
-	frappe.msgprint("MRP BOM Allocation Logs created for all active BOMs.")
+	frappe.msgprint("MRP BOM Allocation Logs created with ideal production windows.")
