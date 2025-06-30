@@ -22,7 +22,8 @@ def on_submit(doc, method):
 
     if doc.supplier not in existing_suppliers:
         item_doc.append("supplier_items", {
-            "supplier": doc.supplier
+            "supplier": doc.supplier,
+            "supplier_part_no" : doc.supplier_part_number
         })
         item_doc.save()
         frappe.msgprint(f"Supplier '{doc.supplier}' added to Item '{doc.item}'.")
