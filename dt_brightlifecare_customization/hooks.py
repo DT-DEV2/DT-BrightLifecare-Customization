@@ -494,7 +494,11 @@ custom_field = [
     "Item Group-custom_listing_id_visibility",
     "Material Request Item-custom_purpose_of_purchase",
     "Purchase Receipt Item-custom_expiry_date",
-    "Item Group-custom_batch_expiry_date"
+    "Item Group-custom_batch_expiry_date",
+    "Item-custom_retest",
+    "Batch-custom_supplier_name",
+    "Purchase Order Item-custom_quality_inspection_template",
+    "Request for Quotation Item-custom_quality_inspection_template"
 ]
 
 

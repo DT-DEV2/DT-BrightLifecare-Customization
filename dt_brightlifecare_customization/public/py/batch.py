@@ -25,12 +25,18 @@
 
 
 import frappe
+from frappe.utils import add_days
+
 
 def set_expiry_date(doc, method):
     if doc.reference_doctype != "Purchase Receipt" or not doc.reference_name:
         return
 
     pr = frappe.get_doc("Purchase Receipt", doc.reference_name)
+
+    doc.supplier = pr.supplier
+
+
 
     for item in pr.items:
         if item.item_code != doc.item:
@@ -49,7 +55,23 @@ def set_expiry_date(doc, method):
         if is_expiry_needed and item.custom_expiry_date:
             doc.expiry_date = item.custom_expiry_date
             doc.save()
+
+        retest = frappe.db.get_value("Item", doc.item, "custom_retest")
+
+        schedule_date = add_days(pr.posting_date, retest)
+
+        doc.append("custom_quality_check_schedule",{
+            "schedule_date" : schedule_date,
+            "actual_date" : pr.posting_date,
+            "expiry_date" : item.custom_expiry_date,
+            "ar_number" : item.quality_inspection
+        })
+
+
+           
+
+    doc.save()
         
         # If expiry is needed but no custom_expiry_date, do nothing
         # The default value already set on the Batch will stay.
-        break
+        # break
