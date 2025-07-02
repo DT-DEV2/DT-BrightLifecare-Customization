@@ -488,7 +488,13 @@ custom_field = [
     "Supplier-custom_drugs__cosmetic_license_attachment",
     "Supplier-custom_column_break_obfy2",
     "Supplier-custom_drugs__cosmetic_license_valid_from",
-    "Supplier-custom_drugs__cosmetic_license_valid_till"
+    "Supplier-custom_drugs__cosmetic_license_valid_till",
+    "Batch-custom_quality_check_schedule",
+    "Item-custom_listing_id",
+    "Item Group-custom_listing_id_visibility",
+    "Material Request Item-custom_purpose_of_purchase",
+    "Purchase Receipt Item-custom_expiry_date",
+    "Item Group-custom_batch_expiry_date"
 ]
 
 
@@ -542,6 +548,12 @@ doc_events = {
     },
     "Supplier Item Link": {
         "on_submit": "dt_brightlifecare_customization.dt_brightlifecare_customization.doctype.supplier_item_link.supplier_item_link.on_submit"
+    },
+    "Batch": {
+        "after_insert": "dt_brightlifecare_customization.public.py.batch.set_expiry_date"
+    },
+    "Serial and Batch Bundle": {
+        "before_submit": "dt_brightlifecare_customization.public.py.serial_and_batch_bundle.set_expiry_date"
     }
 
 }
