@@ -498,7 +498,15 @@ custom_field = [
     "Item-custom_retest",
     "Batch-custom_supplier_name",
     "Purchase Order Item-custom_quality_inspection_template",
-    "Request for Quotation Item-custom_quality_inspection_template"
+    "Request for Quotation Item-custom_quality_inspection_template",
+    "Batch-custom_batch_grade",
+    "Sales Invoice Item-custom_listing_id",
+    "Delivery Note Item-custom_listing_id",
+    "Sales Order Item-custom_listing_id",
+    "Purchase Invoice Item-custom_listing_id",
+    "Purchase Receipt Item-custom_listing_id",
+    "Purchase Order Item-custom_listing_id",
+    "Material Request Item-custom_listing_id"
 ]
 
 
@@ -558,6 +566,9 @@ doc_events = {
     },
     "Serial and Batch Bundle": {
         "before_submit": "dt_brightlifecare_customization.public.py.serial_and_batch_bundle.set_expiry_date"
-    }
+    },
+    # "Item": {
+    #     "before_insert": "dt_brightlifecare_customization.public.py.item.generate_item_code"
+    # }
 
 }
