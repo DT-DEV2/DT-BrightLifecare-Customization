@@ -10,7 +10,9 @@
   "type_of_product_required",
   "nda_sign_required",
   "iso_required",
-  "cancelled_cheque_required"
+  "cancelled_cheque_required",
+  "supplier_item_link_visibility",
+  "contract_applicable"
  ],
  "fields": [
   {
@@ -55,13 +57,31 @@
    "in_list_view": 1,
    "label": "Cancelled Cheque Required",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "supplier_category.supplier_item_link_visibility",
+   "fieldname": "supplier_item_link_visibility",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Supplier Item Link Visibility",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "supplier_category.contract_applicable",
+   "fieldname": "contract_applicable",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Contract Applicable",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-27 13:41:26.772629",
+ "modified": "2025-07-04 15:09:53.636092",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Categories",

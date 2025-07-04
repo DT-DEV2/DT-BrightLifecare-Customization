@@ -1,57 +1,3 @@
-# import frappe
-
-# @frappe.whitelist()
-# def generate_item_code(listing_id):
-#     # Find all items starting with this listing_id
-#     items = frappe.get_all('Item',
-#         filters={'item_code': ['like', f'{listing_id}%']},
-#         fields=['item_code'],
-#         order_by='item_code'
-#     )
-    
-#     if not items:
-#         return listing_id  # first item gets plain listing_id
-    
-#     # Find the highest existing number
-#     max_num = 0
-#     for item in items:
-#         if item.item_code == listing_id:
-#             max_num = max(max_num, 1)
-#         elif item.item_code.startswith(listing_id + '-'):
-#             try:
-#                 num = int(item.item_code.split('-')[-1])
-#                 max_num = max(max_num, num)
-#             except ValueError:
-#                 pass
-    
-#     # Generate next number with 3-digit padding
-#     next_num = max_num + 1
-#     return f"{listing_id}-{str(next_num).zfill(3)}"
-
-
-
-
-
-# import frappe
-
-# def item_autoname(doc, method):
-#     if doc.custom_listing_id:
-#         base = doc.custom_listing_id
-
-#         # Get count of existing items with similar base
-#         existing_items = frappe.db.get_all(
-#             "Item",
-#             filters={"name": ["like", f"{base}-%"]},
-#             fields=["name"]
-#         )
-#         count = len(existing_items) + 1
-
-#         doc.item_code = f"{base}-{count:03d}"
-
-#         doc.name = f"{base}-{count:03d}"
-
-
-
 import frappe
 
 @frappe.whitelist()
@@ -84,3 +30,27 @@ def get_next_item_code_for_listing(listing_id):
         return base
     else:
         return f"{base}-{(max_suffix + 1):03d}"
+
+
+
+
+
+
+
+
+
+def before_save(doc, method):
+    if getattr(doc, "_disable_hook", False):
+        return
+
+    if doc.custom_listing_id:
+        filters = {"custom_listing_id": doc.custom_listing_id}
+        item_codes = frappe.db.get_all("Item", filters=filters, pluck="name")
+
+        for item_code in item_codes:
+            item_doc = frappe.get_doc("Item", item_code)
+            
+            # Prevent recursion in inner saves
+            item_doc._disable_hook = True
+            item_doc.disabled = 1
+            item_doc.save()

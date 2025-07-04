@@ -27,32 +27,6 @@ frappe.ui.form.on('Item', {
         }
     },
 
-    // custom_listing_id: function(frm) {
-    //     if (frm.is_new() && frm.doc.custom_listing_id){
-    //         frm.set_value("item_code", frm.doc.custom_listing_id)
-    //     }
-    // }
-
-    // custom_listing_id(frm) {
-    //     if (frm.doc.custom_listing_id && !frm.doc.item_code) {
-    //         let base_code = frm.doc.custom_listing_id.trim();
-            
-    //         frappe.call({
-    //             method: 'dt_brightlifecare_customization.public.py.item.generate_item_code',
-    //             args: {
-    //                 listing_id: base_code
-    //             },
-    //             callback(r) {
-    //                 if (r.message) {
-    //                     frm.set_value('item_code', r.message);
-    //                 }
-    //             }
-    //         });
-    //     }
-    // }
-
-
-
     custom_listing_id: function(frm) {
         if (frm.doc.custom_listing_id) {
             frappe.call({

@@ -567,8 +567,8 @@ doc_events = {
     "Serial and Batch Bundle": {
         "before_submit": "dt_brightlifecare_customization.public.py.serial_and_batch_bundle.set_expiry_date"
     },
-    # "Item": {
-    #     "before_insert": "dt_brightlifecare_customization.public.py.item.generate_item_code"
-    # }
+    "Item": {
+        "before_save": "dt_brightlifecare_customization.public.py.item.before_save"
+    }
 
 }
