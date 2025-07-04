@@ -39,18 +39,27 @@ def get_next_item_code_for_listing(listing_id):
 
 
 
-def before_save(doc, method):
-    if getattr(doc, "_disable_hook", False):
-        return
+# def before_save(doc, method):
+#     if getattr(doc, "_disable_hook", False):
+#         return
 
+#     if doc.custom_listing_id:
+#         filters = {"custom_listing_id": doc.custom_listing_id}
+#         item_codes = frappe.db.get_all("Item", filters=filters, pluck="name")
+
+#         for item_code in item_codes:
+#             item_doc = frappe.get_doc("Item", item_code)
+            
+#             # Prevent recursion in inner saves
+#             item_doc._disable_hook = True
+#             item_doc.disabled = 1
+#             item_doc.save()
+
+
+def before_save(doc, method):
     if doc.custom_listing_id:
         filters = {"custom_listing_id": doc.custom_listing_id}
         item_codes = frappe.db.get_all("Item", filters=filters, pluck="name")
 
         for item_code in item_codes:
-            item_doc = frappe.get_doc("Item", item_code)
-            
-            # Prevent recursion in inner saves
-            item_doc._disable_hook = True
-            item_doc.disabled = 1
-            item_doc.save()
+            frappe.db.set_value("Item", item_code, "disabled", 1)
