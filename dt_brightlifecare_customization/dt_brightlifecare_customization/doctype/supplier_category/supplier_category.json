@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:category",
  "creation": "2025-06-27 12:33:42.139306",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -9,13 +10,16 @@
   "type_of_product_required",
   "nda_sign_required",
   "iso_required",
-  "cancelled_cheque_required"
+  "cancelled_cheque_required",
+  "supplier_item_link_visibility",
+  "contract_applicable"
  ],
  "fields": [
   {
    "fieldname": "category",
    "fieldtype": "Data",
-   "label": "Category"
+   "label": "Category",
+   "unique": 1
   },
   {
    "default": "0",
@@ -40,15 +44,28 @@
    "fieldname": "cancelled_cheque_required",
    "fieldtype": "Check",
    "label": "Cancelled Cheque Required"
+  },
+  {
+   "default": "0",
+   "fieldname": "supplier_item_link_visibility",
+   "fieldtype": "Check",
+   "label": "Supplier Item Link Visibility"
+  },
+  {
+   "default": "0",
+   "fieldname": "contract_applicable",
+   "fieldtype": "Check",
+   "label": "Contract Applicable"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-27 16:14:32.185017",
+ "modified": "2025-07-04 15:27:41.544676",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Category",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
