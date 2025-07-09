@@ -9,6 +9,7 @@
   "details_section",
   "supplier",
   "supplier_name",
+  "supplier_part_number",
   "warehouse",
   "lead_time",
   "column_break_agni",
@@ -564,6 +565,11 @@
    "fieldtype": "Check",
    "hidden": 1,
    "label": "PM"
+  },
+  {
+   "fieldname": "supplier_part_number",
+   "fieldtype": "Data",
+   "label": "Supplier Part Number"
   },
   {
    "fieldname": "warehouse",
