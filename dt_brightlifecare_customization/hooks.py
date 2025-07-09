@@ -506,7 +506,10 @@ custom_field = [
     "Purchase Invoice Item-custom_listing_id",
     "Purchase Receipt Item-custom_listing_id",
     "Purchase Order Item-custom_listing_id",
-    "Material Request Item-custom_listing_id"
+    "Material Request Item-custom_listing_id",
+    "Stock Entry Detail-custom_expiry_date",
+    "Bank Account-custom_swift_code",
+    "Quality Inspection Template-custom_item_code"
 ]
 
 
