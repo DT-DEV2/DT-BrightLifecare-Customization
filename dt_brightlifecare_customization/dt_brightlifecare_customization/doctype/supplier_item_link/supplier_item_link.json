@@ -10,6 +10,8 @@
   "supplier",
   "supplier_name",
   "supplier_part_number",
+  "warehouse",
+  "lead_time",
   "column_break_agni",
   "item",
   "item_name",
@@ -568,13 +570,25 @@
    "fieldname": "supplier_part_number",
    "fieldtype": "Data",
    "label": "Supplier Part Number"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "description": "In Days",
+   "fieldname": "lead_time",
+   "fieldtype": "Float",
+   "label": "Lead Time"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-06-30 10:02:28.780606",
+ "modified": "2025-07-08 18:56:05.693513",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Item Link",

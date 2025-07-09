@@ -24,6 +24,7 @@
   "stock_uom",
   "section_break_rajr",
   "bom",
+  "bom_qty",
   "bom_fg_batch_size",
   "operation_time_per_batch_size",
   "ideal_production_start_datetime",
@@ -191,6 +192,11 @@
    "fieldname": "ideal_production_end_datetime",
    "fieldtype": "Datetime",
    "label": "Ideal Production End Datetime"
+  },
+  {
+   "fieldname": "bom_qty",
+   "fieldtype": "Float",
+   "label": "BOM Qty"
   }
  ],
  "grid_page_length": 50,
@@ -198,7 +204,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-27 00:46:29.885345",
+ "modified": "2025-07-08 19:43:01.023729",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Log",

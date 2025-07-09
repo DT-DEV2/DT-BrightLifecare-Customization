@@ -8,21 +8,30 @@
  "field_order": [
   "workstation",
   "bom_no",
+  "batch_size",
+  "total_operating_time_for_required_fg",
   "column_break_elin",
   "operation",
   "operation_index_no",
-  "operation_time"
+  "operation_time",
+  "workstation_availability",
+  "section_break_sjpc",
+  "ideal_workstation_start_datetime",
+  "column_break_clgw",
+  "ideal_workstation_end_datetime"
  ],
  "fields": [
   {
    "fieldname": "workstation",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Workstation",
    "options": "Workstation"
   },
   {
    "fieldname": "bom_no",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "BOM No",
    "options": "BOM"
   },
@@ -33,26 +42,64 @@
   {
    "fieldname": "operation",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Operation",
    "options": "Operation"
   },
   {
    "fieldname": "operation_index_no",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Operation Index No"
   },
   {
    "description": "In minutes",
    "fieldname": "operation_time",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Operation Time"
+  },
+  {
+   "fieldname": "batch_size",
+   "fieldtype": "Float",
+   "label": "Batch Size"
+  },
+  {
+   "description": "In minutes",
+   "fieldname": "total_operating_time_for_required_fg",
+   "fieldtype": "Float",
+   "label": "Total Operating Time for required FG"
+  },
+  {
+   "fieldname": "section_break_sjpc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ideal_workstation_start_datetime",
+   "fieldtype": "Datetime",
+   "label": "Ideal Workstation Start Datetime"
+  },
+  {
+   "fieldname": "column_break_clgw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ideal_workstation_end_datetime",
+   "fieldtype": "Datetime",
+   "label": "Ideal Workstation End Datetime"
+  },
+  {
+   "fieldname": "workstation_availability",
+   "fieldtype": "Select",
+   "label": "Workstation Availability",
+   "options": "\nAvailable\nNot Available"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-25 21:15:51.435713",
+ "modified": "2025-07-08 20:03:12.412650",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Log Workstation",

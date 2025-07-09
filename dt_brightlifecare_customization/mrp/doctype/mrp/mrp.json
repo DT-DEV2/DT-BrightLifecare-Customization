@@ -16,7 +16,7 @@
   "allocation_to_bom_section",
   "bom_allocation_condition",
   "column_break_gpio",
-  "allocate_to_bom",
+  "calculate_bom_allocation",
   "section_break_xkul",
   "material_request_items",
   "section_break_ciym",
@@ -118,11 +118,6 @@
    "options": "MRP BOM Exploded Items"
   },
   {
-   "fieldname": "allocate_to_bom",
-   "fieldtype": "Button",
-   "label": "Allocate to BOM"
-  },
-  {
    "fieldname": "column_break_gpio",
    "fieldtype": "Column Break"
   },
@@ -146,13 +141,24 @@
   {
    "fieldname": "section_break_xkul",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "calculate_bom_allocation",
+   "fieldtype": "Button",
+   "label": "Calculate BOM Allocation"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2025-06-27 01:16:29.966294",
+ "links": [
+  {
+   "group": "MRP BOM Allocation Log",
+   "link_doctype": "MRP BOM Allocation Log",
+   "link_fieldname": "mrp"
+  }
+ ],
+ "modified": "2025-07-08 19:12:37.935032",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",
