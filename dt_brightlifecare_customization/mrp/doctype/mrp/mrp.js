@@ -16,11 +16,11 @@ frappe.ui.form.on("MRP", {
 		});
 	},
 
-	allocate_to_bom: function (frm) {
+	calculate_bom_allocation: function (frm) {
 		// frm.dirty();
 
 		frappe.call({
-			method: "dt_brightlifecare_customization.mrp.doctype.mrp.mrp.allocate_to_bom",
+			method: "dt_brightlifecare_customization.mrp.doctype.mrp.mrp.calculate_bom_allocation",
 			args: {
 				mrp_name: frm.doc.name
 			},
