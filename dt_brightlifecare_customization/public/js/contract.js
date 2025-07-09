@@ -145,6 +145,29 @@ frappe.ui.form.on('Contract', {
         if (frm.doc.custom_healthkart_approval == 1) {
             frm.set_df_property('custom_healthkart_approval', 'read_only', 1);
         }
+
+        if (frm.doc.docstatus == 0) {
+            if (frm.doc.party_type === "Supplier" && frm.doc.party_name) {
+                frappe.db.get_doc('Supplier', frm.doc.party_name)
+                    .then(supplier => {
+                        let nda_required = false;
+
+                        if (supplier.custom_supplier_category && supplier.custom_supplier_category.length) {
+                            supplier.custom_supplier_category.forEach(row => {
+                                if (row.nda_sign_required) {
+                                    nda_required = true;
+                                }
+                            });
+                        }
+
+                        frm.set_df_property("custom_nda_sign_by_supplier", "hidden", !nda_required);
+                        frm.set_df_property("custom_nda_sign_by_healthkart", "hidden", !nda_required);
+                    });
+            } else {
+                frm.set_df_property("custom_nda_sign_by_supplier", "hidden", 1);
+                frm.set_df_property("custom_nda_sign_by_healthkart", "hidden", 1);
+            }
+        }
     }
 
 
