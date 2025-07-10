@@ -509,7 +509,8 @@ custom_field = [
     "Material Request Item-custom_listing_id",
     "Stock Entry Detail-custom_expiry_date",
     "Bank Account-custom_swift_code",
-    "Quality Inspection Template-custom_item_code"
+    "Quality Inspection Template-custom_item_code",
+    "BOM-custom_workstation",
 ]
 
 
