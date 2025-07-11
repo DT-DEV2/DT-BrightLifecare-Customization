@@ -63,3 +63,11 @@ def before_save(doc, method):
 
         for item_code in item_codes:
             frappe.db.set_value("Item", item_code, "disabled", 1)
+
+
+    if doc.custom_quality_inspection_template_list:
+        for qit in doc.custom_quality_inspection_template_list:
+            if qit.is_default:
+                doc.quality_inspection_template = qit.quality_inspection_template
+                # doc.save()
+                break

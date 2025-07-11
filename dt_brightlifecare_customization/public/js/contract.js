@@ -4,11 +4,11 @@ frappe.ui.form.on('Contract', {
         frm.set_value('party_user', null);
 
         if (frm.doc.party_type === "Supplier" && frm.doc.party_name) {
-            console.log("test1")
+            // console.log("test1")
             frappe.db.get_doc('Supplier', frm.doc.party_name)
                 .then(supplier => {
                     let nda_required = false;
-                    console.log("test2")
+                    // console.log("test2")
                     if (supplier.custom_supplier_category && supplier.custom_supplier_category.length) {
                         supplier.custom_supplier_category.forEach(row => {
                             if (row.nda_sign_required) {
@@ -16,7 +16,7 @@ frappe.ui.form.on('Contract', {
                             }
                         });
                     }
-                    console.log("test3")
+                    // console.log("test3")
                     frm.set_df_property(
                         "custom_nda_sign_by_supplier",
                         "hidden",
