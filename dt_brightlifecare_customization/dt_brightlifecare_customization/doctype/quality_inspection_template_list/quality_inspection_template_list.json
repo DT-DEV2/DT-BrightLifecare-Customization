@@ -1,0 +1,52 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-10 10:34:13.895409",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "quality_inspection_template",
+  "is_default",
+  "is_disabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "quality_inspection_template",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Quality Inspection Template",
+   "options": "Quality Inspection Template"
+  },
+  {
+   "default": "0",
+   "fetch_from": "quality_inspection_template.custom_is_default",
+   "fieldname": "is_default",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Default"
+  },
+  {
+   "default": "0",
+   "fetch_from": "quality_inspection_template.custom_is_disabled",
+   "fieldname": "is_disabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Disabled"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-10 10:55:51.724005",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Quality Inspection Template List",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
