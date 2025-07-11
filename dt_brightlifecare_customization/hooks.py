@@ -512,7 +512,7 @@ custom_field = [
     "Quality Inspection Template-custom_item_code",
     "Quality Inspection Template-custom_is_default",
     "Quality Inspection Template-custom_is_disabled",
-    "Item-custom_quality_inspection_template_list"
+    "Item-custom_quality_inspection_template_list",
     "BOM-custom_workstation",
 ]
 
