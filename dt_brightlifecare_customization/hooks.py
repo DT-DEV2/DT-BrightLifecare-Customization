@@ -249,7 +249,7 @@ doctype_js = {
     "Stock Entry": "public/js/stock_entry.js",
     "Supplier" : "public/js/supplier.js",
     "Custom Field" : "public/js/custom_field.js",
-    # "Request for Quotation" : "public/js/rfq.js",
+    "Request for Quotation" : "public/js/rfq.js",
     "Supplier Quotation" : "public/js/supplier_quotation.js",
     "Material Request": "public/js/material_request.js",
     "Contract": "public/js/contract.js",
@@ -509,7 +509,10 @@ custom_field = [
     "Material Request Item-custom_listing_id",
     "Stock Entry Detail-custom_expiry_date",
     "Bank Account-custom_swift_code",
-    "Quality Inspection Template-custom_item_code"
+    "Quality Inspection Template-custom_item_code",
+    "Quality Inspection Template-custom_is_default",
+    "Quality Inspection Template-custom_is_disabled",
+    "Item-custom_quality_inspection_template_list"
 ]
 
 
@@ -572,6 +575,9 @@ doc_events = {
     },
     "Item": {
         "before_save": "dt_brightlifecare_customization.public.py.item.before_save"
+    },
+    "Quality Inspection Template": {
+        "on_update": "dt_brightlifecare_customization.public.py.quality_inspection_template.before_save"
     }
 
 }
