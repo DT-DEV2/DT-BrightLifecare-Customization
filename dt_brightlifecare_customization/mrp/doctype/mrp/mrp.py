@@ -198,34 +198,6 @@ def calculate_bom_allocation(mrp_name):
 				log.ideal_production_start_datetime = ideal_start_datetime
 				log.ideal_production_end_datetime = ideal_production_end_datetime
    
-			
-				if bom_doc.operations:
-					# Step 1: Append all operations with total time
-					for op in bom_doc.operations:
-						log.append("mrp_bom_allocation_log_workstation", {
-							"operation": op.operation,
-							"workstation": op.workstation,
-							"bom_no": op.parent,
-							"operation_index_no": op.idx,
-							"operation_time": op.time_in_mins,
-							"batch_size": op.batch_size,
-							"total_operating_time_for_required_fg": (
-								flt(log.qty_in_stock_uom or 0) / flt(log.bom_qty or 1)
-							) * flt(op.time_in_mins or 0)
-						})
-
-					# Step 2: Sequentially calculate start/end for each operation
-					current_start = ideal_start_datetime
-
-					# Sort operations by operation_index_no ASC (1 → N)
-					sorted_ops = sorted(log.mrp_bom_allocation_log_workstation, key=lambda x: x.operation_index_no)
-
-					for row in sorted_ops:
-						row.ideal_workstation_start_datetime = current_start
-						op_time = flt(row.total_operating_time_for_required_fg or 0)
-						row.ideal_workstation_end_datetime = current_start + timedelta(minutes=op_time)
-						current_start = row.ideal_workstation_end_datetime  # next op starts from here
-
 
      
 		

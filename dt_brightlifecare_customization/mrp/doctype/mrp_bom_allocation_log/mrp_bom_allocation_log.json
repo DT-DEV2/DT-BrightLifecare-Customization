@@ -181,7 +181,7 @@
    "fieldname": "mrp_bom_allocation_log_workstation",
    "fieldtype": "Table",
    "label": "MRP BOM Allocation Log Workstation",
-   "options": "MRP BOM Allocation Log Workstation"
+   "options": "MRP BOM Allocation Log Workstation Time Slots"
   },
   {
    "fieldname": "ideal_production_start_datetime",
@@ -204,7 +204,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-08 19:43:01.023729",
+ "modified": "2025-07-11 14:21:16.907132",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Log",
