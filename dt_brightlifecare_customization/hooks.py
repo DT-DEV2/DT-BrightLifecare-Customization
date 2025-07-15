@@ -514,6 +514,10 @@ custom_field = [
     "Quality Inspection Template-custom_is_disabled",
     "Item-custom_quality_inspection_template_list",
     "BOM-custom_workstation",
+    "Supplier-custom_sourcing",
+    "Stock Entry Detail-custom_batch_status",
+    "Batch-custom_status",
+    "Supplier-custom_is_marketplace_workflow"
 ]
 
 
