@@ -59,7 +59,7 @@ def create_user_if_not_exists(self, method):
             "middle_name": self.middle_name,
             "last_name": self.last_name,
             "gender": self.gender,
-            "send_welcome_email": 1,  # Avoid sending email automatically
+            "send_welcome_email": 0,  # Avoid sending email automatically
             "roles": final_visible_roles,  # Assign the Supplier role
             "enabled": 1,
             "module_profile": "",  # This ensures no modules are ticked
