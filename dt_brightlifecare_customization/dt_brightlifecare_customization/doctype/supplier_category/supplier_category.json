@@ -12,7 +12,8 @@
   "iso_required",
   "cancelled_cheque_required",
   "supplier_item_link_visibility",
-  "contract_applicable"
+  "contract_applicable",
+  "is_marketplace_workflow"
  ],
  "fields": [
   {
@@ -56,12 +57,18 @@
    "fieldname": "contract_applicable",
    "fieldtype": "Check",
    "label": "Contract Applicable"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_marketplace_workflow",
+   "fieldtype": "Check",
+   "label": "Is Marketplace Workflow"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-04 15:27:41.544676",
+ "modified": "2025-07-15 14:48:34.474433",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Category",
