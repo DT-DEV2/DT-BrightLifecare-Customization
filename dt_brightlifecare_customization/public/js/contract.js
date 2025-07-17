@@ -145,7 +145,7 @@ frappe.ui.form.on('Contract', {
         if (frm.doc.custom_healthkart_approval == 1) {
             frm.set_df_property('custom_healthkart_approval', 'read_only', 1);
         }
-        if (frm.doc.custom_nda_sign_by_supplier == 1) {
+        if (frm.is_new() || frm.doc.custom_nda_sign_by_supplier == 1 || (frm.doc.party_user && frm.doc.party_user !== frappe.session.user)) {
             frm.set_df_property('custom_nda_sign_by_supplier', 'read_only', 1);
         }
         if (frm.doc.custom_nda_sign_by_healthkart == 1) {
