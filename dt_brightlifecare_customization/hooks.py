@@ -317,7 +317,6 @@ custom_field = [
     "Supplier-custom_terms_and_conditions",
     "Supplier-custom_detail",
     "Supplier-custom_connected_users",
-    "Supplier-custom_source",
     "Supplier-custom_trader_fssai_license_valid_till",
     "Supplier-custom_oem_manufacturer_fssai_license",
     "Supplier-custom_oem_fssai_license_number",
@@ -517,7 +516,13 @@ custom_field = [
     "Supplier-custom_sourcing",
     "Stock Entry Detail-custom_batch_status",
     "Batch-custom_status",
-    "Supplier-custom_is_marketplace_workflow"
+    "Supplier-custom_is_marketplace_workflow",
+    "Supplier-custom_section_break_2d9ub",
+    "Supplier-custom_contract_id",
+    "Supplier-custom_contract_supplier_approver",
+    "Supplier-custom_contract_hk_approver",
+    "Supplier-custom_nda_supplier_approver",
+    "Supplier-custom_nda_hk_approver"
 ]
 
 
@@ -565,6 +570,8 @@ doc_events = {
     },
     "Contract":{
         "on_update": "dt_brightlifecare_customization.public.py.contract.before_save",
+        "on_submit": "dt_brightlifecare_customization.public.py.contract.on_submit",
+        "on_cancel": "dt_brightlifecare_customization.public.py.contract.on_cancel",
     },
     "Role": {
         "on_update": "dt_brightlifecare_customization.public.py.role.create_role_config"
