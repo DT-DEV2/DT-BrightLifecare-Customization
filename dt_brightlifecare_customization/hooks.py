@@ -593,3 +593,10 @@ doc_events = {
     }
 
 }
+
+scheduler_events = {
+    "daily": [
+        "dt_brightlifecare_customization.public.py.disable_inactive_users.disable_inactive_users"
+    ]
+}
+
