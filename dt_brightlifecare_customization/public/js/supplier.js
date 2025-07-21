@@ -1187,6 +1187,7 @@ function toggle_custom_type_of_product(frm) {
     let show = false;
     let iso = false;
     cc = false;
+    is_mktplace = false;
     if (frm.doc.custom_supplier_category && frm.doc.custom_supplier_category.length > 0) {
         frm.doc.custom_supplier_category.forEach(row => {
             if (row.type_of_product_required) {
@@ -1198,10 +1199,21 @@ function toggle_custom_type_of_product(frm) {
             if (row.cancelled_cheque_required) {
                 cc = true;
             }
+            if (row.is_marketplace_workflow) {
+                is_mktplace = true;
+            }
         });
     }
 
     frm.toggle_display('custom_type_of_product', show);
     frm.toggle_display('custom_iso_certificate', iso);
-    frm.toggle_display('custom_cancelled_cheque', cc)
+    frm.toggle_display('custom_cancelled_cheque', cc);
+    frm.doc.custom_is_marketplace_workflow = is_mktplace;
+    frm.refresh_field('custom_is_marketplace_workflow');
+
+
+    if (!show && frm.doc.custom_type_of_product && frm.doc.custom_type_of_product.length > 0) {
+        frm.clear_table('custom_type_of_product');
+        frm.refresh_field('custom_type_of_product');
+    }
 }

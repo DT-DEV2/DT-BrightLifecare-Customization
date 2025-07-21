@@ -12,13 +12,8 @@
   "supplier_part_number",
   "warehouse",
   "lead_time",
-  "column_break_agni",
-  "item",
-  "item_name",
-  "item_group",
-  "rm",
-  "pm",
-  "item_sub_category",
+  "section_break_yfbb",
+  "items",
   "raw_material_tab",
   "document_collection_section",
   "certificate_of_analysis",
@@ -104,30 +99,23 @@
    "options": "Supplier"
   },
   {
-   "fieldname": "column_break_agni",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "item",
-   "fieldtype": "Link",
-   "label": "Item",
-   "options": "Item"
-  },
-  {
    "depends_on": "eval:doc.rm",
    "fieldname": "raw_material_tab",
    "fieldtype": "Tab Break",
+   "hidden": 1,
    "label": "Raw Material"
   },
   {
    "depends_on": "eval:doc.pm",
    "fieldname": "packaging_material_tab",
    "fieldtype": "Tab Break",
+   "hidden": 1,
    "label": "Packaging Material"
   },
   {
    "fieldname": "attachments_tab",
    "fieldtype": "Tab Break",
+   "hidden": 1,
    "label": "Attachments"
   },
   {
@@ -135,18 +123,6 @@
    "fieldtype": "Attach",
    "label": "Share Owner Name, Contact Details",
    "options": "{\"allowed_file_types\": [\".pdf\"]}"
-  },
-  {
-   "fetch_from": "item.item_name",
-   "fieldname": "item_name",
-   "fieldtype": "Data",
-   "label": "Item Name"
-  },
-  {
-   "fetch_from": "item.custom_item_sub_category",
-   "fieldname": "item_sub_category",
-   "fieldtype": "Data",
-   "label": "Item Sub Category"
   },
   {
    "description": "(3 Batch)",
@@ -544,29 +520,6 @@
    "search_index": 1
   },
   {
-   "fetch_from": "item.item_group",
-   "fieldname": "item_group",
-   "fieldtype": "Link",
-   "label": "Item Group",
-   "options": "Item Group"
-  },
-  {
-   "default": "0",
-   "fetch_from": "item_group.custom_rm_for_supplier_item_link",
-   "fieldname": "rm",
-   "fieldtype": "Check",
-   "hidden": 1,
-   "label": "RM"
-  },
-  {
-   "default": "0",
-   "fetch_from": "item_group.custom_pm_for_supplier_item_link",
-   "fieldname": "pm",
-   "fieldtype": "Check",
-   "hidden": 1,
-   "label": "PM"
-  },
-  {
    "fieldname": "supplier_part_number",
    "fieldtype": "Data",
    "label": "Supplier Part Number"
@@ -582,13 +535,23 @@
    "fieldname": "lead_time",
    "fieldtype": "Float",
    "label": "Lead Time"
+  },
+  {
+   "fieldname": "section_break_yfbb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Item - SI Linking"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-08 18:56:05.693513",
+ "modified": "2025-07-21 12:22:17.281123",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Item Link",
