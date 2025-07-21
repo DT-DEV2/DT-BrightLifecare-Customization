@@ -602,3 +602,6 @@ scheduler_events = {
     ]
 }
 
+
+
+on_login = "dt_brightlifecare_customization.auth.restrict_google_users"
