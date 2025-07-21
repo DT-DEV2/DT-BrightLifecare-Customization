@@ -522,7 +522,9 @@ custom_field = [
     "Supplier-custom_contract_supplier_approver",
     "Supplier-custom_contract_hk_approver",
     "Supplier-custom_nda_supplier_approver",
-    "Supplier-custom_nda_hk_approver"
+    "Supplier-custom_nda_hk_approver",
+    "Blanket Order-custom_vendor_remarks",
+    "Purchase Order-custom_vendor_remarks"
 ]
 
 
