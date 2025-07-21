@@ -34,6 +34,8 @@
   "bom_warehouse",
   "total_number_of_batches",
   "total_operation_time",
+  "expected_production_start_datetime",
+  "expected_production_end_datetime",
   "section_break_plme",
   "mrp_bom_allocation_log_workstation"
  ],
@@ -197,6 +199,16 @@
    "fieldname": "bom_qty",
    "fieldtype": "Float",
    "label": "BOM Qty"
+  },
+  {
+   "fieldname": "expected_production_start_datetime",
+   "fieldtype": "Datetime",
+   "label": "Expected Production Start Datetime"
+  },
+  {
+   "fieldname": "expected_production_end_datetime",
+   "fieldtype": "Datetime",
+   "label": "Expected Production End Datetime"
   }
  ],
  "grid_page_length": 50,
@@ -204,7 +216,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-11 14:21:16.907132",
+ "modified": "2025-07-13 18:17:36.083436",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Log",

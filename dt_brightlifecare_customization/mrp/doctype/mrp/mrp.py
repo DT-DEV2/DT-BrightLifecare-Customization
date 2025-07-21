@@ -142,15 +142,15 @@ def calculate_bom_allocation(mrp_name):
 			log.bom_allocation_log_datetime = now_datetime()
    
 			bom_doc = frappe.get_doc("BOM", bom.name)
-			log.bom = bom.name
+			log.bom = bom_doc.name
 			log.bom_qty = bom_doc.quantity
-			log.bom_priority = bom.custom_priority
-			log.bom_fg_batch_size = bom.custom_fg_batch_size
-			log.operation_time_per_batch_size = bom.custom_total_operation_time_for_batch_size
-			log.bom_warehouse = bom.custom_target_warehouse
+			log.bom_priority = bom_doc.custom_priority
+			log.bom_fg_batch_size = bom_doc.custom_fg_batch_size
+			log.operation_time_per_batch_size = bom_doc.custom_total_operation_time_for_batch_size
+			log.bom_warehouse = bom_doc.custom_target_warehouse
 
 			if log.operation_time_per_batch_size and log.qty_in_stock_uom:
-				log.total_number_of_batches = flt(log.qty_in_stock_uom) / flt(log.operation_time_per_batch_size)
+				log.total_number_of_batches = flt(row.qty_in_stock_uom) / flt(bom_doc.custom_fg_batch_size)
 
 			if log.total_number_of_batches and log.operation_time_per_batch_size:
 				log.total_operation_time = flt(log.total_number_of_batches) * flt(log.operation_time_per_batch_size)
@@ -198,9 +198,118 @@ def calculate_bom_allocation(mrp_name):
 				log.ideal_production_start_datetime = ideal_start_datetime
 				log.ideal_production_end_datetime = ideal_production_end_datetime
    
+				
 
      
-		
+				# from datetime import time
+
+				# if log.ideal_production_end_datetime and log.ideal_production_start_datetime:
+				# 	# Get start and end time from MRP Settings
+				# 	mrp_settings = frappe.get_single("MRP Settings")
+				# 	start_time = get_time(mrp_settings.default_workstation_start_time or "09:00:00")
+				# 	end_time = get_time(mrp_settings.default_workstation_end_time or "18:00:00")
+
+				# 	# Get duration from ideal window
+				# 	time_gap = log.ideal_production_end_datetime - log.ideal_production_start_datetime
+
+				# 	# Start from allocation log creation date
+				# 	mrp_start_date = getdate(log.bom_allocation_log_datetime)
+				# 	current_date = mrp_start_date
+				# 	batch_no = 1
+
+				# 	while True:
+				# 		# Slot start
+				# 		slot_start_datetime = datetime.combine(current_date, start_time)
+
+				# 		# Slot end = slot_start + time_gap, but force end time from MRP Settings
+				# 		slot_end_date = (slot_start_datetime + time_gap).date()
+				# 		slot_end_datetime = datetime.combine(slot_end_date, end_time)
+				# 		if slot_end_datetime > log.ideal_production_start_datetime:
+				# 			break
+
+				# 		# --- Job Card Availability Logic ---
+				# 		job_cards = frappe.get_all(
+				# 			"Job Card",
+				# 			filters={
+				# 				"workstation": bom_doc.custom_workstation,
+				# 				"status": ["not in", ["Completed", "Cancelled"]],
+				# 				"expected_start_date": ["<=", slot_end_datetime],
+				# 				"expected_end_date": [">=", slot_start_datetime]
+				# 			},
+				# 			fields=["name", "status", "expected_start_date", "expected_end_date"]
+				# 		)
+
+				# 		is_available = 1  # Default to Available
+
+				# 		for jc in job_cards:
+				# 			# If overlaps with this slot, mark as not available
+				# 			if jc["expected_start_date"] <= slot_end_datetime and jc["expected_end_date"] >= slot_start_datetime:
+				# 				is_available = 0
+				# 				break
+
+				# 		# Append the row to child table
+				# 		log.append("mrp_bom_allocation_log_workstation", {
+				# 			"workstation": bom_doc.custom_workstation,
+				# 			"ideal_slot_workstation_start_datetime": slot_start_datetime,
+				# 			"ideal_slot_workstation_end_datetime": slot_end_datetime,
+				# 			"workstation_availability": "Available" if is_available else "Not Available"
+				# 		})
+
+				# 		# ✅ Stop if slot matches ideal window dates
+				# 		if (
+				# 			slot_start_datetime.date() == log.ideal_production_start_datetime.date() and
+				# 			slot_end_datetime.date() == log.ideal_production_end_datetime.date()
+				# 		):
+				# 			break
+
+				# 		current_date += timedelta(days=1)
+				# 		# batch_no += 1
+    
+				if log.ideal_production_start_datetime and log.ideal_production_end_datetime:
+	
+					mrp_settings = frappe.get_single("MRP Settings")
+					work_start_time = get_time(mrp_settings.default_workstation_start_time or "09:00:00")
+					work_end_time = get_time(mrp_settings.default_workstation_end_time or "18:00:00")
+
+					duration = log.ideal_production_end_datetime - log.ideal_production_start_datetime
+					slot_start = log.ideal_production_start_datetime
+					slot_end = log.ideal_production_end_datetime
+
+					today = now_datetime().date()
+
+					while slot_start.date() >= today:
+						# Check if this time block overlaps any active Job Cards
+						job_cards = frappe.get_all(
+							"Job Card",
+							filters={
+								"workstation": bom_doc.custom_workstation,
+								"status": ["not in", ["Completed", "Cancelled"]],
+								"expected_start_date": ["<=", slot_end],
+								"expected_end_date": [">=", slot_start]
+							},
+							fields=["name", "expected_start_date", "expected_end_date"]
+						)
+						print(f"Checking slot: {slot_start} to {slot_end} for workstation {bom_doc.custom_workstation}")
+
+						if not job_cards:
+							# ✅ Workstation is free in this slot
+							log.expected_production_start_datetime = slot_start
+							log.expected_production_end_datetime = slot_end
+							log.workstation_availability = "Available"
+							print(f"✅ Available Slot: {slot_start} to {slot_end}")
+							return
+
+						# ❌ Not available: shift window back by 1 hour
+						slot_start -= timedelta(hours=1)
+						slot_end = slot_start + duration
+
+					# ❌ No available slot found
+					log.expected_production_start_datetime = None
+					log.expected_production_end_datetime = None
+					log.workstation_availability = "Not Available"
+					print("❌ No available slot found until today.")
+
+
 
 
 			log.save()

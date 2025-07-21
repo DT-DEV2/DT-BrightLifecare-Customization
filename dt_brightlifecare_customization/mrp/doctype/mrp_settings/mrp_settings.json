@@ -1,0 +1,59 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-11 20:27:53.584112",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "workstation_time_detail_section",
+  "default_workstation_start_time",
+  "column_break_udqn",
+  "default_workstation_end_time"
+ ],
+ "fields": [
+  {
+   "fieldname": "workstation_time_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Workstation Time Detail"
+  },
+  {
+   "fieldname": "column_break_udqn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_workstation_start_time",
+   "fieldtype": "Time",
+   "label": "Default Workstation Start Time"
+  },
+  {
+   "fieldname": "default_workstation_end_time",
+   "fieldtype": "Time",
+   "label": "Default Workstation End Time"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-11 20:35:30.374158",
+ "modified_by": "Administrator",
+ "module": "MRP",
+ "name": "MRP Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

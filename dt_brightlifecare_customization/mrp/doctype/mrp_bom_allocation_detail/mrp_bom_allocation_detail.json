@@ -10,7 +10,11 @@
   "material_request",
   "material_request_item_detail",
   "column_break_aygu",
-  "allocated_bom_no"
+  "allocated_bom_no",
+  "fg_batch_size",
+  "target_warehouse",
+  "workstation",
+  "priority"
  ],
  "fields": [
   {
@@ -43,15 +47,40 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Allocated BOM No",
-   "options": "BOM",
-   "read_only": 1
+   "options": "BOM"
+  },
+  {
+   "fetch_from": "allocated_bom_no.custom_target_warehouse",
+   "fieldname": "target_warehouse",
+   "fieldtype": "Link",
+   "label": "Target Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fetch_from": "allocated_bom_no.custom_fg_batch_size",
+   "fieldname": "fg_batch_size",
+   "fieldtype": "Float",
+   "label": "FG Batch Size"
+  },
+  {
+   "fetch_from": "allocated_bom_no.custom_priority",
+   "fieldname": "priority",
+   "fieldtype": "Int",
+   "label": "Priority"
+  },
+  {
+   "fetch_from": "allocated_bom_no.custom_workstation",
+   "fieldname": "workstation",
+   "fieldtype": "Link",
+   "label": "Workstation",
+   "options": "Workstation"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-25 20:43:58.248544",
+ "modified": "2025-07-11 19:57:48.290025",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Detail",

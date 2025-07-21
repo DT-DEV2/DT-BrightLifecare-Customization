@@ -13,14 +13,17 @@
   "posting_date",
   "material_request_detail_section",
   "material_requests",
+  "section_break_xkul",
+  "material_request_items",
   "allocation_to_bom_section",
   "bom_allocation_condition",
   "column_break_gpio",
   "calculate_bom_allocation",
-  "section_break_xkul",
-  "material_request_items",
   "section_break_ciym",
   "mrp_bom_allocation_detail",
+  "section_break_ybzv",
+  "explode_bom",
+  "column_break_irwy",
   "section_break_kolc",
   "mrp_bom_exploded_items",
   "section_break_mnqm",
@@ -146,6 +149,20 @@
    "fieldname": "calculate_bom_allocation",
    "fieldtype": "Button",
    "label": "Calculate BOM Allocation"
+  },
+  {
+   "description": "This will explode the above BOMs to retrieve raw material and packing material details for both finished goods and semi-finished goods.",
+   "fieldname": "explode_bom",
+   "fieldtype": "Button",
+   "label": "Explode BOM"
+  },
+  {
+   "fieldname": "section_break_ybzv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_irwy",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
@@ -158,7 +175,7 @@
    "link_fieldname": "mrp"
   }
  ],
- "modified": "2025-07-08 19:12:37.935032",
+ "modified": "2025-07-11 20:14:21.623458",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",

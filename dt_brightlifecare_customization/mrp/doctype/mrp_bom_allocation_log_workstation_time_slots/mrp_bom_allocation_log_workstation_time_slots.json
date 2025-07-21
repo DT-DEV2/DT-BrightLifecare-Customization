@@ -37,17 +37,20 @@
   {
    "fieldname": "workstation_availability",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Workstation Availability",
    "options": "\nAvailable\nNot Available"
   },
   {
    "fieldname": "ideal_slot_workstation_start_datetime",
    "fieldtype": "Datetime",
+   "in_list_view": 1,
    "label": "Ideal Slot Workstation Start Datetime"
   },
   {
    "fieldname": "ideal_slot_workstation_end_datetime",
    "fieldtype": "Datetime",
+   "in_list_view": 1,
    "label": "Ideal Slot Workstation End Datetime"
   }
  ],
@@ -55,7 +58,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-11 14:24:07.708743",
+ "modified": "2025-07-11 15:29:22.016435",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Log Workstation Time Slots",
