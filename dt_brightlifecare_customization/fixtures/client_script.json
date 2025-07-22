@@ -9,5 +9,16 @@
   "name": "Fetching Supplier Invoice Number and Delivery Note Date",
   "script": "frappe.ui.form.on('Purchase Invoice', {\n    before_load: function(frm) {\n        if (frm.doc.items && frm.doc.items[0].purchase_receipt) {\n            // Get the purchase_receipt from the first item\n            var purchase_receipt = frm.doc.items[0].purchase_receipt;\n            \n            // Fetch the required fields from the Purchase Receipt document\n            frappe.db.get_value('Purchase Receipt', purchase_receipt, ['supplier_delivery_note', 'custom_supplier_delivery_note_date'])\n                .then(r => {\n                    var purchase_receipt_doc = r.message;\n                    if (purchase_receipt_doc) {\n                        // Set these fetched values to fields in the doc\n                        frm.set_value('bill_no', purchase_receipt_doc.supplier_delivery_note);\n                        frm.set_value('bill_date', purchase_receipt_doc.custom_supplier_delivery_note_date);\n                        // Refresh the fields to ensure they are updated in the UI\n                        frm.refresh_field('bill_no');\n                        frm.refresh_field('bill_date');\n                    }\n                });\n        }\n    }\n});",
   "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "BOM",
+  "enabled": 1,
+  "modified": "2025-07-11 15:15:47.620771",
+  "module": "DT-BrightLifecare-Customization",
+  "name": "DT Filter RM BOM No in BOM",
+  "script": "frappe.ui.form.on('BOM', {\n\trefresh: function(frm) {\n\t\tfrm.set_query('bom_no', 'items', function(doc, cdt, cdn) {\n\t\t\tlet row = locals[cdt][cdn];\n\t\t\treturn {\n\t\t\t\tfilters: {\n\t\t\t\t\titem: row.item_code,\n\t\t\t\t\tis_active: 1,\n\t\t\t\t\tdocstatus: 1,\n\t\t\t\t\tcustom_target_warehouse: frm.doc.custom_target_warehouse,\n\t\t\t\t\tcustom_workstation: frm.doc.custom_workstation\n\t\t\t\t}\n\t\t\t};\n\t\t});\n\t}\n});\n",
+  "view": "Form"
  }
 ]

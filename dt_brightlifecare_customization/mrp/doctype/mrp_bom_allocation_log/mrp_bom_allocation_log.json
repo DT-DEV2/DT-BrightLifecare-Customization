@@ -29,13 +29,14 @@
   "operation_time_per_batch_size",
   "ideal_production_start_datetime",
   "ideal_production_end_datetime",
+  "workstation_availability",
   "column_break_qnaf",
   "bom_priority",
   "bom_warehouse",
   "total_number_of_batches",
   "total_operation_time",
-  "section_break_plme",
-  "mrp_bom_allocation_log_workstation"
+  "expected_production_start_datetime",
+  "expected_production_end_datetime"
  ],
  "fields": [
   {
@@ -174,16 +175,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "section_break_plme",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "mrp_bom_allocation_log_workstation",
-   "fieldtype": "Table",
-   "label": "MRP BOM Allocation Log Workstation",
-   "options": "MRP BOM Allocation Log Workstation"
-  },
-  {
    "fieldname": "ideal_production_start_datetime",
    "fieldtype": "Datetime",
    "label": "Ideal Production Start Datetime"
@@ -197,6 +188,22 @@
    "fieldname": "bom_qty",
    "fieldtype": "Float",
    "label": "BOM Qty"
+  },
+  {
+   "fieldname": "expected_production_start_datetime",
+   "fieldtype": "Datetime",
+   "label": "Expected Production Start Datetime"
+  },
+  {
+   "fieldname": "expected_production_end_datetime",
+   "fieldtype": "Datetime",
+   "label": "Expected Production End Datetime"
+  },
+  {
+   "fieldname": "workstation_availability",
+   "fieldtype": "Select",
+   "label": "Workstation Availability",
+   "options": "\nAvailable\nUnavailable"
   }
  ],
  "grid_page_length": 50,
@@ -204,7 +211,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-08 19:43:01.023729",
+ "modified": "2025-07-21 18:50:18.845577",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Log",

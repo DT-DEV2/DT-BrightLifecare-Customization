@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class MRPBOMAllocationLogWorkstation(Document):
+class MRPSettings(Document):
 	pass

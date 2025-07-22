@@ -142,15 +142,15 @@ def calculate_bom_allocation(mrp_name):
 			log.bom_allocation_log_datetime = now_datetime()
    
 			bom_doc = frappe.get_doc("BOM", bom.name)
-			log.bom = bom.name
+			log.bom = bom_doc.name
 			log.bom_qty = bom_doc.quantity
-			log.bom_priority = bom.custom_priority
-			log.bom_fg_batch_size = bom.custom_fg_batch_size
-			log.operation_time_per_batch_size = bom.custom_total_operation_time_for_batch_size
-			log.bom_warehouse = bom.custom_target_warehouse
+			log.bom_priority = bom_doc.custom_priority
+			log.bom_fg_batch_size = bom_doc.custom_fg_batch_size
+			log.operation_time_per_batch_size = bom_doc.custom_total_operation_time_for_batch_size
+			log.bom_warehouse = bom_doc.custom_target_warehouse
 
 			if log.operation_time_per_batch_size and log.qty_in_stock_uom:
-				log.total_number_of_batches = flt(log.qty_in_stock_uom) / flt(log.operation_time_per_batch_size)
+				log.total_number_of_batches = flt(row.qty_in_stock_uom) / flt(bom_doc.custom_fg_batch_size)
 
 			if log.total_number_of_batches and log.operation_time_per_batch_size:
 				log.total_operation_time = flt(log.total_number_of_batches) * flt(log.operation_time_per_batch_size)
@@ -197,40 +197,82 @@ def calculate_bom_allocation(mrp_name):
 
 				log.ideal_production_start_datetime = ideal_start_datetime
 				log.ideal_production_end_datetime = ideal_production_end_datetime
-   
-			
-				if bom_doc.operations:
-					# Step 1: Append all operations with total time
-					for op in bom_doc.operations:
-						log.append("mrp_bom_allocation_log_workstation", {
-							"operation": op.operation,
-							"workstation": op.workstation,
-							"bom_no": op.parent,
-							"operation_index_no": op.idx,
-							"operation_time": op.time_in_mins,
-							"batch_size": op.batch_size,
-							"total_operating_time_for_required_fg": (
-								flt(log.qty_in_stock_uom or 0) / flt(log.bom_qty or 1)
-							) * flt(op.time_in_mins or 0)
-						})
 
-					# Step 2: Sequentially calculate start/end for each operation
-					current_start = ideal_start_datetime
+				if log.ideal_production_start_datetime and log.ideal_production_end_datetime:
 
-					# Sort operations by operation_index_no ASC (1 → N)
-					sorted_ops = sorted(log.mrp_bom_allocation_log_workstation, key=lambda x: x.operation_index_no)
+					# Ensure these are already set
+					ideal_start = log.ideal_production_start_datetime
+					ideal_end = log.ideal_production_end_datetime
+					operation_hours_required = flt(log.total_operation_time) / 60
+					operation_duration = timedelta(hours=operation_hours_required)
 
-					for row in sorted_ops:
-						row.ideal_workstation_start_datetime = current_start
-						op_time = flt(row.total_operating_time_for_required_fg or 0)
-						row.ideal_workstation_end_datetime = current_start + timedelta(minutes=op_time)
-						current_start = row.ideal_workstation_end_datetime  # next op starts from here
+					# Step 1: Try ideal window
+					conflict = frappe.db.sql("""
+						SELECT name FROM `tabJob Card`
+						WHERE workstation = %s
+						AND status = 'Open'
+						AND (%s < expected_end_date AND %s > expected_start_date)
+					""", (
+						bom_doc.custom_workstation,
+						ideal_start, ideal_end
+					))
 
+					if not conflict:
+						log.expected_production_start_datetime = ideal_start
+						log.expected_production_end_datetime = ideal_end
+						log.workstation_availability = "Available"
+						break
 
-     
-		
+					# Step 2: Step back in 1-hour intervals from ideal_end
+					cursor = ideal_end - timedelta(hours=1)
+					now = frappe.utils.now_datetime()
 
+					# Extract shift details
+					shift_start = shift_info["start_time"]
+					shift_end = shift_info["end_time"]
+					holidays = shift_info["holidays"]
 
+					while cursor > now:
+						slot_end = cursor
+						slot_start = slot_end - operation_duration
+
+						# Skip if it's a holiday
+						if slot_start.date() in holidays:
+							cursor -= timedelta(hours=1)
+							continue
+
+						# Skip if slot start/end is outside shift hours
+						if not (shift_start <= slot_start.time() <= shift_end and shift_start <= slot_end.time() <= shift_end):
+							cursor -= timedelta(hours=1)
+							continue
+
+						# Optional: skip weekends
+						if slot_start.weekday() >= 5:
+							cursor -= timedelta(hours=1)
+							continue
+
+						# Check for overlapping Job Cards
+						conflict = frappe.db.sql("""
+							SELECT name FROM `tabJob Card`
+							WHERE workstation = %s
+							AND status = 'Open'
+							AND (%s < expected_end_date AND %s > expected_start_date)
+						""", (
+							bom_doc.custom_workstation,
+							slot_start, slot_end
+						))
+
+						if not conflict:
+							log.expected_production_start_datetime = slot_start
+							log.expected_production_end_datetime = slot_end
+							log.workstation_availability = "Available"
+							break
+
+						cursor -= timedelta(hours=1)
+
+					# If no slot found
+					if not log.expected_production_start_datetime:
+						log.workstation_availability = "Unavailable"
 			log.save()
 
 	frappe.msgprint("MRP BOM Allocation Logs created with ideal production windows.")
