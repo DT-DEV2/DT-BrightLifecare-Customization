@@ -197,121 +197,82 @@ def calculate_bom_allocation(mrp_name):
 
 				log.ideal_production_start_datetime = ideal_start_datetime
 				log.ideal_production_end_datetime = ideal_production_end_datetime
-   
-				
 
-     
-				# from datetime import time
-
-				# if log.ideal_production_end_datetime and log.ideal_production_start_datetime:
-				# 	# Get start and end time from MRP Settings
-				# 	mrp_settings = frappe.get_single("MRP Settings")
-				# 	start_time = get_time(mrp_settings.default_workstation_start_time or "09:00:00")
-				# 	end_time = get_time(mrp_settings.default_workstation_end_time or "18:00:00")
-
-				# 	# Get duration from ideal window
-				# 	time_gap = log.ideal_production_end_datetime - log.ideal_production_start_datetime
-
-				# 	# Start from allocation log creation date
-				# 	mrp_start_date = getdate(log.bom_allocation_log_datetime)
-				# 	current_date = mrp_start_date
-				# 	batch_no = 1
-
-				# 	while True:
-				# 		# Slot start
-				# 		slot_start_datetime = datetime.combine(current_date, start_time)
-
-				# 		# Slot end = slot_start + time_gap, but force end time from MRP Settings
-				# 		slot_end_date = (slot_start_datetime + time_gap).date()
-				# 		slot_end_datetime = datetime.combine(slot_end_date, end_time)
-				# 		if slot_end_datetime > log.ideal_production_start_datetime:
-				# 			break
-
-				# 		# --- Job Card Availability Logic ---
-				# 		job_cards = frappe.get_all(
-				# 			"Job Card",
-				# 			filters={
-				# 				"workstation": bom_doc.custom_workstation,
-				# 				"status": ["not in", ["Completed", "Cancelled"]],
-				# 				"expected_start_date": ["<=", slot_end_datetime],
-				# 				"expected_end_date": [">=", slot_start_datetime]
-				# 			},
-				# 			fields=["name", "status", "expected_start_date", "expected_end_date"]
-				# 		)
-
-				# 		is_available = 1  # Default to Available
-
-				# 		for jc in job_cards:
-				# 			# If overlaps with this slot, mark as not available
-				# 			if jc["expected_start_date"] <= slot_end_datetime and jc["expected_end_date"] >= slot_start_datetime:
-				# 				is_available = 0
-				# 				break
-
-				# 		# Append the row to child table
-				# 		log.append("mrp_bom_allocation_log_workstation", {
-				# 			"workstation": bom_doc.custom_workstation,
-				# 			"ideal_slot_workstation_start_datetime": slot_start_datetime,
-				# 			"ideal_slot_workstation_end_datetime": slot_end_datetime,
-				# 			"workstation_availability": "Available" if is_available else "Not Available"
-				# 		})
-
-				# 		# ✅ Stop if slot matches ideal window dates
-				# 		if (
-				# 			slot_start_datetime.date() == log.ideal_production_start_datetime.date() and
-				# 			slot_end_datetime.date() == log.ideal_production_end_datetime.date()
-				# 		):
-				# 			break
-
-				# 		current_date += timedelta(days=1)
-				# 		# batch_no += 1
-    
 				if log.ideal_production_start_datetime and log.ideal_production_end_datetime:
-	
-					mrp_settings = frappe.get_single("MRP Settings")
-					work_start_time = get_time(mrp_settings.default_workstation_start_time or "09:00:00")
-					work_end_time = get_time(mrp_settings.default_workstation_end_time or "18:00:00")
 
-					duration = log.ideal_production_end_datetime - log.ideal_production_start_datetime
-					slot_start = log.ideal_production_start_datetime
-					slot_end = log.ideal_production_end_datetime
+					# Ensure these are already set
+					ideal_start = log.ideal_production_start_datetime
+					ideal_end = log.ideal_production_end_datetime
+					operation_hours_required = flt(log.total_operation_time) / 60
+					operation_duration = timedelta(hours=operation_hours_required)
 
-					today = now_datetime().date()
+					# Step 1: Try ideal window
+					conflict = frappe.db.sql("""
+						SELECT name FROM `tabJob Card`
+						WHERE workstation = %s
+						AND status = 'Open'
+						AND (%s < expected_end_date AND %s > expected_start_date)
+					""", (
+						bom_doc.custom_workstation,
+						ideal_start, ideal_end
+					))
 
-					while slot_start.date() >= today:
-						# Check if this time block overlaps any active Job Cards
-						job_cards = frappe.get_all(
-							"Job Card",
-							filters={
-								"workstation": bom_doc.custom_workstation,
-								"status": ["not in", ["Completed", "Cancelled"]],
-								"expected_start_date": ["<=", slot_end],
-								"expected_end_date": [">=", slot_start]
-							},
-							fields=["name", "expected_start_date", "expected_end_date"]
-						)
-						print(f"Checking slot: {slot_start} to {slot_end} for workstation {bom_doc.custom_workstation}")
+					if not conflict:
+						log.expected_production_start_datetime = ideal_start
+						log.expected_production_end_datetime = ideal_end
+						log.workstation_availability = "Available"
+						break
 
-						if not job_cards:
-							# ✅ Workstation is free in this slot
+					# Step 2: Step back in 1-hour intervals from ideal_end
+					cursor = ideal_end - timedelta(hours=1)
+					now = frappe.utils.now_datetime()
+
+					# Extract shift details
+					shift_start = shift_info["start_time"]
+					shift_end = shift_info["end_time"]
+					holidays = shift_info["holidays"]
+
+					while cursor > now:
+						slot_end = cursor
+						slot_start = slot_end - operation_duration
+
+						# Skip if it's a holiday
+						if slot_start.date() in holidays:
+							cursor -= timedelta(hours=1)
+							continue
+
+						# Skip if slot start/end is outside shift hours
+						if not (shift_start <= slot_start.time() <= shift_end and shift_start <= slot_end.time() <= shift_end):
+							cursor -= timedelta(hours=1)
+							continue
+
+						# Optional: skip weekends
+						if slot_start.weekday() >= 5:
+							cursor -= timedelta(hours=1)
+							continue
+
+						# Check for overlapping Job Cards
+						conflict = frappe.db.sql("""
+							SELECT name FROM `tabJob Card`
+							WHERE workstation = %s
+							AND status = 'Open'
+							AND (%s < expected_end_date AND %s > expected_start_date)
+						""", (
+							bom_doc.custom_workstation,
+							slot_start, slot_end
+						))
+
+						if not conflict:
 							log.expected_production_start_datetime = slot_start
 							log.expected_production_end_datetime = slot_end
 							log.workstation_availability = "Available"
-							print(f"✅ Available Slot: {slot_start} to {slot_end}")
-							return
+							break
 
-						# ❌ Not available: shift window back by 1 hour
-						slot_start -= timedelta(hours=1)
-						slot_end = slot_start + duration
+						cursor -= timedelta(hours=1)
 
-					# ❌ No available slot found
-					log.expected_production_start_datetime = None
-					log.expected_production_end_datetime = None
-					log.workstation_availability = "Not Available"
-					print("❌ No available slot found until today.")
-
-
-
-
+					# If no slot found
+					if not log.expected_production_start_datetime:
+						log.workstation_availability = "Unavailable"
 			log.save()
 
 	frappe.msgprint("MRP BOM Allocation Logs created with ideal production windows.")
