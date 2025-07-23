@@ -16,9 +16,9 @@
   "section_break_xkul",
   "material_request_items",
   "allocation_to_bom_section",
-  "bom_allocation_condition",
-  "column_break_gpio",
   "calculate_bom_allocation",
+  "column_break_gpio",
+  "allocate_bom",
   "section_break_ciym",
   "mrp_bom_allocation_detail",
   "section_break_ybzv",
@@ -125,13 +125,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "Minimum Number of Batches",
-   "fieldname": "bom_allocation_condition",
-   "fieldtype": "Select",
-   "label": "BOM Allocation Condition",
-   "options": "Minimum Number of Batches\nMinimum Operation Time"
-  },
-  {
    "fieldname": "section_break_ciym",
    "fieldtype": "Section Break"
   },
@@ -163,6 +156,11 @@
   {
    "fieldname": "column_break_irwy",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "allocate_bom",
+   "fieldtype": "Button",
+   "label": "Allocate BOM"
   }
  ],
  "grid_page_length": 50,
@@ -175,7 +173,7 @@
    "link_fieldname": "mrp"
   }
  ],
- "modified": "2025-07-11 20:14:21.623458",
+ "modified": "2025-07-22 18:53:00.200237",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",
