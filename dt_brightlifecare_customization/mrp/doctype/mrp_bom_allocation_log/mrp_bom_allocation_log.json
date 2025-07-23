@@ -27,6 +27,7 @@
   "bom",
   "bom_qty",
   "bom_fg_batch_size",
+  "workstation",
   "operation_time_per_batch_size",
   "ideal_production_start_datetime",
   "ideal_production_end_datetime",
@@ -211,6 +212,12 @@
    "fieldname": "disabled",
    "fieldtype": "Check",
    "label": "Disabled"
+  },
+  {
+   "fieldname": "workstation",
+   "fieldtype": "Link",
+   "label": "Workstation",
+   "options": "Workstation"
   }
  ],
  "grid_page_length": 50,
@@ -218,7 +225,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-22 18:57:03.011800",
+ "modified": "2025-07-23 12:49:05.974322",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Log",
