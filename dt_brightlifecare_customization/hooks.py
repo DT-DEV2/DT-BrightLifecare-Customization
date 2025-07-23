@@ -524,7 +524,17 @@ custom_field = [
     "Supplier-custom_nda_supplier_approver",
     "Supplier-custom_nda_hk_approver",
     "Blanket Order-custom_vendor_remarks",
-    "Purchase Order-custom_vendor_remarks"
+    "Purchase Order-custom_vendor_remarks",
+    "Quality Inspection Reading-custom_parameter_status",
+    "Quality Inspection Reading-custom_specifications",
+    "Quality Inspection Reading-custom_reference_number"
+    "Item Quality Inspection Parameter-custom_status",
+    "Item Quality Inspection Parameter-custom_specifications",
+    "Item Quality Inspection Parameter-custom_reference_number",
+    "Item Quality Inspection Parameter-custom_description",
+    "Quality Inspection Parameter-custom_status",
+    "Quality Inspection Parameter-custom_specifications",
+    "Quality Inspection Parameter-custom_reference_number"
 ]
 
 
