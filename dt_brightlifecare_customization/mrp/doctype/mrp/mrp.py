@@ -118,6 +118,18 @@ def get_shift_config(warehouse):
 @frappe.whitelist()
 def calculate_bom_allocation(mrp_name):
 	mrp_doc = frappe.get_doc("MRP", mrp_name)
+ 
+	existing_logs = frappe.get_all(
+		"MRP BOM Allocation Log",
+		filters={"mrp": mrp_doc.name},
+		fields=["name"]
+	)
+
+	if existing_logs:
+		for log in existing_logs:
+			bom_log = frappe.get_doc("MRP BOM Allocation Log", log.name)
+			bom_log.db_set('disabled', 1)
+
 
 	for row in mrp_doc.material_request_items:
 		bom_list = frappe.get_all(
@@ -148,6 +160,7 @@ def calculate_bom_allocation(mrp_name):
 			log.bom_fg_batch_size = bom_doc.custom_fg_batch_size
 			log.operation_time_per_batch_size = bom_doc.custom_total_operation_time_for_batch_size
 			log.bom_warehouse = bom_doc.custom_target_warehouse
+			log.workstation = bom_doc.custom_workstation
 
 			if log.operation_time_per_batch_size and log.qty_in_stock_uom:
 				log.total_number_of_batches = flt(row.qty_in_stock_uom) / flt(bom_doc.custom_fg_batch_size)
@@ -276,3 +289,114 @@ def calculate_bom_allocation(mrp_name):
 			log.save()
 
 	frappe.msgprint("MRP BOM Allocation Logs created with ideal production windows.")
+
+
+
+
+@frappe.whitelist()
+def allocate_bom(mrp_name):
+	mrp_doc = frappe.get_doc("MRP", mrp_name)
+	mrp_doc.set("mrp_bom_allocation_detail", [])
+
+	for mr_item in mrp_doc.material_request_items:
+
+		# Get all available allocation logs for this item, ordered by priority
+		allocation_log = frappe.db.sql("""
+			SELECT
+				name, bom, bom_fg_batch_size, bom_warehouse, bom_priority, workstation, expected_production_start_datetime, expected_production_end_datetime
+			FROM
+				`tabMRP BOM Allocation Log`
+			WHERE
+				mrp = %(mrp)s AND
+				material_requested = %(item_code)s AND
+				material_requested_detail = %(detail_name)s AND
+				disabled = 0 AND
+				workstation_availability = 'Available'
+			ORDER BY
+				bom_fg_batch_size DESC,
+				bom_priority ASC
+			LIMIT 1
+		""", {
+			"mrp": mrp_doc.name,
+			"item_code": mr_item.item_code,
+			"detail_name": mr_item.name
+		}, as_dict=True)
+
+		row = {
+			"fg_item_code": mr_item.item_code,
+			"fg_quantity": mr_item.material_requested_qty,
+		}
+
+		if allocation_log:
+			row.update({
+				"allocated_bom_no": allocation_log[0].bom,
+				"fg_batch_size": allocation_log[0].bom_fg_batch_size,
+				"target_warehouse": allocation_log[0].bom_warehouse,
+				"priority": allocation_log[0].bom_priority,
+				"workstation": allocation_log[0].workstation,
+				"expected_production_start_datetime": allocation_log[0].expected_production_start_datetime,
+				"expected_production_end_datetime": allocation_log[0].expected_production_end_datetime,
+				"qty_in_stock_uom": mr_item.qty_in_stock_uom,
+				"uom_conversion_factor": mr_item.uom_conversion_factor,
+				"stock_uom": mr_item.stock_uom,
+				"uom": mr_item.uom,
+				"material_request": mr_item.material_request,
+				"material_request_item_detail": mr_item.material_request_item_detail,
+			})
+
+		mrp_doc.append("mrp_bom_allocation_detail", row)
+
+	mrp_doc.save()
+	frappe.msgprint("MRP BOM Allocation Detail rows created.")
+
+
+
+
+
+
+
+
+
+@frappe.whitelist()
+def explode_bom(mrp_name):
+	mrp_doc = frappe.get_doc("MRP", mrp_name)
+
+	for allocation in mrp_doc.mrp_bom_allocation_detail:
+		if not allocation.allocated_bom_no:
+			continue
+
+		# Load the BOM doc and use its saved exploded_items table
+		bom_doc = frappe.get_doc("BOM", allocation.allocated_bom_no)
+
+		for item in bom_doc.exploded_items:
+			
+			rm_required_qty = ((allocation.fg_quantity * item.stock_qty) / bom_doc.quantity)
+   
+			log = frappe.new_doc("MRP BOM Explosion Log")
+			log.update({
+				"fg_item_code": allocation.fg_item_code,
+				"fg_required_quantity": allocation.fg_quantity,
+				"qty_in_stock_uom": allocation.fg_quantity,
+				"uom_conversion_factor": allocation.uom_conversion_factor,
+				"material_request": allocation.material_request,
+				"material_request_item_detail": allocation.material_request_item_detail,
+				"expected_production_start_datetime": allocation.get("expected_production_start_datetime"),
+				"expected_production_end_datetime": allocation.get("expected_production_end_datetime"),
+				"uom": allocation.uom,
+				"qty_in_stock_uom": allocation.qty_in_stock_uom,
+				"allocated_bom_no": allocation.allocated_bom_no,
+				"target_warehouse": allocation.target_warehouse,
+				"workstation": allocation.get("workstation"),
+				"priority": allocation.priority,
+				"bom_item": bom_doc.item,
+				"bom_qty": bom_doc.quantity,
+				"bom_uom": bom_doc.uom,
+				"fg_batch_size": bom_doc.custom_fg_batch_size,
+				"bom_rm_item": item.item_code,
+				"bom_rm_item_qty_in_stock_uom": item.stock_qty,
+				"rm_required_qty_in_stock_uom": rm_required_qty,
+				"bom_rm_item_stock_uom": item.stock_uom,
+			})
+			log.insert()
+
+	frappe.msgprint("MRP BOM Explosion Logs created from BOM.exploded_items.")

@@ -8,6 +8,7 @@
  "field_order": [
   "section_break_zyvv",
   "bom_allocation_log_datetime",
+  "disabled",
   "section_break_eqwn",
   "mrp",
   "material_requested",
@@ -204,6 +205,12 @@
    "fieldtype": "Select",
    "label": "Workstation Availability",
    "options": "\nAvailable\nUnavailable"
+  },
+  {
+   "default": "0",
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled"
   }
  ],
  "grid_page_length": 50,
@@ -211,7 +218,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-21 18:50:18.845577",
+ "modified": "2025-07-22 18:57:03.011800",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Allocation Log",
