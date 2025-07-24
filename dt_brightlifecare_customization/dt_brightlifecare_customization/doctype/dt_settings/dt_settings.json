@@ -1,0 +1,63 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-24 11:39:10.450536",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "security_settings_section",
+  "domain_based_user_restriction",
+  "sso_security_settings_section",
+  "allowed_sso_domain"
+ ],
+ "fields": [
+  {
+   "fieldname": "security_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Security Settings"
+  },
+  {
+   "allow_bulk_edit": 1,
+   "fieldname": "domain_based_user_restriction",
+   "fieldtype": "Table",
+   "label": "Domain based User Restriction",
+   "options": "IP Address Detail"
+  },
+  {
+   "fieldname": "sso_security_settings_section",
+   "fieldtype": "Section Break",
+   "label": "SSO Security Settings"
+  },
+  {
+   "description": "Only users with email addresses belonging to this domain are allowed to log in via SSO (Google).",
+   "fieldname": "allowed_sso_domain",
+   "fieldtype": "Data",
+   "label": "Allowed SSO Domain"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-24 11:53:54.851163",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "DT Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
