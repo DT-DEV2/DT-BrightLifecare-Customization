@@ -624,4 +624,8 @@ scheduler_events = {
 
 
 
-on_login = "dt_brightlifecare_customization.auth.restrict_google_users"
+override_whitelisted_methods = {
+    "frappe.integrations.oauth2_logins.login_via_google": "dt_brightlifecare_customization.auth.custom_login_via_google"
+}
+
+on_login = "dt_brightlifecare_customization.auth.restrict_normal_login"
