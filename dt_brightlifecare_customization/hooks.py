@@ -534,7 +534,14 @@ custom_field = [
     "Item Quality Inspection Parameter-custom_description",
     "Quality Inspection Parameter-custom_status",
     "Quality Inspection Parameter-custom_specifications",
-    "Quality Inspection Parameter-custom_reference_number"
+    "Quality Inspection Parameter-custom_reference_number",
+    "Quality Inspection Reading-custom_method_of_analysis",
+    "Quality Inspection Reading-custom_test_uom",
+    "Item Quality Inspection Parameter-custom_method_of_analysis",
+    "Item Quality Inspection Parameter-custom_test_uom",
+    "Quality Inspection Parameter-custom_method_of_analysis",
+    "Quality Inspection Parameter-custom_test_uom",
+    "Supplier Quotation-custom_connected_users"
 ]
 
 
@@ -602,7 +609,10 @@ doc_events = {
     },
     "Quality Inspection Template": {
         "on_update": "dt_brightlifecare_customization.public.py.quality_inspection_template.before_save"
-    }
+    },
+    "Supplier Quotation": {
+        "before_save": "dt_brightlifecare_customization.public.py.supplier_quotation.fetch_connected_users"
+    },
 
 }
 
