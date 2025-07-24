@@ -541,7 +541,10 @@ custom_field = [
     "Item Quality Inspection Parameter-custom_test_uom",
     "Quality Inspection Parameter-custom_method_of_analysis",
     "Quality Inspection Parameter-custom_test_uom",
-    "Supplier Quotation-custom_connected_users"
+    "Supplier Quotation-custom_connected_users",
+    "Request for Quotation-custom_connected_users",
+    "Purchase Order-custom_connected_users",
+    "Purchase Order-custom_section_break_nclcq"
 ]
 
 
