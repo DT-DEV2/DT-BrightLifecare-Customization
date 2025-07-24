@@ -49,3 +49,19 @@ def before_save(doc, method):
                 # Only share with users who are not already shared
                 if user and user not in shared_users:
                     frappe.share.add(doc.doctype, doc.name, user, read=1, write=0, share=1)
+
+            
+
+
+            sup1 = frappe.get_doc("Supplier", sup.supplier)
+
+            if sup1.custom_connected_users:
+                # Extract existing user IDs from the current doc's child table
+                existing_users = {row.user for row in doc.custom_connected_users}
+
+                for user_entry in sup1.custom_connected_users:
+                    if user_entry.user not in existing_users:
+                        doc.append("custom_connected_users", {
+                            "user": user_entry.user
+                            # add other fields if needed
+                        })

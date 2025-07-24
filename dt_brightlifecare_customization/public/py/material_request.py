@@ -77,6 +77,16 @@ def create_rfq_from_suppliers(docname):
         rfq.append("suppliers", {"supplier": supplier})
         for item in items:
             rfq.append("items", item)
+
+        sup = frappe.get_doc("Supplier", supplier)
+        if sup.custom_connected_users:
+            for user_entry in sup.custom_connected_users:
+                rfq.append("custom_connected_users", {
+                    "user": user_entry.user
+                    # add other fields if needed (e.g., role, email, etc.)
+                })
+
+                
         rfq.message_for_supplier = "Please provide your best quote."
         rfq.save()
         rfq_names.append(rfq.name)
