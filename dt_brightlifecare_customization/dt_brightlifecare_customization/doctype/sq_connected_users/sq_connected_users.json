@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-05-29 14:28:46.049184",
+ "creation": "2025-07-24 11:39:30.805282",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -14,18 +14,17 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "User",
-   "options": "User",
-   "unique": 1
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-24 11:27:46.321447",
+ "modified": "2025-07-24 11:39:51.613135",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Connected Users",
+ "name": "SQ Connected Users",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",
