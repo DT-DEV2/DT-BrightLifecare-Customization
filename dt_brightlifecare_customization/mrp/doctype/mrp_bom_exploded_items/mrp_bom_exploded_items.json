@@ -8,9 +8,16 @@
  "field_order": [
   "item_code",
   "item_name",
+  "warehouse",
+  "stock_in_hand",
+  "available_for_use",
+  "plan_to_reserve",
+  "plan_to_purchase",
   "column_break_ffqn",
-  "qty_as_per_bom",
-  "stock_uom"
+  "required_qty_in_stock_uom",
+  "stock_uom",
+  "batch_no",
+  "batch_allocation"
  ],
  "fields": [
   {
@@ -33,23 +40,63 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "qty_as_per_bom",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Qty As Per BOM"
-  },
-  {
    "fieldname": "stock_uom",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Stock UOM",
    "options": "UOM"
+  },
+  {
+   "fieldname": "required_qty_in_stock_uom",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Required Qty in Stock UOM"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "stock_in_hand",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Stock in Hand"
+  },
+  {
+   "fieldname": "available_for_use",
+   "fieldtype": "Float",
+   "label": "Available for use"
+  },
+  {
+   "fieldname": "plan_to_reserve",
+   "fieldtype": "Float",
+   "label": "Plan to Reserve"
+  },
+  {
+   "fieldname": "plan_to_purchase",
+   "fieldtype": "Float",
+   "label": "Plan to Purchase"
+  },
+  {
+   "fieldname": "batch_no",
+   "fieldtype": "Link",
+   "label": "Batch No",
+   "options": "Batch"
+  },
+  {
+   "fieldname": "batch_allocation",
+   "fieldtype": "Long Text",
+   "label": "Batch Allocation"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-11 20:10:11.314154",
+ "modified": "2025-07-23 20:10:16.236798",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP BOM Exploded Items",

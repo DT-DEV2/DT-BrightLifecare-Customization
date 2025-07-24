@@ -115,6 +115,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_bulk_edit": 1,
    "fieldname": "mrp_bom_exploded_items",
    "fieldtype": "Table",
    "label": "MRP BOM Exploded Items",
@@ -173,7 +174,7 @@
    "link_fieldname": "mrp"
   }
  ],
- "modified": "2025-07-22 18:53:00.200237",
+ "modified": "2025-07-23 19:23:47.545594",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",

@@ -356,47 +356,100 @@ def allocate_bom(mrp_name):
 
 
 
-
 @frappe.whitelist()
 def explode_bom(mrp_name):
 	mrp_doc = frappe.get_doc("MRP", mrp_name)
+
+	# Step 1: Clear old exploded items
+	mrp_doc.set("mrp_bom_exploded_items", [])
+
+	# Step 2: Temp dict to accumulate RM qtys
+	rm_aggregate = {}
 
 	for allocation in mrp_doc.mrp_bom_allocation_detail:
 		if not allocation.allocated_bom_no:
 			continue
 
-		# Load the BOM doc and use its saved exploded_items table
 		bom_doc = frappe.get_doc("BOM", allocation.allocated_bom_no)
 
 		for item in bom_doc.exploded_items:
-			
-			rm_required_qty = ((allocation.fg_quantity * item.stock_qty) / bom_doc.quantity)
-   
-			log = frappe.new_doc("MRP BOM Explosion Log")
-			log.update({
-				"fg_item_code": allocation.fg_item_code,
-				"fg_required_quantity": allocation.fg_quantity,
-				"qty_in_stock_uom": allocation.fg_quantity,
-				"uom_conversion_factor": allocation.uom_conversion_factor,
-				"material_request": allocation.material_request,
-				"material_request_item_detail": allocation.material_request_item_detail,
-				"expected_production_start_datetime": allocation.get("expected_production_start_datetime"),
-				"expected_production_end_datetime": allocation.get("expected_production_end_datetime"),
-				"uom": allocation.uom,
-				"qty_in_stock_uom": allocation.qty_in_stock_uom,
-				"allocated_bom_no": allocation.allocated_bom_no,
-				"target_warehouse": allocation.target_warehouse,
-				"workstation": allocation.get("workstation"),
-				"priority": allocation.priority,
-				"bom_item": bom_doc.item,
-				"bom_qty": bom_doc.quantity,
-				"bom_uom": bom_doc.uom,
-				"fg_batch_size": bom_doc.custom_fg_batch_size,
-				"bom_rm_item": item.item_code,
-				"bom_rm_item_qty_in_stock_uom": item.stock_qty,
-				"rm_required_qty_in_stock_uom": rm_required_qty,
-				"bom_rm_item_stock_uom": item.stock_uom,
-			})
-			log.insert()
+			key = (item.item_code, item.source_warehouse)
+			rm_required_qty = (allocation.fg_quantity * item.stock_qty) / bom_doc.quantity
 
-	frappe.msgprint("MRP BOM Explosion Logs created from BOM.exploded_items.")
+			if key not in rm_aggregate:
+				rm_aggregate[key] = {
+					"item_code": item.item_code,
+					"stock_uom": item.stock_uom,
+					"source_warehouse": item.source_warehouse,
+					"rm_required_qty_in_stock_uom": 0,
+					"required_datetime": allocation.expected_production_start_datetime
+				}
+
+			rm_aggregate[key]["rm_required_qty_in_stock_uom"] += rm_required_qty
+
+	# Step 3: Track batch consumption across all items
+	batch_availability = {}
+
+	for key, data in rm_aggregate.items():
+		item_code = data["item_code"]
+		warehouse = data["source_warehouse"]
+		required_qty = data["rm_required_qty_in_stock_uom"]
+		production_date = data["required_datetime"]
+
+		# Get stock in hand
+		stock_in_hand = frappe.db.get_value("Bin", {"item_code": item_code, "warehouse": warehouse}, "actual_qty") or 0
+
+		# Find eligible batches
+		batches = frappe.get_all(
+			"Batch",
+			filters={
+				"item": item_code,
+				"expiry_date": [">", production_date]
+			},
+			fields=["name", "batch_qty", "expiry_date"],
+			order_by="expiry_date asc"
+		)
+
+		remaining_qty = required_qty
+		batch_allocation = []
+
+		for batch in batches:
+			# Initialize availability
+			available_qty = batch_availability.get(batch.name, batch.batch_qty or 0)
+
+			if available_qty <= 0:
+				continue
+
+			allocated_qty = min(available_qty, remaining_qty)
+
+			batch_allocation.append({
+				"batch_no": batch.name,
+				"allocated_qty": allocated_qty,
+				"available_qty_before": available_qty,
+				"expiry_date": batch.expiry_date
+			})
+
+			# Reduce from batch_availability
+			batch_availability[batch.name] = available_qty - allocated_qty
+			remaining_qty -= allocated_qty
+
+			if remaining_qty <= 0:
+				break
+
+		primary_batch_no = batch_allocation[0]["batch_no"] if batch_allocation else None
+
+		mrp_doc.append("mrp_bom_exploded_items", {
+			"item_code": item_code,
+			"stock_uom": data["stock_uom"],
+			"warehouse": warehouse,
+			"required_qty_in_stock_uom": required_qty,
+			"stock_in_hand": stock_in_hand,
+			"available_for_use": stock_in_hand,
+			"batch_allocation": frappe.as_json(batch_allocation),
+			"batch_no": primary_batch_no  # ✅ store the primary batch
+		})
+
+
+	# Step 4: Save
+	mrp_doc.save(ignore_permissions=True)
+	frappe.msgprint("Exploded BOM items updated in `mrp_bom_exploded_items` with batch allocation.")
