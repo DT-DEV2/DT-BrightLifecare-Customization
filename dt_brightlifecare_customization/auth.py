@@ -53,7 +53,7 @@ def login_oauth_user(
 		if not user.lower().endswith(f"@{allowed_domain.lower()}"):
 			frappe.respond_as_web_page(
 				_("Access Denied"),
-				_(f"Only accounts from {allowed_domain} are allowed for Google SSO."),
+				_(f"SSO Login is not allowed for Unrestricted Domain."),
 				http_status_code=403,
 			)
 			return
@@ -125,7 +125,7 @@ def _apply_ip_restriction(user):
 	if not client_ip or not _ip_in_rows(client_ip, rows):
 		frappe.respond_as_web_page(
 			_("Access Denied"),
-			_(f"Your IP ({client_ip or 'Unknown'}) is not allowed for domain {domain}."),
+			_(f"Sign-in Refused: You are outside the permitted network range"),
 			http_status_code=403,
 		)
 		raise frappe.AuthenticationError(_("IP Restriction Failed"))
@@ -158,7 +158,7 @@ def restrict_normal_login(login_manager):
                 pass
         # now block
         frappe.throw(
-            _("Login denied: Your IP ({0}) is not allowed for domain {1}.").format(client_ip or "Unknown", domain)
+            _("Sign-in Refused: You are outside the permitted network range")
         )
 
 def _get_client_ip():
