@@ -6106,7 +6106,7 @@
   "collapsible_depends_on": null,
   "columns": 0,
   "default": null,
-  "depends_on": "eval:doc.custom_nda_sign_by_supplier && !frappe.user.has_role('DT Merchant Onboarding')",
+  "depends_on": "eval:doc.custom_nda_sign_by_supplier && !frappe.user.has_role('ZDT Merchant Onboarding')",
   "description": null,
   "docstatus": 0,
   "doctype": "Custom Field",
