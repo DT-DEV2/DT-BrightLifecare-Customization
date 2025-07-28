@@ -3335,7 +3335,7 @@
   "insert_after": "custom_fg_batch_size",
   "is_system_generated": 0,
   "is_virtual": 0,
-  "label": "Target Warehouse",
+  "label": "Source Warehouse",
   "length": 0,
   "link_filters": "[[\"Warehouse\",\"is_group\",\"=\",0]]",
   "mandatory_depends_on": null,
