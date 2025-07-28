@@ -7,11 +7,24 @@ from frappe.utils import flt
 from frappe import _
 from frappe.utils import now_datetime, flt, get_time, getdate
 from datetime import datetime, timedelta
-
+import time
 
 class MRP(Document):
 	pass
 
+
+
+@frappe.whitelist()
+def calculate_bom_allocation(mrp_name):
+	mrp = frappe.get_doc("MRP", mrp_name)
+
+	if mrp.allocation_status == "In Progress":
+		frappe.throw("BOM Allocation is already in progress. Please wait...")
+
+	mrp.db_set("allocation_status", "In Progress")
+	frappe.enqueue("dt_brightlifecare_customization.mrp.doctype.mrp.mrp.run_calculate_bom_allocation", 
+					queue="long", job_name=f"bom_allocation_{mrp_name}",
+					mrp_name=mrp_name)
 
 
 
@@ -51,179 +64,223 @@ def get_shift_config(warehouse):
 	}
 
 @frappe.whitelist()
-def calculate_bom_allocation(mrp_name):
-	mrp_doc = frappe.get_doc("MRP", mrp_name)
- 
-	existing_logs = frappe.get_all(
-		"MRP BOM Allocation Log",
-		filters={"mrp": mrp_doc.name},
-		fields=["name"]
-	)
+def run_calculate_bom_allocation(mrp_name, user=None):
+	try:
+		mrp_doc = frappe.get_doc("MRP", mrp_name)
 
-	if existing_logs:
-		for log in existing_logs:
-			bom_log = frappe.get_doc("MRP BOM Allocation Log", log.name)
-			bom_log.db_set('disabled', 1)
-
-
-	for row in mrp_doc.material_request_items:
-		bom_list = frappe.get_all(
-			"BOM",
-			filters={"item": row.item_code, "is_active": 1},
-			fields=["name", "custom_priority", "custom_fg_batch_size", 
-			        "custom_total_operation_time_for_batch_size", "custom_source_warehouse"]
+		existing_logs = frappe.get_all(
+			"MRP BOM Allocation Log",
+			filters={"mrp": mrp_doc.name},
+			fields=["name"]
 		)
-
-		for bom in bom_list:
-			log = frappe.new_doc("MRP BOM Allocation Log")
-			log.mrp = mrp_doc.name
-			log.mrp_date = mrp_doc.posting_date
-			log.material_requested = row.item_code
-			log.material_requested_detail = row.name
-			log.required_by = row.required_by
-			log.uom = row.uom
-			log.required_qty = row.material_requested_qty
-			log.uom_conversion_factor = row.uom_conversion_factor
-			log.qty_in_stock_uom = row.qty_in_stock_uom
-			log.stock_uom = row.stock_uom
-			log.bom_allocation_log_datetime = now_datetime()
-   
-			bom_doc = frappe.get_doc("BOM", bom.name)
-			log.bom = bom_doc.name
-			log.bom_qty = bom_doc.quantity
-			log.bom_priority = bom_doc.custom_priority
-			log.bom_fg_batch_size = bom_doc.custom_fg_batch_size
-			log.operation_time_per_batch_size = bom_doc.custom_total_operation_time_for_batch_size
-			log.bom_warehouse = bom_doc.custom_source_warehouse
-			log.workstation = bom_doc.custom_workstation
-
-			if log.operation_time_per_batch_size and log.qty_in_stock_uom:
-				log.total_number_of_batches = flt(row.qty_in_stock_uom) / flt(bom_doc.custom_fg_batch_size)
-
-			if log.total_number_of_batches and log.operation_time_per_batch_size:
-				log.total_operation_time = flt(log.total_number_of_batches) * flt(log.operation_time_per_batch_size)
-
-			total_operation_minutes = flt(log.total_operation_time or 0)
-
-			if total_operation_minutes > 0 and row.required_by:
-				if isinstance(row.required_by, str):
-					required_by = datetime.strptime(row.required_by, "%Y-%m-%d")
-				elif isinstance(row.required_by, datetime):
-					required_by = row.required_by
-				else:
-					required_by = row.required_by
-
-				shift_info = get_shift_config(log.bom_warehouse)
-				start_time = shift_info["start_time"]
-				end_time = shift_info["end_time"]
-				working_minutes_per_day = shift_info["working_minutes"]
-				holidays = shift_info["holidays"]
-
-				# Calculate ideal production end datetime (day before required_by)
-				ideal_end_date = getdate(required_by) - timedelta(days=1)
-				ideal_production_end_datetime = datetime.combine(ideal_end_date, end_time)
-
-				remaining_minutes = total_operation_minutes
-				current_date = ideal_end_date
-				ideal_start_datetime = None
-
-				while True:
-					if current_date in holidays or current_date.weekday() >= 5:
-						current_date -= timedelta(days=1)
-						continue
-
-					if remaining_minutes <= working_minutes_per_day:
-						# Partial or full-day usage
-						start_time_actual = (datetime.combine(current_date, end_time) - timedelta(minutes=remaining_minutes)).time()
-						ideal_start_datetime = datetime.combine(current_date, start_time_actual)
-						break
-
-					# If not break, consume full day
-					remaining_minutes -= working_minutes_per_day
-					current_date -= timedelta(days=1)
+		boms_total = 0
+		boms_processed = 0
+		
+		if existing_logs:
+			for log in existing_logs:
+				bom_log = frappe.get_doc("MRP BOM Allocation Log", log.name)
+				bom_log.db_set('disabled', 1)
 
 
-				log.ideal_production_start_datetime = ideal_start_datetime
-				log.ideal_production_end_datetime = ideal_production_end_datetime
+		for row in mrp_doc.material_request_items:
+			bom_list = frappe.get_all("BOM", filters={"item": row.item_code, "is_active": 1, "docstatus": 1})
+			if bom_list:
+				boms_total += len(bom_list)
 
-				if log.ideal_production_start_datetime and log.ideal_production_end_datetime:
+				for bom in bom_list:
+					log = frappe.new_doc("MRP BOM Allocation Log")
+					log.mrp = mrp_doc.name
+					log.mrp_date = mrp_doc.posting_date
+					log.material_requested = row.item_code
+					log.material_requested_detail = row.name
+					log.required_by = row.required_by
+					log.uom = row.uom
+					log.required_qty = row.material_requested_qty
+					log.uom_conversion_factor = row.uom_conversion_factor
+					log.qty_in_stock_uom = row.qty_in_stock_uom
+					log.stock_uom = row.stock_uom
+					log.bom_allocation_log_datetime = now_datetime()
+		
+					bom_doc = frappe.get_doc("BOM", bom.name)
+					log.bom = bom_doc.name
+					log.bom_qty = bom_doc.quantity
+					log.bom_priority = bom_doc.custom_priority
+					log.bom_fg_batch_size = bom_doc.custom_fg_batch_size
+					log.operation_time_per_batch_size = bom_doc.custom_total_operation_time_for_batch_size
+					log.bom_warehouse = bom_doc.custom_source_warehouse
+					log.workstation = bom_doc.custom_workstation
+					print(f"Processing BOM: {bom_doc.name} for MRP: {mrp_doc.name}")
 
-					# Ensure these are already set
-					ideal_start = log.ideal_production_start_datetime
-					ideal_end = log.ideal_production_end_datetime
-					operation_hours_required = flt(log.total_operation_time) / 60
-					operation_duration = timedelta(hours=operation_hours_required)
+					if log.operation_time_per_batch_size and log.qty_in_stock_uom:
+						log.total_number_of_batches = flt(row.qty_in_stock_uom) / flt(bom_doc.custom_fg_batch_size)
 
-					# Step 1: Try ideal window
-					conflict = frappe.db.sql("""
-						SELECT name FROM `tabJob Card`
-						WHERE workstation = %s
-						AND status = 'Open'
-						AND (%s < expected_end_date AND %s > expected_start_date)
-					""", (
-						bom_doc.custom_workstation,
-						ideal_start, ideal_end
-					))
+					if log.total_number_of_batches and log.operation_time_per_batch_size:
+						log.total_operation_time = flt(log.total_number_of_batches) * flt(log.operation_time_per_batch_size)
 
-					if not conflict:
-						log.expected_production_start_datetime = ideal_start
-						log.expected_production_end_datetime = ideal_end
-						log.workstation_availability = "Available"
-						break
+					total_operation_minutes = flt(log.total_operation_time or 0)
 
-					# Step 2: Step back in 1-hour intervals from ideal_end
-					cursor = ideal_end - timedelta(hours=1)
-					now = frappe.utils.now_datetime()
+					if total_operation_minutes > 0 and row.required_by:
+						if isinstance(row.required_by, str):
+							required_by = datetime.strptime(row.required_by, "%Y-%m-%d")
+						elif isinstance(row.required_by, datetime):
+							required_by = row.required_by
+						else:
+							required_by = row.required_by
 
-					# Extract shift details
-					shift_start = shift_info["start_time"]
-					shift_end = shift_info["end_time"]
-					holidays = shift_info["holidays"]
+						shift_info = get_shift_config(log.bom_warehouse)
+						start_time = shift_info["start_time"]
+						end_time = shift_info["end_time"]
+						working_minutes_per_day = shift_info["working_minutes"]
+						holidays = shift_info["holidays"]
 
-					while cursor > now:
-						slot_end = cursor
-						slot_start = slot_end - operation_duration
+						# Calculate ideal production end datetime (day before required_by)
+						ideal_end_date = getdate(required_by) - timedelta(days=1)
+						ideal_production_end_datetime = datetime.combine(ideal_end_date, end_time)
 
-						# Skip if it's a holiday
-						if slot_start.date() in holidays:
-							cursor -= timedelta(hours=1)
-							continue
+						remaining_minutes = total_operation_minutes
+						current_date = ideal_end_date
+						ideal_start_datetime = None
 
-						# Skip if slot start/end is outside shift hours
-						if not (shift_start <= slot_start.time() <= shift_end and shift_start <= slot_end.time() <= shift_end):
-							cursor -= timedelta(hours=1)
-							continue
+						while True:
+							if current_date in holidays or current_date.weekday() >= 5:
+								current_date -= timedelta(days=1)
+								continue
 
-						# Optional: skip weekends
-						if slot_start.weekday() >= 5:
-							cursor -= timedelta(hours=1)
-							continue
+							if remaining_minutes <= working_minutes_per_day:
+								# Partial or full-day usage
+								start_time_actual = (datetime.combine(current_date, end_time) - timedelta(minutes=remaining_minutes)).time()
+								ideal_start_datetime = datetime.combine(current_date, start_time_actual)
+								break
 
-						# Check for overlapping Job Cards
-						conflict = frappe.db.sql("""
-							SELECT name FROM `tabJob Card`
-							WHERE workstation = %s
-							AND status = 'Open'
-							AND (%s < expected_end_date AND %s > expected_start_date)
-						""", (
-							bom_doc.custom_workstation,
-							slot_start, slot_end
-						))
+							# If not break, consume full day
+							remaining_minutes -= working_minutes_per_day
+							current_date -= timedelta(days=1)
 
-						if not conflict:
-							log.expected_production_start_datetime = slot_start
-							log.expected_production_end_datetime = slot_end
-							log.workstation_availability = "Available"
-							break
 
-						cursor -= timedelta(hours=1)
+						log.ideal_production_start_datetime = ideal_start_datetime
+						log.ideal_production_end_datetime = ideal_production_end_datetime
 
-					# If no slot found
-					if not log.expected_production_start_datetime:
-						log.workstation_availability = "Unavailable"
-			log.save()
+						if log.ideal_production_start_datetime and log.ideal_production_end_datetime:
 
-	frappe.msgprint("MRP BOM Allocation Logs created with ideal production windows.")
+							# Ensure these are already set
+							ideal_start = log.ideal_production_start_datetime
+							ideal_end = log.ideal_production_end_datetime
+							operation_hours_required = flt(log.total_operation_time) / 60
+							operation_duration = timedelta(hours=operation_hours_required)
+
+							# Step 1: Try ideal window
+							conflict = frappe.db.sql("""
+								SELECT name FROM `tabJob Card`
+								WHERE workstation = %s
+								AND status = 'Open'
+								AND (%s < expected_end_date AND %s > expected_start_date)
+							""", (
+								bom_doc.custom_workstation,
+								ideal_start, ideal_end
+							))
+
+							if not conflict:
+								log.expected_production_start_datetime = ideal_start
+								log.expected_production_end_datetime = ideal_end
+								log.workstation_availability = "Available"
+								
+							else:
+								# Step 2: Step back in 1-hour intervals from ideal_end
+								cursor = ideal_end - timedelta(hours=1)
+								now = frappe.utils.now_datetime()
+
+								# Extract shift details
+								shift_start = shift_info["start_time"]
+								shift_end = shift_info["end_time"]
+								holidays = shift_info["holidays"]
+
+								while cursor > now:
+									slot_end = cursor
+									slot_start = slot_end - operation_duration
+
+									# Skip if it's a holiday
+									if slot_start.date() in holidays:
+										cursor -= timedelta(hours=1)
+										continue
+
+									# Skip if slot start/end is outside shift hours
+									if not (shift_start <= slot_start.time() <= shift_end and shift_start <= slot_end.time() <= shift_end):
+										cursor -= timedelta(hours=1)
+										continue
+
+									# Optional: skip weekends
+									if slot_start.weekday() >= 5:
+										cursor -= timedelta(hours=1)
+										continue
+
+									# Check for overlapping Job Cards
+									conflict = frappe.db.sql("""
+										SELECT name FROM `tabJob Card`
+										WHERE workstation = %s
+										AND status = 'Open'
+										AND (%s < expected_end_date AND %s > expected_start_date)
+									""", (
+										bom_doc.custom_workstation,
+										slot_start, slot_end
+									))
+
+									if not conflict:
+										log.expected_production_start_datetime = slot_start
+										log.expected_production_end_datetime = slot_end
+										log.workstation_availability = "Available"
+										break
+
+									cursor -= timedelta(hours=1)
+
+								# If no slot found
+								if not log.expected_production_start_datetime:
+									log.workstation_availability = "Unavailable"
+					log.save()
+		
+					# Simulate time-consuming work (remove in production)
+					time.sleep(0.2)
+
+					# Update progress
+					boms_processed += 1
+					frappe.publish_realtime(
+						"mrp_bom_allocation_progress",
+						{
+							"progress": int((boms_processed / boms_total) * 100),
+							"message": f"Processing BOM {bom.name} ({boms_processed}/{boms_total})"
+						},
+						user=user
+					)
+			else:
+				frappe.publish_realtime(
+					"mrp_bom_allocation_progress",
+					{
+						"progress": 100,
+						"message": "No active BOMs found for any items."
+					},
+					user=user
+				)
+				mrp_doc.db_set("allocation_status", "Completed")
+				return
+		frappe.publish_realtime(
+			"mrp_bom_allocation_progress",
+			{
+				"progress": 100,
+				"message": "Allocation complete."
+			},
+			user=user
+		)
+		mrp_doc.save()
+		mrp_doc.db_set("allocation_status", "Completed")
+
+	except Exception as e:
+		frappe.publish_realtime("mrp_bom_allocation_progress", {
+			"progress": 100,
+			"failed": True,
+			"message": f"Error: {str(e)}",
+		}, user=frappe.session.user)
+		frappe.db.set_value("MRP", mrp_name, "allocation_status", "Failed")
+		frappe.log_error("BOM Allocation Failed", frappe.get_traceback())
+
 
 
 
