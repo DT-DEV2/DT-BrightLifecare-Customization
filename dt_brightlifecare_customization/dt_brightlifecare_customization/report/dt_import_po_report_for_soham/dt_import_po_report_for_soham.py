@@ -13,7 +13,7 @@ def execute(filters=None):
         {"label": "Address type", "fieldname": "address_type", "fieldtype": "Data"},
         {"label": "BLC F/W Code", "fieldname": "fw_code", "fieldtype": "Data"},
         {"label": "Bright life care", "fieldname": "bright_life_care", "fieldtype": "Data"},
-        {"label": "BLC Address", "fieldname": "blc_address", "fieldtype": "Data"},
+        {"label": "BLC Address", "fieldname": "blc_address", "fieldtype": "Link", "options": "Address"},
         {"label": "Item Code", "fieldname": "item_code", "fieldtype": "Link", "options": "Item"},
         {"label": "Item Name", "fieldname": "item_name", "fieldtype": "Data"},
         {"label": "PO Qty", "fieldname": "qty", "fieldtype": "Float"},
@@ -41,17 +41,25 @@ def execute(filters=None):
     data = frappe.db.sql("""
         SELECT
             po.set_warehouse AS warehouse,
-            po.company AS company,             
+            po.company AS company,     
+            i.item_group AS item_group,
+            i.custom_item_sub_category AS sub_item_group,       
             po.transaction_date AS posting_date,
             po.name,
             po.supplier AS supplier_code,
             po.supplier_name AS supplier_name,
+            addr.address_type AS address_type,
+            po.billing_address AS blc_address,
             poi.item_code AS item_code,
 			poi.item_name AS item_name,
             poi.qty AS qty,
             poi.rate AS rate,
             po.schedule_date AS schedule_date,
+            isup.supplier_part_no AS manufacturer,
+            poi.supplier_quotation AS supplier_quotation,
+            sq.transaction_date AS quotation_date,
             poi.gst_hsn_code AS hsn_code,
+            itd.gst_rate AS item_tax_rate,
 			poi.taxable_value AS taxable_amount,
             poi.base_net_amount AS amount,
             poi.base_net_rate AS net_rate,
@@ -60,6 +68,11 @@ def execute(filters=None):
 
         FROM `tabPurchase Order` po
 		JOIN `tabPurchase Order Item` poi ON po.name = poi.parent
+        LEFT JOIN `tabItem` i ON poi.item_code = i.name
+        LEFT JOIN `tabAddress` addr ON po.supplier_address = addr.name
+        LEFT JOIN `tabSupplier Quotation` sq  ON poi.supplier_quotation = sq.name
+        LEFT JOIN `tabItem Supplier` isup ON isup.parent = poi.item_code AND isup.supplier = po.supplier
+        LEFT JOIN `tabItem Tax Template` itd ON itd.name = poi.item_tax_template AND itd.gst_treatment LIKE '%Taxable%'
         WHERE po.docstatus != 2
     """, as_dict=1)
 
