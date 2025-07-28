@@ -21,6 +21,8 @@ def create_mrp(material_request, use_defaults=False):
         )
 
     new_mrp_doc = frappe.new_doc("MRP")
+    new_mrp_doc.company = material_request_doc.company
+    new_mrp_doc.posting_date = material_request_doc.transaction_date
     
     new_mrp_doc.append('material_requests', {
         'material_request': material_request_doc.name,

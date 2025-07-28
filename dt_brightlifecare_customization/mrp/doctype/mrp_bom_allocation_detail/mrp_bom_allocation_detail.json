@@ -17,7 +17,7 @@
   "uom",
   "stock_uom",
   "fg_batch_size",
-  "target_warehouse",
+  "warehouse",
   "workstation",
   "priority",
   "section_break_vght",
@@ -59,10 +59,10 @@
    "options": "BOM"
   },
   {
-   "fetch_from": "allocated_bom_no.custom_target_warehouse",
-   "fieldname": "target_warehouse",
+   "fetch_from": "allocated_bom_no.custom_source_warehouse",
+   "fieldname": "warehouse",
    "fieldtype": "Link",
-   "label": "Target Warehouse",
+   "label": "Warehouse",
    "options": "Warehouse"
   },
   {

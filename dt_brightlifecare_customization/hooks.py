@@ -293,7 +293,7 @@ custom_field = [
     "Serial and Batch Entry-custom_batch_expiry_date",
     "Item Group-custom_rm_for_supplier_item_link",
     "Item Group-custom_pm_for_supplier_item_link",
-    "BOM-custom_target_warehouse",
+    "BOM-custom_source_warehouse",
     "Supplier-custom_relabeller_fssai_contract_term",
     "Supplier-custom_oem_fssai_contract_term",
     "Supplier-custom_distributer_fssai_contract_term",

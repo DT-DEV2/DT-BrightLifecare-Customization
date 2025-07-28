@@ -14,7 +14,7 @@
   "required_by",
   "uom",
   "stock_uom",
-  "target_warehouse",
+  "warehouse",
   "description_section",
   "description",
   "reference_section",
@@ -97,9 +97,9 @@
    "label": "UOM Conversion Factor"
   },
   {
-   "fieldname": "target_warehouse",
+   "fieldname": "warehouse",
    "fieldtype": "Link",
-   "label": "Target Warehouse",
+   "label": "Warehouse",
    "options": "Warehouse"
   },
   {

@@ -3,19 +3,6 @@
 
 frappe.ui.form.on("MRP", {
 
-	get_raw_materials: function (frm) {
-		frm.dirty();
-
-		frappe.call({
-			method: "get_raw_materials",
-			freeze: true,
-			doc: frm.doc,
-			callback: function () {
-				refresh_field("raw_materials");
-			},
-		});
-	},
-
 	calculate_bom_allocation: function (frm) {
 		frm.dirty();
 
