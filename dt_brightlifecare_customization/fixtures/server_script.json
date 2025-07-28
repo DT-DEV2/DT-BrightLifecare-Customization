@@ -53,7 +53,7 @@
   "rate_limit_count": 5,
   "rate_limit_seconds": 86400,
   "reference_doctype": "BOM",
-  "script": "if doc.custom_target_warehouse:\n    if doc.items:\n        for d in doc.items:\n            d.source_warehouse = doc.custom_target_warehouse",
+  "script": "if doc.custom_source_warehouse:\n    if doc.items:\n        for d in doc.items:\n            d.source_warehouse = doc.custom_source_warehouse",
   "script_type": "DocType Event"
  },
  {

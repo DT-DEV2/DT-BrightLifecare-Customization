@@ -91,7 +91,7 @@
    "options": "BOM"
   },
   {
-   "fetch_from": "bom.custom_target_warehouse",
+   "fetch_from": "bom.custom_source_warehouse",
    "fieldname": "bom_warehouse",
    "fieldtype": "Link",
    "label": "BOM Warehouse",
