@@ -544,7 +544,10 @@ custom_field = [
     "Supplier Quotation-custom_connected_users",
     "Request for Quotation-custom_connected_users",
     "Purchase Order-custom_connected_users",
-    "Purchase Order-custom_section_break_nclcq"
+    "Purchase Order-custom_section_break_nclcq",
+    "Supplier-custom_msme_declaration",
+    "Supplier-custom_msme_declaration_attachment",
+    "Supplier-custom_certificate_attachment"
 ]
 
 

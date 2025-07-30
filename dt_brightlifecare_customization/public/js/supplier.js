@@ -406,6 +406,25 @@ frappe.ui.form.on('Supplier', {
 
     },
 
+    custom_msme_declaration: function(frm) {
+        // Get the single FSSAI Declaration document
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Download MSME Declaration',
+                fieldname: 'declaration'
+            },
+            callback: function(response) {
+                if (response.message && response.message.declaration) {
+                    // Open the file URL in new tab to trigger download
+                    window.open(response.message.declaration, '_blank');
+                } else {
+                    frappe.msgprint(__('No MSME Declaration file found'));
+                }
+            }
+        });
+    },
+
     custom_download_fssai_declaration: function(frm) {
         // Get the single FSSAI Declaration document
         frappe.call({
