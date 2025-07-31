@@ -619,13 +619,11 @@ frappe.ui.form.on('Supplier', {
         const workflow_action = frm.selected_workflow_action;
 
         if (workflow_action === 'Send for Approval' && frm.doc.supplier_type === 'Company') {
+            const isMarketplace = frm.doc.custom_is_marketplace_workflow;
             // Define an array of fields to check
             const fieldsToCheck = [
                 { field: 'custom_certificate_of_incorporationpartnership', message: __('<b>Mandatory field:</b><br>Certificate of Incorporation/Partnership Number') },
                 { field: 'custom_certificate_of_incorporationpartnership_attachment', message: __('<b>Mandatory field:</b><br>COI/P Attachment') },
-                { field: 'custom_board_resolution', message: __('<b>Mandatory field:</b><br>Board Resolution Number') },
-                { field: 'custom_board_resolution_attachment', message: __('<b>Mandatory field:</b><br>Board Resolution Attachment') },
-                { field: 'custom_memorandum_of_association_moa_attachment', message: __('<b>Mandatory field:</b><br>MOA & AOA Attachment') },
                 { field: 'custom_authorised_signatory_name', message: __('<b>Mandatory field:</b><br>Authorised Signatory Name') },
                 { field: 'custom_authorised_signatory_aadhar_card', message: __('<b>Mandatory field:</b><br>Authorised Signatory Aadhar Card') },
                 { field: 'custom_authorised_signatory_aadhar_card_attachment', message: __('<b>Mandatory field:</b><br>Authorised Signatory Aadhar Card Attachment') },
@@ -635,6 +633,17 @@ frappe.ui.form.on('Supplier', {
                 // { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
 
             ];
+
+
+            // Add extra fields only if marketplace workflow is ticked
+            if (isMarketplace) {
+                fieldsToCheck.push(
+                    { field: 'custom_board_resolution', message: __('<b>Mandatory field:</b><br>Board Resolution Number') },
+                    { field: 'custom_board_resolution_attachment', message: __('<b>Mandatory field:</b><br>Board Resolution Attachment') },
+                    { field: 'custom_memorandum_of_association_moa_attachment', message: __('<b>Mandatory field:</b><br>MOA & AOA Attachment') }
+                );
+            }
+            
 
             // Loop through the fields and check if they are filled
             for (let i = 0; i < fieldsToCheck.length; i++) {
@@ -732,10 +741,9 @@ frappe.ui.form.on('Supplier', {
 
 
         else if (workflow_action === 'Send for Approval' && frm.doc.supplier_type === 'Individual') {
+            const isMarketplace = frm.doc.custom_is_marketplace_workflow;
             // Define an array of fields to check
             const fieldsToCheck = [
-                { field: 'custom_board_resolution', message: __('<b>Mandatory field:</b><br>Board Resolution Number') },
-                { field: 'custom_board_resolution_attachment', message: __('<b>Mandatory field:</b><br>Board Resolution Attachment') },
                 { field: 'custom_authorised_signatory_name', message: __('<b>Mandatory field:</b><br>Authorised Signatory Name') },
                 { field: 'custom_authorised_signatory_aadhar_card', message: __('<b>Mandatory field:</b><br>Authorised Signatory Aadhar Card') },
                 { field: 'custom_authorised_signatory_aadhar_card_attachment', message: __('<b>Mandatory field:</b><br>Authorised Signatory Aadhar Card Attachment') },
@@ -745,6 +753,14 @@ frappe.ui.form.on('Supplier', {
                 // { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
 
             ];
+
+
+            if (isMarketplace) {
+                fieldsToCheck.push(
+                    { field: 'custom_board_resolution', message: __('<b>Mandatory field:</b><br>Board Resolution Number') },
+                    { field: 'custom_board_resolution_attachment', message: __('<b>Mandatory field:</b><br>Board Resolution Attachment') },
+                );
+            }
 
             // Loop through the fields and check if they are filled
             for (let i = 0; i < fieldsToCheck.length; i++) {
@@ -841,12 +857,11 @@ frappe.ui.form.on('Supplier', {
 
 
         else if (workflow_action === 'Send for Approval' && frm.doc.supplier_type === 'LLP') {
+            const isMarketplace = frm.doc.custom_is_marketplace_workflow;
             // Define an array of fields to check
             const fieldsToCheck = [
                 { field: 'custom_certificate_of_incorporationpartnership', message: __('<b>Mandatory field:</b><br>Certificate of Incorporation/Partnership Number') },
                 { field: 'custom_certificate_of_incorporationpartnership_attachment', message: __('<b>Mandatory field:</b><br>COI/P Attachment') },
-                { field: 'custom_board_resolution', message: __('<b>Mandatory field:</b><br>Board Resolution Number') },
-                { field: 'custom_board_resolution_attachment', message: __('<b>Mandatory field:</b><br>Board Resolution Attachment') },
                 { field: 'custom_authorised_signatory_name', message: __('<b>Mandatory field:</b><br>Authorised Signatory Name') },
                 { field: 'custom_authorised_signatory_aadhar_card', message: __('<b>Mandatory field:</b><br>Authorised Signatory Aadhar Card') },
                 { field: 'custom_authorised_signatory_aadhar_card_attachment', message: __('<b>Mandatory field:</b><br>Authorised Signatory Aadhar Card Attachment') },
@@ -855,6 +870,14 @@ frappe.ui.form.on('Supplier', {
                 { field: 'custom_in_case_of_authorised_dealer', message: __('<b>Mandatory field:</b><br>Authorised Dealer') },
                 // { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
             ];
+
+
+            if (isMarketplace) {
+                fieldsToCheck.push(
+                    { field: 'custom_board_resolution', message: __('<b>Mandatory field:</b><br>Board Resolution Number') },
+                    { field: 'custom_board_resolution_attachment', message: __('<b>Mandatory field:</b><br>Board Resolution Attachment') },
+                );
+            }
 
             // Loop through the fields and check if they are filled
             for (let i = 0; i < fieldsToCheck.length; i++) {
@@ -950,12 +973,11 @@ frappe.ui.form.on('Supplier', {
 
 
         else if (workflow_action === 'Send for Approval' && frm.doc.supplier_type === 'Partnership') {
+            const isMarketplace = frm.doc.custom_is_marketplace_workflow;
             // Define an array of fields to check
             const fieldsToCheck = [
                 { field: 'custom_certificate_of_incorporationpartnership', message: __('<b>Mandatory field:</b><br>Certificate of Incorporation/Partnership Number') },
                 { field: 'custom_certificate_of_incorporationpartnership_attachment', message: __('<b>Mandatory field:</b><br>COI/P Attachment') },
-                { field: 'custom_board_resolution', message: __('<b>Mandatory field:</b><br>Board Resolution Number') },
-                { field: 'custom_board_resolution_attachment', message: __('<b>Mandatory field:</b><br>Board Resolution Attachment') },
                 { field: 'custom_authorised_signatory_name', message: __('<b>Mandatory field:</b><br>Authorised Signatory Name') },
                 { field: 'custom_authorised_signatory_aadhar_card', message: __('<b>Mandatory field:</b><br>Authorised Signatory Aadhar Card') },
                 { field: 'custom_authorised_signatory_aadhar_card_attachment', message: __('<b>Mandatory field:</b><br>Authorised Signatory Aadhar Card Attachment') },
@@ -965,6 +987,14 @@ frappe.ui.form.on('Supplier', {
                 // { field: 'custom_authorised_dealer_attachment', message: __('<b>Mandatory field:</b><br>Authorised Dealer Attachment') },
 
             ];
+
+
+            if (isMarketplace) {
+                fieldsToCheck.push(
+                    { field: 'custom_board_resolution', message: __('<b>Mandatory field:</b><br>Board Resolution Number') },
+                    { field: 'custom_board_resolution_attachment', message: __('<b>Mandatory field:</b><br>Board Resolution Attachment') },
+                );
+            }
 
             // Loop through the fields and check if they are filled
             for (let i = 0; i < fieldsToCheck.length; i++) {
@@ -1066,22 +1096,6 @@ frappe.ui.form.on('Supplier', {
 
 
 
-
-
-// frappe.ui.form.on('Type Of Product Detail', {
-//     fssai_license: function(frm, cdt, cdn) {
-//         // Run check every time fssai_license is changed in any row
-//         toggle_fssai_license_field(frm);
-//     }
-// });
-
-
-// function toggle_fssai_license_field(frm) {
-//     const rows = frm.doc.custom_type_of_product || [];
-//     const any_checked = rows.some(row => row.fssai_license === 1);
-
-//     frm.toggle_display('custom_fssai_licence_number', any_checked);
-// }
 
 
 
