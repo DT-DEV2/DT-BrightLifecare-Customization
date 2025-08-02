@@ -5,19 +5,26 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "quotation_comparison_attachment"
+  "quotation_comparison_attachment",
+  "supplier"
  ],
  "fields": [
   {
    "fieldname": "quotation_comparison_attachment",
    "fieldtype": "Attach",
    "label": "Quotation Comparison Attachment"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-24 10:12:20.410363",
+ "modified": "2025-08-02 10:53:07.039872",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Quotation Comparison",
