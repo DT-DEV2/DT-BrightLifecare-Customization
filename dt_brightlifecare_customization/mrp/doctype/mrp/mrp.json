@@ -11,20 +11,15 @@
   "company",
   "column_break_hgqf",
   "posting_date",
+  "expected_start_date",
   "material_request_detail_section",
   "material_requests",
   "section_break_xkul",
   "material_request_items",
-  "allocation_to_bom_section",
-  "calculate_bom_allocation",
-  "allocation_status",
-  "column_break_gpio",
-  "allocate_bom",
-  "section_break_ciym",
-  "mrp_bom_allocation_detail",
   "section_break_ybzv",
   "explode_bom",
   "column_break_irwy",
+  "get_raw_materials_for_transfer",
   "section_break_kolc",
   "mrp_bom_exploded_items",
   "section_break_mnqm",
@@ -80,8 +75,7 @@
   },
   {
    "fieldname": "section_break_mnqm",
-   "fieldtype": "Section Break",
-   "label": "FEFO Allocation"
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "material_request_detail_section",
@@ -107,11 +101,6 @@
    "options": "MRP Material Request Item"
   },
   {
-   "fieldname": "allocation_to_bom_section",
-   "fieldtype": "Section Break",
-   "label": "Allocation to BOM"
-  },
-  {
    "fieldname": "section_break_kolc",
    "fieldtype": "Section Break"
   },
@@ -120,30 +109,11 @@
    "fieldname": "mrp_bom_exploded_items",
    "fieldtype": "Table",
    "label": "MRP BOM Exploded Items",
-   "options": "MRP BOM Exploded Items"
-  },
-  {
-   "fieldname": "column_break_gpio",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "section_break_ciym",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "mrp_bom_allocation_detail",
-   "fieldtype": "Table",
-   "label": "MRP BOM Allocation Detail",
-   "options": "MRP BOM Allocation Detail"
+   "options": "MRP BOM Exploded Item"
   },
   {
    "fieldname": "section_break_xkul",
    "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "calculate_bom_allocation",
-   "fieldtype": "Button",
-   "label": "Calculate BOM Allocation"
   },
   {
    "description": "This will explode the above BOMs to retrieve raw material and packing material details for both finished goods and semi-finished goods.",
@@ -160,29 +130,22 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "allocate_bom",
-   "fieldtype": "Button",
-   "label": "Allocate BOM"
+   "fieldname": "expected_start_date",
+   "fieldtype": "Date",
+   "label": "Expected Start Date",
+   "reqd": 1
   },
   {
-   "fieldname": "allocation_status",
-   "fieldtype": "Select",
-   "label": "Allocation Status",
-   "options": "\nIn Progress\nCompleted\nFailed",
-   "read_only": 1
+   "fieldname": "get_raw_materials_for_transfer",
+   "fieldtype": "Button",
+   "label": "Get Raw Materials for Transfer"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [
-  {
-   "group": "MRP BOM Allocation Log",
-   "link_doctype": "MRP BOM Allocation Log",
-   "link_fieldname": "mrp"
-  }
- ],
- "modified": "2025-07-28 15:22:13.573030",
+ "links": [],
+ "modified": "2025-08-05 15:26:12.631369",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",

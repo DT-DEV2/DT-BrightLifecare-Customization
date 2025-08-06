@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class MRPBOMExplodedItems(Document):
+class FeedingWarehouse(Document):
 	pass

@@ -547,7 +547,8 @@ custom_field = [
     "Purchase Order-custom_section_break_nclcq",
     "Supplier-custom_msme_declaration",
     "Supplier-custom_msme_declaration_attachment",
-    "Supplier-custom_certificate_attachment"
+    "Supplier-custom_certificate_attachment",
+    "Warehouse-custom_feeding_warehouses"
 ]
 
 

@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class MRPBOMAllocationDetail(Document):
+class MRPBOMExplodedItem(Document):
 	pass
