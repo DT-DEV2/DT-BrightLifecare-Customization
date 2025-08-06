@@ -614,6 +614,9 @@ frappe.ui.form.on('Supplier', {
 
 
 
+    
+
+
 
     before_workflow_action: function(frm) {
         const workflow_action = frm.selected_workflow_action;
@@ -643,6 +646,12 @@ frappe.ui.form.on('Supplier', {
                     { field: 'custom_memorandum_of_association_moa_attachment', message: __('<b>Mandatory field:</b><br>MOA & AOA Attachment') }
                 );
             }
+
+            setTimeout(() => {
+                fieldsToCheck.forEach(field => {
+                    add_fake_asterisk(frm, field.field);
+                });
+            }, 300); 
             
 
             // Loop through the fields and check if they are filled
@@ -762,6 +771,12 @@ frappe.ui.form.on('Supplier', {
                 );
             }
 
+            setTimeout(() => {
+                fieldsToCheck.forEach(field => {
+                    add_fake_asterisk(frm, field.field);
+                });
+            }, 300); 
+
             // Loop through the fields and check if they are filled
             for (let i = 0; i < fieldsToCheck.length; i++) {
                 const field = fieldsToCheck[i];
@@ -878,6 +893,14 @@ frappe.ui.form.on('Supplier', {
                     { field: 'custom_board_resolution_attachment', message: __('<b>Mandatory field:</b><br>Board Resolution Attachment') },
                 );
             }
+
+
+            setTimeout(() => {
+                fieldsToCheck.forEach(field => {
+                    add_fake_asterisk(frm, field.field);
+                });
+            }, 300); 
+
 
             // Loop through the fields and check if they are filled
             for (let i = 0; i < fieldsToCheck.length; i++) {
@@ -996,6 +1019,15 @@ frappe.ui.form.on('Supplier', {
                 );
             }
 
+
+            setTimeout(() => {
+                fieldsToCheck.forEach(field => {
+                    add_fake_asterisk(frm, field.field);
+                });
+            }, 300); 
+
+            
+
             // Loop through the fields and check if they are filled
             for (let i = 0; i < fieldsToCheck.length; i++) {
                 const field = fieldsToCheck[i];
@@ -1094,6 +1126,24 @@ frappe.ui.form.on('Supplier', {
 
 
 
+
+function add_fake_asterisk(frm, fieldname) {
+    const field = frm.fields_dict[fieldname];
+    if (!field || !field.$wrapper) return;
+
+    const label_text = field.df.label;
+    const label = field.$wrapper.find('.control-label');
+
+    label.each(function () {
+        const $label = $(this);
+        const current = $label.html().trim();
+
+        // Only add asterisk if not already present
+        if (!current.includes('*')) {
+            $label.html(`${label_text} <span style="color:red">*</span>`);
+        }
+    });
+}
 
 
 
