@@ -42,9 +42,10 @@ def create_mrp_reservation_entries(mrp_doc):
 
 
 
-
 @frappe.whitelist()
 def explode_bom(mrp_name):
+	from erpnext.stock.doctype.batch.batch import get_batch_qty
+
 	mrp_doc = frappe.get_doc("MRP", mrp_name)
 
 	# Step 1: Clear previously exploded rows
@@ -79,24 +80,17 @@ def explode_bom(mrp_name):
 	if missing_bom_rows:
 		frappe.throw(_("BOM not found for items: {0}").format(", ".join(missing_bom_rows)))
 
-	# Step 4: Preload batch availability for all items across all warehouses
+	# Step 4: Preload batch expiry info
 	all_item_codes = list({item["item_code"] for item in rm_aggregate.values()})
-	batch_availability = {}
+	batch_expiry_lookup = {
+		b.name: b.expiry_date for b in frappe.get_all(
+			"Batch",
+			filters={"item": ["in", all_item_codes]},
+			fields=["name", "expiry_date"]
+		)
+	}
 
-	batches = frappe.get_all(
-		"Batch",
-		filters={
-			"item": ["in", all_item_codes],
-			"expiry_date": [">", mrp_doc.expected_start_date]
-		},
-		fields=["name", "item", "batch_qty", "expiry_date"],
-		order_by="expiry_date asc"
-	)
-
-	for batch in batches:
-		batch_availability[batch.name] = flt(batch.batch_qty)
-
-	# 🔁 Step 4.5: Subtract previously allocated batch qtys from submitted MRP documents
+	# Step 4.5: Subtract previously allocated batch qtys from submitted MRP documents
 	mrp_batch_consumed_qty = frappe.db.sql("""
 		SELECT
 			allocated_batch.batch_no AS batch_no,
@@ -119,12 +113,7 @@ def explode_bom(mrp_name):
 			allocated_batch.batch_no
 	""", as_dict=True)
 
-
-	for row in mrp_batch_consumed_qty:
-		batch_no = row.batch_no
-		used_qty = flt(row.total_used)
-		if batch_no in batch_availability:
-			batch_availability[batch_no] = max(batch_availability[batch_no] - used_qty, 0)
+	consumed_qty_by_batch = {row.batch_no: flt(row.total_used) for row in mrp_batch_consumed_qty}
 
 	# Step 5: Process each RM and perform batch allocation
 	for key, data in rm_aggregate.items():
@@ -147,32 +136,49 @@ def explode_bom(mrp_name):
 		plan_to_reserve = min(available_for_use, required_qty)
 		plan_to_purchase = required_qty - plan_to_reserve
 
-		# Allocate batch quantities safely from global availability
+		# Get batch-wise availability from ERPNext core
+		batchwise_qty = get_batch_qty(
+			item_code=item_code,
+			warehouse=warehouse,
+		)
+
+		print("Qty for batch:", batchwise_qty)
+		# ✅ Normalize output to dict if needed
+		if isinstance(batchwise_qty, list):
+			batchwise_qty = {b["batch_no"]: b["qty"] for b in batchwise_qty if b.get("batch_no")}
+
+
+		# Subtract previously allocated MRP batches
+		for batch_no, consumed in consumed_qty_by_batch.items():
+			print(batch_no, consumed)
+			if batch_no in batchwise_qty:
+				batchwise_qty[batch_no] = max(batchwise_qty[batch_no] - consumed, 0)
+
+		# Sort batches by expiry date
+		sorted_batches = sorted(
+			batchwise_qty.items(),
+			key=lambda b: batch_expiry_lookup.get(b[0]) or frappe.utils.getdate("2999-12-31")
+		)
+
+		# Allocate batches
 		remaining_qty = required_qty
 		batch_allocation = []
 
-		for batch in batches:
-			if batch.item != item_code:
+		for batch_no, available_qty in sorted_batches:
+			if available_qty <= 0 or remaining_qty <= 0:
 				continue
 
-			available_qty = batch_availability.get(batch.name, 0)
+			allocated_qty = min(available_qty, remaining_qty)
 
-			if available_qty <= 0:
-				continue
+			batch_allocation.append({
+				"batch_no": batch_no,
+				"allocated_qty": allocated_qty,
+				"available_qty_before": available_qty,
+				"expiry_date": batch_expiry_lookup.get(batch_no)
+			})
 
-			# Only use batch if it can fulfill the required_qty
-			if available_qty >= required_qty:
-				batch_allocation.append({
-					"batch_no": batch.name,
-					"allocated_qty": required_qty,
-					"available_qty_before": available_qty,
-					"expiry_date": batch.expiry_date
-				})
-				# Reduce from global availability
-				batch_availability[batch.name] = available_qty - required_qty
-				remaining_qty = 0
-				break  # ✅ stop after assigning one batch
-
+			batchwise_qty[batch_no] -= allocated_qty
+			remaining_qty -= allocated_qty
 
 		primary_batch_no = batch_allocation[0]["batch_no"] if batch_allocation else None
 
@@ -199,104 +205,137 @@ def explode_bom(mrp_name):
 
 
 
-
 @frappe.whitelist()
 def get_raw_materials_for_transfer(mrp_name):
-    mrp = frappe.get_doc("MRP", mrp_name)
+	from erpnext.stock.doctype.batch.batch import get_batch_qty
+	from frappe.utils import getdate, nowdate
 
-    # Clear existing raw_materials
-    mrp.set("raw_materials", [])
+	mrp = frappe.get_doc("MRP", mrp_name)
 
-    for row in mrp.mrp_bom_exploded_items:
-        item_code = row.item_code
-        required_qty = flt(row.required_qty_in_stock_uom)
-        original_warehouse = row.warehouse
-        remaining_qty = required_qty
+	# Clear existing raw_materials
+	mrp.set("raw_materials", [])
 
-        # Always copy the row as-is first
-        if row.material_request_type != "Purchase":
-            # For non-purchase rows, copy directly without alternate warehouse logic
-            mrp.append("raw_materials", {
-                "item_code": row.item_code,
-                "stock_uom": row.stock_uom,
-                "warehouse": row.warehouse,
-                "required_qty_in_stock_uom": row.required_qty_in_stock_uom,
-                "stock_in_hand": row.stock_in_hand,
-                "reserved_stock_for_mrp": row.reserved_stock_for_mrp,
-                "available_for_use": row.available_for_use,
-                "plan_to_reserve": row.plan_to_reserve,
-                "plan_to_purchase": row.plan_to_purchase,
-                "batch_allocation": row.batch_allocation,
-                "batch_no": row.batch_no,
-                "material_request_type": row.material_request_type
-            })
-            continue
+	for row in mrp.mrp_bom_exploded_items:
+		item_code = row.item_code
+		required_qty = flt(row.required_qty_in_stock_uom)
+		original_warehouse = row.warehouse
+		remaining_qty = required_qty
 
-        # For rows with type "Purchase", check alternate warehouses
-        feeding_warehouses = frappe.get_all(
-            "Feeding Warehouse",
-            filters={"parenttype": "Warehouse"},
-            fields=["warehouse"]
-        )
+		# Always copy the row as-is first if not a Purchase item
+		if row.material_request_type != "Purchase":
+			mrp.append("raw_materials", {
+				"item_code": row.item_code,
+				"stock_uom": row.stock_uom,
+				"warehouse": row.warehouse,
+				"required_qty_in_stock_uom": row.required_qty_in_stock_uom,
+				"stock_in_hand": row.stock_in_hand,
+				"reserved_stock_for_mrp": row.reserved_stock_for_mrp,
+				"available_for_use": row.available_for_use,
+				"plan_to_reserve": row.plan_to_reserve,
+				"plan_to_purchase": row.plan_to_purchase,
+				"batch_allocation": row.batch_allocation,
+				"batch_no": row.batch_no,
+				"material_request_type": row.material_request_type
+			})
+			continue
 
-        for fw in feeding_warehouses:
-            alt_wh = fw.warehouse
-            if alt_wh == original_warehouse:
-                continue
+		# Get expiry dates of all batches for the item
+		batch_expiry_lookup = {
+			b.name: b.expiry_date for b in frappe.get_all(
+				"Batch",
+				filters={"item": item_code},
+				fields=["name", "expiry_date"]
+			)
+		}
 
-            bin_data = frappe.db.get_value(
-                "Bin",
-                {"item_code": item_code, "warehouse": alt_wh},
-                ["actual_qty", "custom_reserved_stock_for_mrp"],
-                as_dict=True
-            ) or {}
+		# For rows with type "Purchase", check alternate (feeding) warehouses
+		feeding_warehouses = frappe.get_all(
+			"Feeding Warehouse",
+			filters={"parenttype": "Warehouse"},
+			fields=["warehouse"]
+		)
 
-            stock_in_hand = flt(bin_data.get("actual_qty", 0))
-            reserved_qty = flt(bin_data.get("custom_reserved_stock_for_mrp", 0))
-            available = max(stock_in_hand - reserved_qty, 0)
+		for fw in feeding_warehouses:
+			alt_wh = fw.warehouse
+			if alt_wh == original_warehouse:
+				continue
 
-            if available <= 0:
-                continue
+			# Get batch-wise qty in the alternate warehouse
+			batchwise_qty = get_batch_qty(item_code=item_code, warehouse=alt_wh)
 
-            alloc_qty = min(available, remaining_qty)
+			# If get_batch_qty returned a list instead of dict
+			if isinstance(batchwise_qty, list):
+				batchwise_qty = {
+					b.get("batch_no"): flt(b.get("qty")) for b in batchwise_qty if b.get("batch_no")
+				}
 
-            # Add row for this warehouse with allocated quantity
-            mrp.append("raw_materials", {
-                "item_code": item_code,
-                "stock_uom": row.stock_uom,
-                "warehouse": alt_wh,
-                "required_qty_in_stock_uom": required_qty,
-                "stock_in_hand": stock_in_hand,
-                "reserved_stock_for_mrp": reserved_qty,
-                "available_for_use": available,
-                "plan_to_reserve": alloc_qty,
-                "plan_to_purchase": 0,
-                "batch_allocation": row.batch_allocation,
-                "batch_no": row.batch_no,
-                "material_request_type": "Material Transfer"
-            })
+			# Filter out expired batches
+			batchwise_qty = {
+				batch_no: qty for batch_no, qty in batchwise_qty.items()
+				if (not batch_expiry_lookup.get(batch_no)) or getdate(batch_expiry_lookup[batch_no]) >= getdate(nowdate())
+			}
 
-            remaining_qty -= alloc_qty
+			# Sort by expiry date (FEFO)
+			sorted_batches = sorted(
+				batchwise_qty.items(),
+				key=lambda b: batch_expiry_lookup.get(b[0]) or getdate("2999-12-31")
+			)
 
-            if remaining_qty <= 0:
-                break
+			for batch_no, available_qty in sorted_batches:
+				if remaining_qty <= 0 or available_qty <= 0:
+					break
 
-        # If there is still some quantity left, mark for Purchase
-        if remaining_qty > 0:
-            mrp.append("raw_materials", {
-                "item_code": item_code,
-                "stock_uom": row.stock_uom,
-                "warehouse": original_warehouse,
-                "required_qty_in_stock_uom": required_qty,
-                "stock_in_hand": row.stock_in_hand,
-                "reserved_stock_for_mrp": row.reserved_stock_for_mrp,
-                "available_for_use": row.available_for_use,
-                "plan_to_reserve": 0,
-                "plan_to_purchase": remaining_qty,
-                "batch_allocation": row.batch_allocation,
-                "batch_no": row.batch_no,
-                "material_request_type": "Purchase"
-            })
+				alloc_qty = min(available_qty, remaining_qty)
 
-    mrp.save()
-    frappe.msgprint("Raw materials updated with stock split from alternate warehouses.")
+				# Fetch Bin data for context (optional)
+				bin_data = frappe.db.get_value(
+					"Bin",
+					{"item_code": item_code, "warehouse": alt_wh},
+					["actual_qty", "custom_reserved_stock_for_mrp"],
+					as_dict=True
+				) or {}
+
+				mrp.append("raw_materials", {
+					"item_code": item_code,
+					"stock_uom": row.stock_uom,
+					"warehouse": alt_wh,
+					"required_qty_in_stock_uom": required_qty,
+					"stock_in_hand": flt(bin_data.get("actual_qty")),
+					"reserved_stock_for_mrp": flt(bin_data.get("custom_reserved_stock_for_mrp")),
+					"available_for_use": available_qty,
+					"plan_to_reserve": alloc_qty,
+					"plan_to_purchase": 0,
+					"batch_allocation": frappe.as_json([{
+						"batch_no": batch_no,
+						"allocated_qty": alloc_qty,
+						"available_qty_before": available_qty,
+						"expiry_date": batch_expiry_lookup.get(batch_no)
+					}]),
+					"batch_no": batch_no,
+					"material_request_type": "Material Transfer"
+				})
+
+				remaining_qty -= alloc_qty
+
+			if remaining_qty <= 0:
+				break
+
+		# If there's still some left, mark for Purchase
+		if remaining_qty > 0:
+			mrp.append("raw_materials", {
+				"item_code": item_code,
+				"stock_uom": row.stock_uom,
+				"warehouse": original_warehouse,
+				"required_qty_in_stock_uom": required_qty,
+				"stock_in_hand": row.stock_in_hand,
+				"reserved_stock_for_mrp": row.reserved_stock_for_mrp,
+				"available_for_use": row.available_for_use,
+				"plan_to_reserve": 0,
+				"plan_to_purchase": remaining_qty,
+				"batch_allocation": row.batch_allocation,
+				"batch_no": row.batch_no,
+				"material_request_type": "Purchase"
+			})
+
+	mrp.save()
+	frappe.msgprint("Raw materials updated with batch-aware transfer plan.")

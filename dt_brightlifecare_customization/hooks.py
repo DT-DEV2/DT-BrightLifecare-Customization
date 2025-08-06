@@ -549,7 +549,8 @@ custom_field = [
     "Supplier-custom_msme_declaration_attachment",
     "Supplier-custom_certificate_attachment",
     "Warehouse-custom_feeding_warehouses",
-    "Bin-custom_reserved_stock_for_mrp"
+    "Bin-custom_reserved_stock_for_mrp",
+    "Warehouse-custom_section_break_ipwlb"
 ]
 
 
