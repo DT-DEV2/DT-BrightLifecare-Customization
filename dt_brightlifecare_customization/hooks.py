@@ -550,7 +550,11 @@ custom_field = [
     "Supplier-custom_certificate_attachment",
     "Warehouse-custom_feeding_warehouses",
     "Bin-custom_reserved_stock_for_mrp",
-    "Warehouse-custom_section_break_ipwlb"
+    "Warehouse-custom_section_break_ipwlb",
+    "Supplier-custom_is_raw_material",
+    "Supplier-custom_is_packing_material",
+    "Supplier-custom_is_import_supplier",
+    "Supplier-custom_is_indirect_supplier"
 ]
 
 

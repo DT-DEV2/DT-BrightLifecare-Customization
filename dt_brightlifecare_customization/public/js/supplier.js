@@ -1271,6 +1271,10 @@ function toggle_custom_type_of_product(frm) {
     let iso = false;
     cc = false;
     is_mktplace = false;
+    is_raw_mat = false;
+    is_packing_mat = false;
+    is_indirect_sup = false;
+    is_import_sup = false;
     if (frm.doc.custom_supplier_category && frm.doc.custom_supplier_category.length > 0) {
         frm.doc.custom_supplier_category.forEach(row => {
             if (row.type_of_product_required) {
@@ -1285,6 +1289,18 @@ function toggle_custom_type_of_product(frm) {
             if (row.is_marketplace_workflow) {
                 is_mktplace = true;
             }
+            if (row.is_raw_material) {
+                is_raw_mat = true;
+            }
+            if (row.is_packing_material) {
+                is_packing_mat = true;
+            }
+            if (row.is_indirect_supplier) {
+                is_indirect_sup = true;
+            }
+            if (row.is_import_supplier) {
+                is_import_sup = true;
+            }
         });
     }
 
@@ -1293,6 +1309,14 @@ function toggle_custom_type_of_product(frm) {
     frm.toggle_display('custom_cancelled_cheque', cc);
     frm.doc.custom_is_marketplace_workflow = is_mktplace;
     frm.refresh_field('custom_is_marketplace_workflow');
+    frm.doc.custom_is_raw_material = is_raw_mat;
+    frm.refresh_field('custom_is_raw_material');
+    frm.doc.custom_is_packing_material = is_packing_mat;
+    frm.refresh_field('custom_is_packing_material');
+    frm.doc.custom_is_indirect_supplier = is_indirect_sup;
+    frm.refresh_field('custom_is_indirect_supplier');
+    frm.doc.custom_is_import_supplier = is_import_sup;
+    frm.refresh_field('custom_is_import_supplier');
 
 
     if (!show && frm.doc.custom_type_of_product && frm.doc.custom_type_of_product.length > 0) {
