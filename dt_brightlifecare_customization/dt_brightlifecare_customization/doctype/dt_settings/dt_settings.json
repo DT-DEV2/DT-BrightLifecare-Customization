@@ -8,7 +8,12 @@
   "security_settings_section",
   "domain_based_user_restriction",
   "sso_security_settings_section",
-  "allowed_sso_domain"
+  "allowed_sso_domain",
+  "domain_tab",
+  "supplier_uat_site_url",
+  "supplier_production_site_url",
+  "healthkart_uat_site_url",
+  "healthkart_production_site_url"
  ],
  "fields": [
   {
@@ -33,13 +38,42 @@
    "fieldname": "allowed_sso_domain",
    "fieldtype": "Data",
    "label": "Allowed SSO Domain"
+  },
+  {
+   "fieldname": "domain_tab",
+   "fieldtype": "Tab Break",
+   "label": "Domain"
+  },
+  {
+   "fieldname": "supplier_uat_site_url",
+   "fieldtype": "Data",
+   "label": "Supplier UAT Site URL",
+   "options": "URL"
+  },
+  {
+   "fieldname": "supplier_production_site_url",
+   "fieldtype": "Data",
+   "label": "Supplier Production Site URL",
+   "options": "URL"
+  },
+  {
+   "fieldname": "healthkart_uat_site_url",
+   "fieldtype": "Data",
+   "label": "HealthKart UAT Site URL",
+   "options": "URL"
+  },
+  {
+   "fieldname": "healthkart_production_site_url",
+   "fieldtype": "Data",
+   "label": "HealthKart Production Site URL",
+   "options": "URL"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-24 11:53:54.851163",
+ "modified": "2025-08-07 11:15:00.715707",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "DT Settings",
