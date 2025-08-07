@@ -14,6 +14,10 @@
   "supplier_item_link_visibility",
   "contract_applicable",
   "is_marketplace_workflow",
+  "is_raw_material",
+  "is_packing_material",
+  "is_indirect_supplier",
+  "is_import_supplier",
   "user"
  ],
  "fields": [
@@ -70,12 +74,36 @@
    "fieldtype": "Link",
    "label": "User",
    "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_raw_material",
+   "fieldtype": "Check",
+   "label": "Is Raw Material"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_packing_material",
+   "fieldtype": "Check",
+   "label": "Is Packing Material"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_indirect_supplier",
+   "fieldtype": "Check",
+   "label": "Is Indirect Supplier"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_import_supplier",
+   "fieldtype": "Check",
+   "label": "Is Import Supplier"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-06 11:29:20.890563",
+ "modified": "2025-08-07 12:22:26.170322",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Supplier Category",
