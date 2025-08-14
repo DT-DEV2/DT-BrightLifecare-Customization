@@ -15,10 +15,10 @@
   "doctype": "Client Script",
   "dt": "BOM",
   "enabled": 1,
-  "modified": "2025-07-11 15:15:47.620771",
+  "modified": "2025-08-13 14:57:15.532239",
   "module": "DT-BrightLifecare-Customization",
   "name": "DT Filter RM BOM No in BOM",
-  "script": "frappe.ui.form.on('BOM', {\n\trefresh: function(frm) {\n\t\tfrm.set_query('bom_no', 'items', function(doc, cdt, cdn) {\n\t\t\tlet row = locals[cdt][cdn];\n\t\t\treturn {\n\t\t\t\tfilters: {\n\t\t\t\t\titem: row.item_code,\n\t\t\t\t\tis_active: 1,\n\t\t\t\t\tdocstatus: 1,\n\t\t\t\t\tcustom_source_warehouse: frm.doc.custom_source_warehouse,\n\t\t\t\t\tcustom_workstation: frm.doc.custom_workstation\n\t\t\t\t}\n\t\t\t};\n\t\t});\n\t}\n});\n",
+  "script": "frappe.ui.form.on('BOM', {\n\trefresh: function(frm) {\n\t\tfrm.set_query('bom_no', 'items', function(doc, cdt, cdn) {\n\t\t\tlet row = locals[cdt][cdn];\n\t\t\treturn {\n\t\t\t\tfilters: {\n\t\t\t\t\titem: row.item_code,\n\t\t\t\t\tis_active: 1,\n\t\t\t\t\tdocstatus: 1,\n\t\t\t\t\tcustom_source_warehouse: frm.doc.custom_source_warehouse,\n\t\t\t\t}\n\t\t\t};\n\t\t});\n\t}\n});\n",
   "view": "Form"
  }
 ]

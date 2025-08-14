@@ -512,7 +512,7 @@ custom_field = [
     "Quality Inspection Template-custom_is_default",
     "Quality Inspection Template-custom_is_disabled",
     "Item-custom_quality_inspection_template_list",
-    "BOM-custom_workstation",
+    # "BOM-custom_workstation",
     "Supplier-custom_sourcing",
     "Stock Entry Detail-custom_batch_status",
     "Batch-custom_status",
@@ -554,7 +554,8 @@ custom_field = [
     "Supplier-custom_is_raw_material",
     "Supplier-custom_is_packing_material",
     "Supplier-custom_is_import_supplier",
-    "Supplier-custom_is_indirect_supplier"
+    "Supplier-custom_is_indirect_supplier",
+    "Item-custom_artwork_id"
 ]
 
 
@@ -625,6 +626,10 @@ doc_events = {
     },
     "Supplier Quotation": {
         "before_save": "dt_brightlifecare_customization.public.py.supplier_quotation.fetch_connected_users"
+    },
+    "BOM": {
+        "before_save": "dt_brightlifecare_customization.public.py.bom.before_save",
+        "validate": "dt_brightlifecare_customization.public.py.bom.validate"
     },
 
 }
