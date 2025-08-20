@@ -13,7 +13,9 @@
   "supplier_uat_site_url",
   "supplier_production_site_url",
   "healthkart_uat_site_url",
-  "healthkart_production_site_url"
+  "healthkart_production_site_url",
+  "user_disability_restrictions_tab",
+  "user_to_stop_disable"
  ],
  "fields": [
   {
@@ -67,13 +69,24 @@
    "fieldtype": "Data",
    "label": "HealthKart Production Site URL",
    "options": "URL"
+  },
+  {
+   "fieldname": "user_disability_restrictions_tab",
+   "fieldtype": "Tab Break",
+   "label": "User Disability Restrictions"
+  },
+  {
+   "fieldname": "user_to_stop_disable",
+   "fieldtype": "Table",
+   "label": "User to stop disable",
+   "options": "User Disability Restrictions"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-08-07 11:15:00.715707",
+ "modified": "2025-08-20 11:59:40.680820",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "DT Settings",
