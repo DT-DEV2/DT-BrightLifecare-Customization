@@ -555,7 +555,9 @@ custom_field = [
     "Supplier-custom_is_packing_material",
     "Supplier-custom_is_import_supplier",
     "Supplier-custom_is_indirect_supplier",
-    "Item-custom_artwork_id"
+    "Item-custom_artwork_id",
+    "Supplier-custom_for_business_approval",
+    "Supplier-custom_final_remarks"
 ]
 
 
