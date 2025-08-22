@@ -24,6 +24,7 @@
  ],
  "fields": [
   {
+   "columns": 2,
    "fieldname": "item_code",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -35,7 +36,6 @@
    "fetch_from": "item_code.item_name",
    "fieldname": "item_name",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Item Name"
   },
   {
@@ -50,12 +50,14 @@
    "options": "UOM"
   },
   {
+   "columns": 1,
    "fieldname": "required_qty_in_stock_uom",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Required Qty in Stock UOM"
   },
   {
+   "columns": 2,
    "fieldname": "warehouse",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -63,24 +65,31 @@
    "options": "Warehouse"
   },
   {
+   "columns": 1,
    "fieldname": "stock_in_hand",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Stock in Hand"
   },
   {
+   "columns": 1,
    "fieldname": "available_for_use",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Available for use"
   },
   {
+   "columns": 1,
    "fieldname": "plan_to_reserve",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Plan to Reserve"
   },
   {
+   "columns": 1,
    "fieldname": "plan_to_purchase",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Plan to Purchase"
   },
   {
@@ -95,21 +104,24 @@
    "label": "Batch Allocation"
   },
   {
+   "columns": 1,
    "description": "(Other)",
    "fieldname": "reserved_stock_for_mrp",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Reserved Stock for MRP"
   },
   {
+   "columns": 1,
    "fieldname": "material_request_type",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Material Request Type",
    "options": "Purchase\nMaterial Transfer"
   },
   {
    "fieldname": "for_warehouse",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "For Warehouse",
    "options": "Warehouse"
   }

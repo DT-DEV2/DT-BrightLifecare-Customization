@@ -32,17 +32,17 @@ def create_mrp(material_request, use_defaults=False):
     })
 
     for item in material_request_doc.items:
-        bom_and_warehouse = get_best_bom(item.item_code)
+        bom_and_warehouse = get_best_bom(item.item_code, item.warehouse)
 
         # fallback to item.bom_no if available
         best_bom = bom_and_warehouse.get("bom")
-        best_warehouse = bom_and_warehouse.get("warehouse")
+        # best_warehouse = bom_and_warehouse.get("warehouse")
 
         new_mrp_doc.append('material_request_items', {
             'item_code': item.item_code,
             'material_requested_qty': item.qty,
             'required_by': item.schedule_date,
-            'warehouse': best_warehouse,
+            'warehouse': item.warehouse,
             'uom': item.uom,
             'material_request': material_request_doc.name,
             'material_request_item_detail': item.name,
@@ -61,13 +61,13 @@ def create_mrp(material_request, use_defaults=False):
 
 
 
-def get_best_bom(item_code):
+def get_best_bom(item_code, warehouse):
     result = frappe.db.sql("""
         SELECT name AS bom, custom_source_warehouse AS warehouse
         FROM `tabBOM`
-        WHERE item = %s AND is_active = 1 AND docstatus = 1
+        WHERE item = %s AND custom_source_warehouse = %s AND is_active = 1 AND docstatus = 1
         ORDER BY custom_fg_batch_size DESC, custom_priority DESC
         LIMIT 1
-    """, (item_code,), as_dict=True)
+    """, (item_code, warehouse,), as_dict=True)
 
     return result[0] if result else {}

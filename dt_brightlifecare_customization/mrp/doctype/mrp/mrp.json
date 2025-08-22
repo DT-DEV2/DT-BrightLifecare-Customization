@@ -21,11 +21,12 @@
   "column_break_irwy",
   "get_raw_materials_for_transfer",
   "section_break_kolc",
-  "mrp_bom_exploded_items",
-  "section_break_mnqm",
   "raw_materials",
+  "section_break_mnqm",
+  "mrp_bom_exploded_items",
   "section_break_jzcr",
-  "amended_from"
+  "amended_from",
+  "warehouses"
  ],
  "fields": [
   {
@@ -139,13 +140,20 @@
    "fieldname": "get_raw_materials_for_transfer",
    "fieldtype": "Button",
    "label": "Get Raw Materials for Transfer"
+  },
+  {
+   "fieldname": "warehouses",
+   "fieldtype": "Table MultiSelect",
+   "hidden": 1,
+   "label": "Warehouses",
+   "options": "Feeding Warehouse"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-05 15:26:12.631369",
+ "modified": "2025-08-20 15:14:15.845861",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",
