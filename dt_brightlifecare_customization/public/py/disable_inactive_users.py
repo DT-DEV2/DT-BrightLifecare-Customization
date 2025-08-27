@@ -5,8 +5,17 @@ def disable_inactive_users():
     today = now_datetime()
     inactive_threshold = 90  # days
 
-    # Users to exclude from disabling
-    excluded_users = ["Administrator", "Guest"]
+    # Default exclusions
+    excluded_users = {"Administrator", "Guest"}
+
+    # Fetch excluded users from DT Settings child table
+    try:
+        settings = frappe.get_doc("DT Settings")  # your singleton doctype
+        for row in settings.user_to_stop_disable:
+            if row.user:  # assuming child table has field `user`
+                excluded_users.add(row.user)
+    except Exception as e:
+        frappe.logger().error(f"[User Disable] Error fetching DT Settings exclusions: {e}")
 
     # Get all enabled system users
     users = frappe.get_all(

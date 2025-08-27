@@ -24,7 +24,7 @@ def validate(doc, method):
     # Step 2: Get BOMs with same item and qty
     bom_list = frappe.get_all(
         "BOM",
-        filters={"item": doc.item, "quantity": doc.quantity, "is_active": 1},
+        filters={"item": doc.item, "quantity": doc.quantity, "is_active": 1, "custom_source_warehouse": doc.custom_source_warehouse},
         fields=["name"]
     )
 
@@ -33,19 +33,19 @@ def validate(doc, method):
 
     # Step 3: Prepare new BOM items for comparison
     new_items = sorted(
-        [{"item_code": d.item_code, "qty": d.qty} for d in doc.items],
-        key=lambda x: x["item_code"]
+        [{"item_code": d.item_code, "qty": d.qty, "source_warehouse": d.source_warehouse} for d in doc.items],
+        key=lambda x: (x["item_code"], x["source_warehouse"]) 
     )
 
     for bom in bom_list:
         existing_doc = frappe.get_doc("BOM", bom.name)
         existing_items = sorted(
-            [{"item_code": d.item_code, "qty": d.qty} for d in existing_doc.items],
-            key=lambda x: x["item_code"]
+            [{"item_code": d.item_code, "qty": d.qty, "source_warehouse": d.source_warehouse} for d in existing_doc.items],
+            key=lambda x: (x["item_code"], x["source_warehouse"])
         )
 
         if new_items == existing_items:
             frappe.throw(
-                f"BOM {bom.name} already exists with the same item, quantity, and components."
+                f"BOM {bom.name} already exists with the same item, quantity, warehouse."
             )
 
