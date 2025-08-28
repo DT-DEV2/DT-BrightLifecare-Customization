@@ -36,7 +36,7 @@ class CustomUser(User):
             # fallback when not inside a request (e.g. background job)
             base_url = frappe.local.conf.host_name
 
-        link = url + base_url
+        link = base_url + url
         ###### Overidden part ends ######
         
         if send_email:
