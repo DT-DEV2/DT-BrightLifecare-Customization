@@ -652,3 +652,7 @@ override_whitelisted_methods = {
 }
 
 on_login = "dt_brightlifecare_customization.auth.restrict_normal_login"
+
+override_doctype_class = {
+	"User": "dt_brightlifecare_customization.overrides.user.CustomUser"
+}
