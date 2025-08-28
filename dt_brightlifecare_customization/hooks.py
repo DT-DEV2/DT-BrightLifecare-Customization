@@ -255,6 +255,7 @@ doctype_js = {
     "Contract": "public/js/contract.js",
     "Material Request": "public/js/material_request.js",
     "Item": "public/js/item.js",
+    "Quality Inspection" : "public/js/quality_inspection.js"
 }
 
 
@@ -557,7 +558,8 @@ custom_field = [
     "Supplier-custom_is_indirect_supplier",
     "Item-custom_artwork_id",
     "Supplier-custom_for_business_approval",
-    "Supplier-custom_final_remarks"
+    "Supplier-custom_final_remarks",
+    "Warehouse-custom_qc_warehouse"
 ]
 
 
@@ -583,7 +585,8 @@ doc_events = {
         "after_insert": "dt_brightlifecare_customization.public.py.contact.share_contact_with_email",
     },
     "Purchase Receipt": {
-        "validate": "dt_brightlifecare_customization.public.py.purchase_receipt.validate_supplier_delivery_note"
+        "validate": "dt_brightlifecare_customization.public.py.purchase_receipt.validate_supplier_delivery_note",
+        "on_submit" : "dt_brightlifecare_customization.public.py.purchase_receipt.submit_purchase_receipt_with_qi",
     },
     "Purchase Order": {
         "before_save": "dt_brightlifecare_customization.public.py.purchase_order.before_save"
