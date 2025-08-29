@@ -11,13 +11,13 @@
   "warehouse",
   "for_warehouse",
   "stock_in_hand",
+  "required_qty_in_stock_uom",
   "reserved_stock_for_mrp",
   "available_for_use",
   "plan_to_reserve",
   "plan_to_purchase",
   "column_break_ffqn",
   "material_request_type",
-  "required_qty_in_stock_uom",
   "stock_uom",
   "batch_no",
   "batch_allocation"
@@ -57,7 +57,7 @@
    "label": "Required Qty in Stock UOM"
   },
   {
-   "columns": 2,
+   "columns": 1,
    "fieldname": "warehouse",
    "fieldtype": "Link",
    "in_list_view": 1,

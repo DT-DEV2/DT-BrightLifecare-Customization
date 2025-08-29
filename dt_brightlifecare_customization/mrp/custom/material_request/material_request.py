@@ -66,7 +66,7 @@ def get_best_bom(item_code, warehouse):
         SELECT name AS bom, custom_source_warehouse AS warehouse
         FROM `tabBOM`
         WHERE item = %s AND custom_source_warehouse = %s AND is_active = 1 AND docstatus = 1
-        ORDER BY custom_fg_batch_size DESC, custom_priority DESC
+        ORDER BY custom_fg_batch_size DESC, custom_priority ASC
         LIMIT 1
     """, (item_code, warehouse,), as_dict=True)
 

@@ -212,11 +212,11 @@ def explode_bom(mrp_name):
 			mrp_doc.append("mrp_bom_exploded_items", {
 				"item_code": item_code,
 				"stock_uom": data["stock_uom"],
-				"warehouse": original_warehouse,   # keep original warehouse
+				"warehouse": None,
 				"required_qty_in_stock_uom": required_qty,
-				"stock_in_hand": stock_in_hand,
-				"reserved_stock_for_mrp": reserved_qty,
-				"available_for_use": available_for_use,
+				"stock_in_hand": 0,
+				"reserved_stock_for_mrp": 0,
+				"available_for_use": 0,
 				"plan_to_reserve": 0,
 				"plan_to_purchase": remaining_qty,
 				"batch_allocation": "[]",          # no batch yet for purchase
@@ -226,11 +226,11 @@ def explode_bom(mrp_name):
 			mrp_doc.append("raw_materials", {
 				"item_code": item_code,
 				"stock_uom": data["stock_uom"],
-				"warehouse": original_warehouse,
+				"warehouse": None,
 				"required_qty_in_stock_uom": required_qty,
-				"stock_in_hand": stock_in_hand,
-				"reserved_stock_for_mrp": reserved_qty,
-				"available_for_use": available_for_use,
+				"stock_in_hand": 0,
+				"reserved_stock_for_mrp": 0,
+				"available_for_use": 0,
 				"plan_to_reserve": 0,
 				"plan_to_purchase": remaining_qty,
 				"batch_allocation": "[]",
