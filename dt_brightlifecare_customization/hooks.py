@@ -559,7 +559,9 @@ custom_field = [
     "Item-custom_artwork_id",
     "Supplier-custom_for_business_approval",
     "Supplier-custom_final_remarks",
-    "Warehouse-custom_qc_warehouse"
+    "Warehouse-custom_qc_warehouse",
+    "Quality Inspection-custom_mt_target_warehouse",
+    "Quality Inspection-custom_sample_status"
 ]
 
 
