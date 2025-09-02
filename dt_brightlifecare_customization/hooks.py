@@ -561,7 +561,9 @@ custom_field = [
     "Supplier-custom_final_remarks",
     "Warehouse-custom_qc_warehouse",
     "Quality Inspection-custom_mt_target_warehouse",
-    "Quality Inspection-custom_sample_status"
+    "Quality Inspection-custom_sample_status",
+    "BOM-custom_quality_inspection",
+    "BOM Item-custom_formulation_quantity"
 ]
 
 
@@ -589,6 +591,9 @@ doc_events = {
     "Purchase Receipt": {
         "validate": "dt_brightlifecare_customization.public.py.purchase_receipt.validate_supplier_delivery_note",
         "on_submit" : "dt_brightlifecare_customization.public.py.purchase_receipt.submit_purchase_receipt_with_qi",
+    },
+    "Stock Entry": {
+        "on_submit" : "dt_brightlifecare_customization.public.py.stock_entry.submit_stock_entry_with_qi",
     },
     "Purchase Order": {
         "before_save": "dt_brightlifecare_customization.public.py.purchase_order.before_save"
@@ -638,6 +643,10 @@ doc_events = {
         "before_save": "dt_brightlifecare_customization.public.py.bom.before_save",
         "validate": "dt_brightlifecare_customization.public.py.bom.validate"
     },
+    "Quality Inspection": {
+        "validate": "dt_brightlifecare_customization.public.py.quality_inspection.on_qi_validate",
+        "on_submit": "dt_brightlifecare_customization.public.py.quality_inspection.on_qi_submit",
+    }
 
 }
 
