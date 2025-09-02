@@ -194,6 +194,14 @@ def on_qi_validate(doc, method=None):
 
 def on_qi_submit(doc, method=None):
     """When QI is submitted → Batch = Approved / Rejected"""
+    if doc.batch_no:
+        batch = frappe.get_doc("Batch", doc.batch_no)
+        for row in batch.custom_quality_check_schedule:
+            row.ar_number = doc.name
+        batch.save()
+
+
+
     if doc.status == "Accepted":
         update_batch_status(doc.batch_no, "Approved")
     elif doc.status == "Rejected":
