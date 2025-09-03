@@ -175,13 +175,14 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-05 11:17:50.998359",
+ "modified": "2025-09-03 23:28:28.737747",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP Reservation Entry",
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,

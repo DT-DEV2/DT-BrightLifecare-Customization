@@ -15,6 +15,41 @@ frappe.ui.form.on("MRP", {
                 }
             };
         });
+
+		// Add Create menu actions similar to Production Plan
+		if (frm.doc.docstatus === 1) {
+			frm.add_custom_button(__('Material Request'), () => {
+				frappe.call({
+					method: 'dt_brightlifecare_customization.mrp.doctype.mrp.mrp.make_material_request',
+					args: { mrp_name: frm.doc.name },
+					callback: function(r) {
+						if (!r.exc) {
+							frm.reload_doc();
+							if (r.message && r.message.created && r.message.created.length) {
+								let links = r.message.created.map(d => `<a href="#Form/${d.doctype}/${d.name}">${d.doctype} ${d.name}</a>`);
+								frappe.msgprint(__('Created: {0}', [links.join(', ')]));
+							}
+						}
+					}
+				});
+			}, __('Create'));
+
+			frm.add_custom_button(__('Work Order'), () => {
+				frappe.call({
+					method: 'dt_brightlifecare_customization.mrp.doctype.mrp.mrp.make_work_orders',
+					args: { mrp_name: frm.doc.name },
+					callback: function(r) {
+						if (!r.exc) {
+							frm.reload_doc();
+							if (r.message && r.message.created && r.message.created.length) {
+								let links = r.message.created.map(d => `<a href="#Form/${d.doctype}/${d.name}">${d.doctype} ${d.name}</a>`);
+								frappe.msgprint(__('Created: {0}', [links.join(', ')]));
+							}
+						}
+					}
+				});
+			}, __('Create'));
+		}
 	},
 
 	explode_bom: function (frm) {
