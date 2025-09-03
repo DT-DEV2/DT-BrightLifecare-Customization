@@ -563,7 +563,9 @@ custom_field = [
     "Quality Inspection-custom_mt_target_warehouse",
     "Quality Inspection-custom_sample_status",
     "BOM-custom_quality_inspection",
-    "BOM Item-custom_formulation_quantity"
+    "Material Request Item-custom_mrp_raw_material_item",
+    "Material Request Item-custom_mrp",
+    "Work Order-custom_mrp",
 ]
 
 

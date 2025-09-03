@@ -22,8 +22,6 @@
   "get_raw_materials_for_transfer",
   "section_break_kolc",
   "raw_materials",
-  "section_break_mnqm",
-  "mrp_bom_exploded_items",
   "section_break_jzcr",
   "amended_from",
   "warehouses"
@@ -75,10 +73,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "section_break_mnqm",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "material_request_detail_section",
    "fieldtype": "Section Break",
    "label": "Material Request Detail"
@@ -90,6 +84,7 @@
    "options": "MRP Material Request"
   },
   {
+   "allow_bulk_edit": 1,
    "fieldname": "raw_materials",
    "fieldtype": "Table",
    "label": "Raw Materials",
@@ -104,13 +99,6 @@
   {
    "fieldname": "section_break_kolc",
    "fieldtype": "Section Break"
-  },
-  {
-   "allow_bulk_edit": 1,
-   "fieldname": "mrp_bom_exploded_items",
-   "fieldtype": "Table",
-   "label": "MRP BOM Exploded Items",
-   "options": "MRP BOM Exploded Item"
   },
   {
    "fieldname": "section_break_xkul",
@@ -152,8 +140,25 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2025-08-20 15:14:15.845861",
+ "links": [
+  {
+   "group": "MRP Reservation Entry",
+   "link_doctype": "MRP Reservation Entry",
+   "link_fieldname": "voucher_no"
+  },
+  {
+   "group": "Material Request",
+   "link_doctype": "Material Request",
+   "link_fieldname": "custom_mrp",
+   "table_fieldname": "items"
+  },
+  {
+   "group": "Work Order",
+   "link_doctype": "Work Order",
+   "link_fieldname": "custom_mrp"
+  }
+ ],
+ "modified": "2025-09-04 00:08:47.847108",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",
