@@ -566,6 +566,9 @@ custom_field = [
     "Material Request Item-custom_mrp_raw_material_item",
     "Material Request Item-custom_mrp",
     "Work Order-custom_mrp",
+    "Quality Inspection-custom_internal_report",
+    "Quality Inspection-custom_external_report",
+    "Quality Inspection-custom_coa"
 ]
 
 
