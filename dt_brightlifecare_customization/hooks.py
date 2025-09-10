@@ -568,7 +568,9 @@ custom_field = [
     "Work Order-custom_mrp",
     "Quality Inspection-custom_internal_report",
     "Quality Inspection-custom_external_report",
-    "Quality Inspection-custom_coa"
+    "Quality Inspection-custom_coa",
+    "Item-custom_retest_qty",
+    "Item-custom_storage_condition"
 ]
 
 
