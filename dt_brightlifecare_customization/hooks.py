@@ -570,7 +570,12 @@ custom_field = [
     "Quality Inspection-custom_external_report",
     "Quality Inspection-custom_coa",
     "Item-custom_retest_qty",
-    "Item-custom_storage_condition"
+    "Item-custom_storage_condition",
+    "Address-custom_ship_to_external_nrgp",
+    "Stock Entry-custom_column_break_xhzdc",
+    "Stock Entry-custom_test_cost",
+    "Quality Inspection-custom_coa_externalbilledreceived",
+    "Warehouse-custom_internal_nrgp"
 ]
 
 
