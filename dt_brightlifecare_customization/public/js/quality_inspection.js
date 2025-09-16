@@ -19,6 +19,12 @@ frappe.ui.form.on("Quality Inspection", {
                                     args: { qi_name: frm.doc.name },
                                     callback: function (r) {
                                         frm.reload_doc();
+                                        if (r.message && r.message.stock_entry) {
+                                            frappe.msgprint({
+                                                message: __('Sample Stock Entry created: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
+                                                indicator: 'green'
+                                            });
+                                        }
                                     }
                                 });
                             });
@@ -28,98 +34,277 @@ frappe.ui.form.on("Quality Inspection", {
             });
         }
 
-        // 🔹 NRGP Button (only if Sample Collected)
-        if (frm.doc.docstatus === 0 && frm.doc.custom_sample_status === "Sample Collected") {
+      if (frm.doc.docstatus === 0 && frm.doc.custom_sample_status === "Sample Collected") {
             frm.add_custom_button(__("NRGP"), () => {
-                // ------------------------
-                // STEP 1: Choose NRGP Type
-                // ------------------------
+
+                // Step 1 → Choose NRGP Type
                 let step1 = new frappe.ui.Dialog({
                     title: __("Choose NRGP Type"),
                     fields: [
-                        {
-                            fieldtype: "Select",
-                            label: "NRGP Type",
-                            fieldname: "nrgp_type",
-                            options: ["Internal", "External"],
-                            reqd: 1,
-                        },
+                        { 
+                            fieldtype: "Select", 
+                            label: "NRGP Type", 
+                            fieldname: "nrgp_type", 
+                            options: ["Internal", "External"], 
+                            reqd: 1 
+                        }
                     ],
                     primary_action_label: __("Next"),
                     primary_action(values) {
+                        step1.hide();
+
+                        // ------------------- External NRGP -------------------
                         if (values.nrgp_type === "External") {
-                            if (frm.doc.custom_external_nrgp_created) {
-                                frappe.msgprint(__("External NRGP has already been created for this Quality Inspection."));
-                                return;
-                            }
-                            frappe.call({
-                                method: "dt_brightlifecare_customization.public.py.quality_inspection.make_external_nrgp",
-                                args: { qi_name: frm.doc.name },
-                                callback: function (r) {
-                                    if (!r.exc) {
-                                        frappe.msgprint("External NRGP created: " + r.message.stock_entries.join(", "));
-                                        frm.reload_doc();
+                            let address_dialog = new frappe.ui.Dialog({
+                                title: __("External NRGP Details"),
+                                fields: [
+                                    { 
+                                        fieldtype: "Link", 
+                                        label: "Ship To Address", 
+                                        fieldname: "ship_to_address", 
+                                        options: "Address", 
+                                        reqd: 1,
+                                        get_query: () => {
+                                            return {
+                                                filters: {
+                                                    custom_ship_to_external_nrgp: 1
+                                                }
+                                            };
+                                        }
+                                    },
+                                    { 
+                                        fieldtype: "Float", 
+                                        label: "Test Cost", 
+                                        fieldname: "custom_test_cost", 
+                                        reqd: 1 
                                     }
+                                ],
+                                primary_action_label: __("Add Tranporter Details"),
+                                primary_action(values) {
+                                    frappe.call({
+                                        method: "dt_brightlifecare_customization.public.py.quality_inspection.make_external_nrgp",
+                                        args: {
+                                            qi_name: frm.doc.name,
+                                            ship_to_address: values.ship_to_address,
+                                            custom_test_cost: values.custom_test_cost,
+                                            draft: true
+                                        },
+                                        callback(r) {
+                                            frm.reload_doc();
+                                            if (r.message && r.message.stock_entry) {
+                                                frappe.msgprint({
+                                                    message: __('External NRGP created in Draft: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
+                                                    indicator: 'green'
+                                                });
+                                            }
+                                        }
+                                    });
+                                    address_dialog.hide();
                                 },
+                                secondary_action_label: __("Submit"),
+                                secondary_action() {
+                                    let vals = address_dialog.get_values();
+                                    frappe.call({
+                                        method: "dt_brightlifecare_customization.public.py.quality_inspection.make_external_nrgp",
+                                        args: {
+                                            qi_name: frm.doc.name,
+                                            ship_to_address: vals.ship_to_address,
+                                            custom_test_cost: vals.custom_test_cost,
+                                            draft: false
+                                        },
+                                        callback(r) {
+                                            frm.reload_doc();
+                                            if (r.message && r.message.stock_entry) {
+                                                frappe.msgprint({
+                                                    message: __('External NRGP created & Submitted: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
+                                                    indicator: 'green'
+                                                });
+                                            }
+                                        }
+                                    });
+                                    address_dialog.hide();
+                                }
                             });
-                            step1.hide();
+
+                            address_dialog.show();
+
+                            // Add Back button (left side)
+                            $(`<button class="btn btn-default">${__("Back")}</button>`)
+                                .prependTo(address_dialog.$wrapper.find(".modal-footer"))
+                                .on("click", () => {
+                                    address_dialog.hide();
+                                    step1.show();
+                                });
+
+                        // ------------------- Internal NRGP -------------------
                         } else {
-                            if (frm.doc.custom_internal_nrgp_created) {
-                                frappe.msgprint(__("Internal NRGP has already been created for this Quality Inspection."));
-                                return;
-                            }
-                            step1.hide();
-                            open_step2();
-                        }
-                    },
-                });
-
-                // ------------------------
-                // STEP 2: Target Warehouse
-                // ------------------------
-                function open_step2() {
-                    let step2 = new frappe.ui.Dialog({
-                        title: __("Select Target Warehouse"),
-                        fields: [
-                            {
-                                fieldtype: "Link",
-                                label: "Target Warehouse",
-                                fieldname: "target_warehouse",
-                                options: "Warehouse",
-                                reqd: 1,
-                            },
-                        ],
-                        primary_action_label: __("Create"),
-                        primary_action(values) {
-                            frappe.call({
-                                method: "dt_brightlifecare_customization.public.py.quality_inspection.make_internal_nrgp",
-                                args: {
-                                    qi_name: frm.doc.name,
-                                    target_warehouse: values.target_warehouse,
-                                },
-                                callback: function (r) {
-                                    if (!r.exc) {
-                                        frappe.msgprint("Internal NRGP created: " + r.message.stock_entries.join(", "));
-                                        frm.reload_doc();
+                            let step2 = new frappe.ui.Dialog({
+                                title: __("Select Target Warehouse"),
+                                fields: [
+                                    { 
+                                        fieldtype: "Link", 
+                                        label: "Target Warehouse", 
+                                        fieldname: "target_warehouse", 
+                                        options: "Warehouse", 
+                                        reqd: 1,
+                                        get_query: () => {
+                                            return {
+                                                filters: {
+                                                    custom_internal_nrgp: 1
+                                                }
+                                            };
+                                        }
                                     }
+                                ],
+                                primary_action_label: __("Add Transporter Details"),
+                                primary_action(values) {
+                                    frappe.call({
+                                        method: "dt_brightlifecare_customization.public.py.quality_inspection.make_internal_nrgp",
+                                        args: { qi_name: frm.doc.name, target_warehouse: values.target_warehouse, draft: true },
+                                        callback(r){
+                                            frm.reload_doc();
+                                            if (r.message && r.message.stock_entry) {
+                                                frappe.msgprint({
+                                                    message: __('Internal NRGP created in Draft: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
+                                                    indicator: 'green'
+                                                });
+                                            }
+                                        }
+                                    });
+                                    step2.hide();
                                 },
+                                secondary_action_label: __("Submit"),
+                                secondary_action() {
+                                    let target_wh = step2.get_values().target_warehouse;
+                                    frappe.call({
+                                        method: "dt_brightlifecare_customization.public.py.quality_inspection.make_internal_nrgp",
+                                        args: { qi_name: frm.doc.name, target_warehouse: target_wh, draft: false },
+                                        callback(r){
+                                            frm.reload_doc();
+                                            if (r.message && r.message.stock_entry) {
+                                                frappe.msgprint({
+                                                    message: __('Internal NRGP created & Submitted: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
+                                                    indicator: 'green'
+                                                });
+                                            }
+                                        }
+                                    });
+                                    step2.hide();
+                                }
                             });
-                            step2.hide();
-                        },
-                    });
 
-                    // ✅ Back button
-                    step2.set_secondary_action_label(__("Back"));
-                    step2.set_secondary_action(() => {
-                        step2.hide();
-                        step1.show();
-                    });
+                            step2.show();
 
-                    step2.show();
-                }
+                            // Add Back button (left side)
+                            $(`<button class="btn btn-default">${__("Back")}</button>`)
+                                .prependTo(step2.$wrapper.find(".modal-footer"))
+                                .on("click", () => {
+                                    step2.hide();
+                                    step1.show();
+                                });
+                        }
+                    }
+                });
 
                 step1.show();
             });
         }
-    },
+    }
 });
+
+frappe.ui.form.on("Quality Inspection", {
+    refresh: function(frm) {
+        // Always visible & grey by default
+        ["custom_internal_report", "custom_external_report", "custom_coa"].forEach(f => {
+            frm.set_df_property(f, "hidden", 0);
+            frm.fields_dict[f].df.read_only = 1;
+            frm.refresh_field(f);
+        });
+
+        // Hide external billed received by default
+        frm.set_df_property("custom_coa_externalbilledreceived", "hidden", 1);
+
+        if (!frm.doc.name) return;
+
+        frappe.call({
+            method: "dt_brightlifecare_customization.public.py.quality_inspection.check_stock_entries",
+            args: { qi_name: frm.doc.name },
+            callback: function(r) {
+                if (!r.message) return;
+                const { internal_exists, external_exists } = r.message;
+
+                // Internal COA → editable if ANY internal entry exists
+                if (internal_exists) {
+                    unlock_attach(frm, "custom_internal_report");
+                }
+
+                // External COA → editable if External NRGP exists
+                if (external_exists) {
+                    unlock_attach(frm, "custom_external_report");
+                }
+
+                // Batch COA rules
+                apply_batch_coa_rule(frm, internal_exists, external_exists);
+
+                // Show external billed received only if custom_coa is attached
+                toggle_external_billed_received(frm);
+            }
+        });
+    },
+
+    custom_internal_report: function(frm) {
+        recheck_batch_coa(frm);
+    },
+
+    custom_external_report: function(frm) {
+        recheck_batch_coa(frm);
+    },
+
+    custom_coa: function(frm) {
+        toggle_external_billed_received(frm);
+    }
+});
+
+// Helpers
+function lock_attach(frm, fieldname) {
+    frm.fields_dict[fieldname].df.read_only = 1;
+    frm.refresh_field(fieldname);
+}
+function unlock_attach(frm, fieldname) {
+    frm.fields_dict[fieldname].df.read_only = 0;
+    frm.refresh_field(fieldname);
+}
+function apply_batch_coa_rule(frm, internal_exists, external_exists) {
+    lock_attach(frm, "custom_coa"); // default lock
+
+    if (internal_exists && !external_exists) {
+        // Only internal
+        if (frm.doc.custom_internal_report) unlock_attach(frm, "custom_coa");
+    } else if (!internal_exists && external_exists) {
+        // Only external
+        if (frm.doc.custom_external_report) unlock_attach(frm, "custom_coa");
+    } else if (internal_exists && external_exists) {
+        // Both internal + external
+        if (frm.doc.custom_internal_report && frm.doc.custom_external_report) {
+            unlock_attach(frm, "custom_coa");
+        }
+    }
+}
+function recheck_batch_coa(frm) {
+    frappe.call({
+        method: "dt_brightlifecare_customization.public.py.quality_inspection.check_stock_entries",
+        args: { qi_name: frm.doc.name },
+        callback: function(r) {
+            if (!r.message) return;
+            apply_batch_coa_rule(frm, r.message.internal_exists, r.message.external_exists);
+            toggle_external_billed_received(frm);
+        }
+    });
+}
+function toggle_external_billed_received(frm) {
+    if (frm.doc.custom_coa) {
+        frm.set_df_property("custom_coa_externalbilledreceived", "hidden", 0);
+    } else {
+        frm.set_df_property("custom_coa_externalbilledreceived", "hidden", 1);
+    }
+}
