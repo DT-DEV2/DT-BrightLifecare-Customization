@@ -10,8 +10,8 @@ from datetime import datetime, timedelta
 import time
 
 class MRP(Document):
-	def on_submit(self):
-		create_mrp_reservation_entries(self)
+    def on_submit(self):
+        create_mrp_reservation_entries(self)
 
 
 def create_mrp_reservation_entries(mrp_doc):
@@ -499,6 +499,86 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 
 
 @frappe.whitelist()
+def get_sub_assembly_items(mrp_name):
+    """Populate `sub_assembly_items` from BOMs of Material Request Items.
+    Logic:
+    - For each Material Request Item with a BOM, find BOM Item rows that reference a sub-BOM (bom_no set).
+    - Compute required sub-assembly qty in stock UOM using: 
+      required_stock_qty = fg_qty_in_stock_uom * (child.stock_qty / parent_bom.quantity)
+    - Append rows into `sub_assembly_items` with key fields (item, parent FG, qty, BOM, warehouses, UOMs).
+    """
+    mrp = frappe.get_doc("MRP", mrp_name)
+
+    # Clear existing sub-assembly rows
+    mrp.set("sub_assembly_items", [])
+
+    for mr_item in mrp.get("material_request_items", []):
+        bom_no = mr_item.get("bom_no")
+        if not bom_no:
+            # skip rows without BOM
+            continue
+
+        try:
+            bom_doc = frappe.get_doc("BOM", bom_no)
+        except Exception:
+            continue
+
+        parent_bom_qty = flt(bom_doc.quantity) or 1.0
+
+        # Finished good qty in stock UOM on the MR row
+        fg_qty_stock = flt(mr_item.get("qty_in_stock_uom"))
+        if not fg_qty_stock:
+            # fallback to material_requested_qty * uom_conversion_factor
+            fg_qty_stock = flt(mr_item.get("material_requested_qty")) * flt(mr_item.get("uom_conversion_factor") or 1.0)
+
+        # Fetch direct BOM items that have a sub-BOM reference (i.e., sub-assemblies)
+        bom_items = frappe.get_all(
+            "BOM Item",
+            filters={"parent": bom_no},
+            fields=["item_code", "uom", "stock_qty", "qty", "bom_no"],
+            order_by="idx asc",
+        )
+
+        for bi in bom_items:
+            if not bi.get("bom_no"):
+                # only consider items that are themselves assemblies (i.e., point to another BOM)
+                continue
+
+            item_code = bi.get("item_code")
+            try:
+                item_doc = frappe.get_cached_doc("Item", item_code)
+            except Exception:
+                continue
+
+            stock_uom = item_doc.stock_uom
+            # child.stock_qty is per parent BOM's quantity
+            child_stock_per_parent = flt(bi.get("stock_qty") or 0)
+            if child_stock_per_parent <= 0:
+                # fall back to qty (in item's UOM) if stock_qty missing
+                child_stock_per_parent = flt(bi.get("qty") or 0)
+
+            required_stock_qty = 0.0
+            if parent_bom_qty > 0:
+                required_stock_qty = fg_qty_stock * (child_stock_per_parent / parent_bom_qty)
+
+            # Append to child table
+            mrp.append("sub_assembly_items", {
+                "production_item": item_code,
+                "item_name": item_doc.item_name,
+                "parent_item_code": mr_item.get("item_code"),
+                "fg_warehouse": mr_item.get("warehouse"),
+                "qty": flt(required_stock_qty),
+                "bom_no": bi.get("bom_no"),
+                "uom": bi.get("uom") or stock_uom,
+                "stock_uom": stock_uom,
+                "mrp_item": mr_item.get("name"),
+            })
+
+    mrp.save()
+    frappe.msgprint(_("Sub-assembly items updated from BOMs"))
+    return True
+
+@frappe.whitelist()
 def make_material_request(mrp_name):
     """Create Material Request(s) from MRP.raw_materials similar to Production Plan.
     - Creates up to two Material Requests: one for Purchase, one for Material Transfer.
@@ -623,6 +703,26 @@ def make_work_orders(mrp_name):
         wo.planned_start_date = nowdate()
 
         # Link back to MRP if custom field exists
+        if frappe.get_meta("Work Order").get_field("custom_mrp"):
+            wo.set("custom_mrp", mrp.name)
+        wo.insert()
+        created.append({"doctype": "Work Order", "name": wo.name})
+
+    # Also create Work Orders for Sub Assembly Items where manufacturing type is In House
+    for srow in mrp.get("sub_assembly_items", []):
+        mf_type = (srow.get("type_of_manufacturing") or "").strip()
+        if mf_type != "In House":
+            continue
+        if not srow.get("bom_no") or flt(srow.get("qty") or 0) <= 0:
+            continue
+
+        wo = frappe.new_doc("Work Order")
+        wo.company = mrp.company
+        wo.production_item = srow.production_item
+        wo.bom_no = srow.bom_no
+        wo.qty = flt(srow.qty)
+        wo.fg_warehouse = srow.get("fg_warehouse")
+        wo.planned_start_date = nowdate()
         if frappe.get_meta("Work Order").get_field("custom_mrp"):
             wo.set("custom_mrp", mrp.name)
         wo.insert()
