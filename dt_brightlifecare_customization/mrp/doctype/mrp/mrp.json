@@ -16,6 +16,12 @@
   "material_requests",
   "section_break_xkul",
   "material_request_items",
+  "section_break_jjhh",
+  "column_break_poti",
+  "column_break_dxpy",
+  "get_sub_assembly_items",
+  "section_break_psgw",
+  "sub_assembly_items",
   "section_break_ybzv",
   "explode_bom",
   "column_break_irwy",
@@ -135,6 +141,34 @@
    "hidden": 1,
    "label": "Warehouses",
    "options": "Feeding Warehouse"
+  },
+  {
+   "fieldname": "section_break_psgw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sub_assembly_items",
+   "fieldtype": "Table",
+   "label": "Sub Assembly Items",
+   "options": "MRP Sub Assembly Item"
+  },
+  {
+   "fieldname": "section_break_jjhh",
+   "fieldtype": "Section Break",
+   "hide_border": 1
+  },
+  {
+   "fieldname": "column_break_poti",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_dxpy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "get_sub_assembly_items",
+   "fieldtype": "Button",
+   "label": "Get Sub Assembly Items"
   }
  ],
  "grid_page_length": 50,
@@ -158,7 +192,7 @@
    "link_fieldname": "custom_mrp"
   }
  ],
- "modified": "2025-09-04 00:08:47.847108",
+ "modified": "2025-09-17 12:17:31.641401",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",
