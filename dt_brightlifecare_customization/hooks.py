@@ -575,7 +575,9 @@ custom_field = [
     "Stock Entry-custom_column_break_xhzdc",
     "Stock Entry-custom_test_cost",
     "Quality Inspection-custom_coa_externalbilledreceived",
-    "Warehouse-custom_internal_nrgp"
+    "Warehouse-custom_internal_nrgp",
+    "Batch-custom_batch_manufacturing_report_bmr",
+    "Batch-custom_batch_packaging_report_bpr"
 ]
 
 
