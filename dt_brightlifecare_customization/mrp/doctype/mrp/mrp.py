@@ -175,46 +175,45 @@ def explode_bom(mrp_name):
 		primary_batch_no = None
 
 		if has_batch_no and original_warehouse:
-			# --- Batch availability (respect submitted MRP consumption) ---
+			# --- Batch availability (exclude batches already consumed by submitted MRPs) ---
 			batchwise_qty = get_batch_qty(item_code=item_code, warehouse=original_warehouse)
 			if isinstance(batchwise_qty, list):
 				batchwise_qty = {b.get("batch_no"): b.get("qty") for b in batchwise_qty if b.get("batch_no")}
 			else:
 				batchwise_qty = batchwise_qty or {}
 
-			for batch_no, consumed in consumed_qty_by_batch.items():
-				if batch_no in batchwise_qty:
-					batchwise_qty[batch_no] = max(flt(batchwise_qty[batch_no]) - flt(consumed), 0)
+			if consumed_qty_by_batch:
+				batchwise_qty = {
+					batch_no: qty
+					for batch_no, qty in batchwise_qty.items()
+					if batch_no not in consumed_qty_by_batch
+				}
 
 			sorted_batches = sorted(
 				batchwise_qty.items(),
 				key=lambda b: batch_expiry_lookup.get(b[0]) or frappe.utils.getdate("2999-12-31")
 			)
 
-			# --- Allocate from stock first (cap by available_for_use) ---
+			# --- Allocate from stock only if a single batch can satisfy the need ---
 			need_from_stock = min(required_qty, available_for_use)
-			remaining_for_stock = need_from_stock
+			if need_from_stock > 0:
+				selected_batch = None
+				for batch_no, available_qty in sorted_batches:
+					if flt(available_qty) >= need_from_stock:
+						selected_batch = (batch_no, available_qty)
+						break
 
-			for batch_no, available_qty in sorted_batches:
-				if remaining_for_stock <= 0:
-					break
-				if flt(available_qty) <= 0:
-					continue
-
-				take = min(flt(available_qty), remaining_for_stock)
-				if take <= 0:
-					continue
-
-				batch_allocation.append({
-					"batch_no": batch_no,
-					"allocated_qty": take,
-					"available_qty_before": flt(available_qty),
-					"expiry_date": batch_expiry_lookup.get(batch_no)
-				})
-				allocated_from_stock += take
-				remaining_for_stock -= take
-
-			primary_batch_no = batch_allocation[0]["batch_no"] if batch_allocation else None
+				if selected_batch:
+					batch_no, available_qty = selected_batch
+					take = flt(need_from_stock)
+					batch_allocation.append({
+						"batch_no": batch_no,
+						"allocated_qty": take,
+						"available_qty_before": flt(available_qty),
+						"expiry_date": batch_expiry_lookup.get(batch_no)
+					})
+					allocated_from_stock += take
+					primary_batch_no = batch_no
 		else:
 			# Non-batch or no source warehouse → simple allocation up to available_for_use
 			allocated_from_stock = min(required_qty, available_for_use)
@@ -368,10 +367,13 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 					else:
 						batchwise_qty = batchwise_qty or {}
 
-					# Subtract quantities already consumed by submitted MRPs
-					for bno, consumed in consumed_qty_by_batch.items():
-						if bno in batchwise_qty:
-							batchwise_qty[bno] = max(flt(batchwise_qty[bno]) - flt(consumed), 0)
+					# Drop batches already consumed by submitted MRPs entirely
+					if consumed_qty_by_batch:
+						batchwise_qty = {
+							batch_no: qty
+							for batch_no, qty in batchwise_qty.items()
+							if batch_no not in consumed_qty_by_batch
+						}
 
 					# Filter out expired batches
 					batchwise_qty = {
@@ -388,30 +390,32 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 					)
 
 					need_from_stock = min(remaining_qty, available_for_use)
-					remaining_for_stock = need_from_stock
+					if need_from_stock <= 0:
+						continue
+
 					batch_allocation = []
-
+					allocated_from_wh = 0
+					selected_batch = None
 					for batch_no, available_qty in sorted_batches:
-						if remaining_for_stock <= 0:
+						if flt(available_qty) >= need_from_stock:
+							selected_batch = (batch_no, available_qty)
 							break
-						if flt(available_qty) <= 0:
-							continue
 
-						take = min(flt(available_qty), remaining_for_stock)
-						if take <= 0:
-							continue
+					if not selected_batch:
+						continue
 
-						batch_allocation.append(
-							{
-								"batch_no": batch_no,
-								"allocated_qty": flt(take, reserve_precision),
-								"available_qty_before": flt(available_qty),
-								"expiry_date": batch_expiry_lookup.get(batch_no),
-							}
-						)
-						remaining_for_stock -= take
+					batch_no, available_qty = selected_batch
+					take = flt(need_from_stock, reserve_precision)
+					batch_allocation.append(
+						{
+							"batch_no": batch_no,
+							"allocated_qty": take,
+							"available_qty_before": flt(available_qty),
+							"expiry_date": batch_expiry_lookup.get(batch_no),
+						}
+					)
 
-					allocated_from_wh = flt(need_from_stock - remaining_for_stock, reserve_precision)
+					allocated_from_wh = take
 
 					if allocated_from_wh > 0:
 						new_row = mrp.append("raw_materials", {})
