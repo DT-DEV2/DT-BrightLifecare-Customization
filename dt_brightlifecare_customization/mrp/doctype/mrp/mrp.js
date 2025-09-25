@@ -14,7 +14,7 @@ frappe.ui.form.on("MRP", {
 					custom_source_warehouse: child.warehouse
                 }
             };
-        });
+		});
 
 		// Add Create menu actions similar to Production Plan
 		if (frm.doc.docstatus === 1) {
@@ -134,6 +134,27 @@ frappe.ui.form.on("MRP", {
 		});
 
 		dialog.show();
+	},
+
+	// Populate Sub Assembly Items based on selected BOMs on Material Request Items
+	get_sub_assembly_items: function (frm) {
+		if (!frm.doc.material_request_items || !frm.doc.material_request_items.length) {
+			frappe.msgprint(__('Please add Material Request Items with BOMs first.'));
+			return;
+		}
+
+		frappe.call({
+			method: 'dt_brightlifecare_customization.mrp.doctype.mrp.mrp.get_sub_assembly_items',
+			args: { mrp_name: frm.doc.name },
+			// freeze: true,
+			// freeze_message: __('Collecting sub-assembly items...'),
+			callback: function(r) {
+				if (!r.exc) {
+					frm.reload_doc();
+					frappe.show_alert({message: __('Sub-assembly items updated'), indicator: 'green'});
+				}
+			}
+		});
 	}
 
 
