@@ -681,3 +681,7 @@ on_login = "dt_brightlifecare_customization.auth.restrict_normal_login"
 override_doctype_class = {
 	"User": "dt_brightlifecare_customization.overrides.user.CustomUser"
 }
+
+
+web_include_js = "/assets/dt_brightlifecare_customization/js/custom.js"
+app_include_js = "/assets/dt_brightlifecare_customization/js/custom.js"

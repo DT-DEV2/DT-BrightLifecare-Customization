@@ -10,8 +10,8 @@ from datetime import datetime, timedelta
 import time
 
 class MRP(Document):
-	def on_submit(self):
-		create_mrp_reservation_entries(self)
+    def on_submit(self):
+        create_mrp_reservation_entries(self)
 
 
 def create_mrp_reservation_entries(mrp_doc):
@@ -175,46 +175,45 @@ def explode_bom(mrp_name):
 		primary_batch_no = None
 
 		if has_batch_no and original_warehouse:
-			# --- Batch availability (respect submitted MRP consumption) ---
+			# --- Batch availability (exclude batches already consumed by submitted MRPs) ---
 			batchwise_qty = get_batch_qty(item_code=item_code, warehouse=original_warehouse)
 			if isinstance(batchwise_qty, list):
 				batchwise_qty = {b.get("batch_no"): b.get("qty") for b in batchwise_qty if b.get("batch_no")}
 			else:
 				batchwise_qty = batchwise_qty or {}
 
-			for batch_no, consumed in consumed_qty_by_batch.items():
-				if batch_no in batchwise_qty:
-					batchwise_qty[batch_no] = max(flt(batchwise_qty[batch_no]) - flt(consumed), 0)
+			if consumed_qty_by_batch:
+				batchwise_qty = {
+					batch_no: qty
+					for batch_no, qty in batchwise_qty.items()
+					if batch_no not in consumed_qty_by_batch
+				}
 
 			sorted_batches = sorted(
 				batchwise_qty.items(),
 				key=lambda b: batch_expiry_lookup.get(b[0]) or frappe.utils.getdate("2999-12-31")
 			)
 
-			# --- Allocate from stock first (cap by available_for_use) ---
+			# --- Allocate from stock only if a single batch can satisfy the need ---
 			need_from_stock = min(required_qty, available_for_use)
-			remaining_for_stock = need_from_stock
+			if need_from_stock > 0:
+				selected_batch = None
+				for batch_no, available_qty in sorted_batches:
+					if flt(available_qty) >= need_from_stock:
+						selected_batch = (batch_no, available_qty)
+						break
 
-			for batch_no, available_qty in sorted_batches:
-				if remaining_for_stock <= 0:
-					break
-				if flt(available_qty) <= 0:
-					continue
-
-				take = min(flt(available_qty), remaining_for_stock)
-				if take <= 0:
-					continue
-
-				batch_allocation.append({
-					"batch_no": batch_no,
-					"allocated_qty": take,
-					"available_qty_before": flt(available_qty),
-					"expiry_date": batch_expiry_lookup.get(batch_no)
-				})
-				allocated_from_stock += take
-				remaining_for_stock -= take
-
-			primary_batch_no = batch_allocation[0]["batch_no"] if batch_allocation else None
+				if selected_batch:
+					batch_no, available_qty = selected_batch
+					take = flt(need_from_stock)
+					batch_allocation.append({
+						"batch_no": batch_no,
+						"allocated_qty": take,
+						"available_qty_before": flt(available_qty),
+						"expiry_date": batch_expiry_lookup.get(batch_no)
+					})
+					allocated_from_stock += take
+					primary_batch_no = batch_no
 		else:
 			# Non-batch or no source warehouse → simple allocation up to available_for_use
 			allocated_from_stock = min(required_qty, available_for_use)
@@ -368,10 +367,13 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 					else:
 						batchwise_qty = batchwise_qty or {}
 
-					# Subtract quantities already consumed by submitted MRPs
-					for bno, consumed in consumed_qty_by_batch.items():
-						if bno in batchwise_qty:
-							batchwise_qty[bno] = max(flt(batchwise_qty[bno]) - flt(consumed), 0)
+					# Drop batches already consumed by submitted MRPs entirely
+					if consumed_qty_by_batch:
+						batchwise_qty = {
+							batch_no: qty
+							for batch_no, qty in batchwise_qty.items()
+							if batch_no not in consumed_qty_by_batch
+						}
 
 					# Filter out expired batches
 					batchwise_qty = {
@@ -388,30 +390,32 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 					)
 
 					need_from_stock = min(remaining_qty, available_for_use)
-					remaining_for_stock = need_from_stock
+					if need_from_stock <= 0:
+						continue
+
 					batch_allocation = []
-
+					allocated_from_wh = 0
+					selected_batch = None
 					for batch_no, available_qty in sorted_batches:
-						if remaining_for_stock <= 0:
+						if flt(available_qty) >= need_from_stock:
+							selected_batch = (batch_no, available_qty)
 							break
-						if flt(available_qty) <= 0:
-							continue
 
-						take = min(flt(available_qty), remaining_for_stock)
-						if take <= 0:
-							continue
+					if not selected_batch:
+						continue
 
-						batch_allocation.append(
-							{
-								"batch_no": batch_no,
-								"allocated_qty": flt(take, reserve_precision),
-								"available_qty_before": flt(available_qty),
-								"expiry_date": batch_expiry_lookup.get(batch_no),
-							}
-						)
-						remaining_for_stock -= take
+					batch_no, available_qty = selected_batch
+					take = flt(need_from_stock, reserve_precision)
+					batch_allocation.append(
+						{
+							"batch_no": batch_no,
+							"allocated_qty": take,
+							"available_qty_before": flt(available_qty),
+							"expiry_date": batch_expiry_lookup.get(batch_no),
+						}
+					)
 
-					allocated_from_wh = flt(need_from_stock - remaining_for_stock, reserve_precision)
+					allocated_from_wh = take
 
 					if allocated_from_wh > 0:
 						new_row = mrp.append("raw_materials", {})
@@ -497,6 +501,86 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 	mrp.save()
 	frappe.msgprint("Raw materials updated with selected warehouses")
 
+
+@frappe.whitelist()
+def get_sub_assembly_items(mrp_name):
+    """Populate `sub_assembly_items` from BOMs of Material Request Items.
+    Logic:
+    - For each Material Request Item with a BOM, find BOM Item rows that reference a sub-BOM (bom_no set).
+    - Compute required sub-assembly qty in stock UOM using: 
+      required_stock_qty = fg_qty_in_stock_uom * (child.stock_qty / parent_bom.quantity)
+    - Append rows into `sub_assembly_items` with key fields (item, parent FG, qty, BOM, warehouses, UOMs).
+    """
+    mrp = frappe.get_doc("MRP", mrp_name)
+
+    # Clear existing sub-assembly rows
+    mrp.set("sub_assembly_items", [])
+
+    for mr_item in mrp.get("material_request_items", []):
+        bom_no = mr_item.get("bom_no")
+        if not bom_no:
+            # skip rows without BOM
+            continue
+
+        try:
+            bom_doc = frappe.get_doc("BOM", bom_no)
+        except Exception:
+            continue
+
+        parent_bom_qty = flt(bom_doc.quantity) or 1.0
+
+        # Finished good qty in stock UOM on the MR row
+        fg_qty_stock = flt(mr_item.get("qty_in_stock_uom"))
+        if not fg_qty_stock:
+            # fallback to material_requested_qty * uom_conversion_factor
+            fg_qty_stock = flt(mr_item.get("material_requested_qty")) * flt(mr_item.get("uom_conversion_factor") or 1.0)
+
+        # Fetch direct BOM items that have a sub-BOM reference (i.e., sub-assemblies)
+        bom_items = frappe.get_all(
+            "BOM Item",
+            filters={"parent": bom_no},
+            fields=["item_code", "uom", "stock_qty", "qty", "bom_no"],
+            order_by="idx asc",
+        )
+
+        for bi in bom_items:
+            if not bi.get("bom_no"):
+                # only consider items that are themselves assemblies (i.e., point to another BOM)
+                continue
+
+            item_code = bi.get("item_code")
+            try:
+                item_doc = frappe.get_cached_doc("Item", item_code)
+            except Exception:
+                continue
+
+            stock_uom = item_doc.stock_uom
+            # child.stock_qty is per parent BOM's quantity
+            child_stock_per_parent = flt(bi.get("stock_qty") or 0)
+            if child_stock_per_parent <= 0:
+                # fall back to qty (in item's UOM) if stock_qty missing
+                child_stock_per_parent = flt(bi.get("qty") or 0)
+
+            required_stock_qty = 0.0
+            if parent_bom_qty > 0:
+                required_stock_qty = fg_qty_stock * (child_stock_per_parent / parent_bom_qty)
+
+            # Append to child table
+            mrp.append("sub_assembly_items", {
+                "production_item": item_code,
+                "item_name": item_doc.item_name,
+                "parent_item_code": mr_item.get("item_code"),
+                "fg_warehouse": mr_item.get("warehouse"),
+                "qty": flt(required_stock_qty),
+                "bom_no": bi.get("bom_no"),
+                "uom": bi.get("uom") or stock_uom,
+                "stock_uom": stock_uom,
+                "mrp_item": mr_item.get("name"),
+            })
+
+    mrp.save()
+    frappe.msgprint(_("Sub-assembly items updated from BOMs"))
+    return True
 
 @frappe.whitelist()
 def make_material_request(mrp_name):
@@ -623,6 +707,26 @@ def make_work_orders(mrp_name):
         wo.planned_start_date = nowdate()
 
         # Link back to MRP if custom field exists
+        if frappe.get_meta("Work Order").get_field("custom_mrp"):
+            wo.set("custom_mrp", mrp.name)
+        wo.insert()
+        created.append({"doctype": "Work Order", "name": wo.name})
+
+    # Also create Work Orders for Sub Assembly Items where manufacturing type is In House
+    for srow in mrp.get("sub_assembly_items", []):
+        mf_type = (srow.get("type_of_manufacturing") or "").strip()
+        if mf_type != "In House":
+            continue
+        if not srow.get("bom_no") or flt(srow.get("qty") or 0) <= 0:
+            continue
+
+        wo = frappe.new_doc("Work Order")
+        wo.company = mrp.company
+        wo.production_item = srow.production_item
+        wo.bom_no = srow.bom_no
+        wo.qty = flt(srow.qty)
+        wo.fg_warehouse = srow.get("fg_warehouse")
+        wo.planned_start_date = nowdate()
         if frappe.get_meta("Work Order").get_field("custom_mrp"):
             wo.set("custom_mrp", mrp.name)
         wo.insert()
