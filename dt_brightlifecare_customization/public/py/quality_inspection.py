@@ -55,6 +55,17 @@ def _get_source_warehouse(qi):
     return warehouse
 
 
+def get_warehouse_address(warehouse):
+    """Fetch linked Address for a Warehouse from Address → Dynamic Link"""
+    if not warehouse:
+        return ""
+    return frappe.db.get_value(
+        "Dynamic Link",
+        {"link_doctype": "Warehouse", "link_name": warehouse, "parenttype": "Address"},
+        "parent"
+    ) or ""
+
+
 def _create_stock_entry(qi, stock_entry_type, qty, source_wh=None, target_wh=None, draft=False, to_address=None):
     """Create a Stock Entry document linked to QI and set addresses + GST"""
     if not source_wh:
@@ -77,27 +88,46 @@ def _create_stock_entry(qi, stock_entry_type, qty, source_wh=None, target_wh=Non
     item_row.use_serial_batch_fields = 1
 
     # -----------------------
-    # Addresses
+    # Address Mapping
     # -----------------------
-    from_address = frappe.db.get_value("Warehouse", source_wh, "custom_company_address") or ""
-    to_address = to_address or (frappe.db.get_value("Warehouse", target_wh, "custom_company_address") if target_wh else "")
+    if stock_entry_type == "Sample Internal Transfer":
+        # Bill From / Ship From → Source WH company address
+        se.bill_from_address = frappe.db.get_value("Warehouse", source_wh, "custom_company_address") or ""
+        se.ship_from_address = get_warehouse_address(source_wh)
 
-    se.bill_from_address = from_address
-    se.ship_from_address = from_address
-    se.bill_to_address = to_address
-    se.ship_to_address = to_address
+        # Bill To / Ship To → Target WH company address
+        se.bill_to_address = get_warehouse_address(target_wh)
+        se.ship_to_address = se.bill_to_address
+
+    elif stock_entry_type == "Internal NRGP":
+        # Source WH → Warehouse Address (linked in Address table)
+        se.bill_from_address = frappe.db.get_value("Warehouse", source_wh, "custom_company_address") or ""
+        se.ship_from_address = get_warehouse_address(source_wh)
+
+        # Target WH → Warehouse Address
+        se.bill_to_address = get_warehouse_address(target_wh)
+        se.ship_to_address = se.bill_to_address
+
+    elif stock_entry_type == "External NRGP":
+        se.bill_from_address = frappe.db.get_value("Warehouse", source_wh, "custom_company_address") or ""
+        se.ship_from_address = get_warehouse_address(source_wh)
+
+        # Bill To / Ship To → External Party Address (passed in)
+        se.bill_to_address = to_address or ""
+        se.ship_to_address = to_address or ""
 
     # -----------------------
-    # GST Categories (Fix)
+    # GST Categories
     # -----------------------
-    if from_address:
-        se.bill_from_gst_category = frappe.db.get_value("Address", from_address, "gst_category") or "Unregistered"
-    if to_address:
-        se.bill_to_gst_category = frappe.db.get_value("Address", to_address, "gst_category") or "Unregistered"
+    # for field, addr in {
+    #     "bill_from_gst_category": se.bill_from_address,
+    #     "bill_to_gst_category": se.bill_to_address,
+    # }.items():
+    #     if addr:
+    #         se.set(field, frappe.db.get_value("Address", addr, "gst_category") or "Unregistered")
 
     se.insert()
 
-    # Submit only if draft=False
     if not draft:
         se.submit()
 
@@ -205,7 +235,6 @@ def make_external_nrgp(qi_name, ship_to_address=None, draft=False, custom_test_c
     return {"stock_entry": se_name}
 
 
-
 @frappe.whitelist()
 def make_internal_nrgp(qi_name, target_warehouse=None, draft=False):
     draft = frappe.utils.cint(draft) == 1 or str(draft).lower() == "true"
@@ -230,11 +259,10 @@ def make_internal_nrgp(qi_name, target_warehouse=None, draft=False):
         sample_size,
         source_wh=source_wh,
         target_wh=target_warehouse,
-        draft=draft  # ✅ pass draft here
+        draft=draft
     )
 
     return {"stock_entry": se_name}
-
 
 
 @frappe.whitelist()
@@ -278,6 +306,21 @@ def on_qi_validate(doc, method=None):
 
 
 def on_qi_submit(doc, method=None):
+    # 🔒 Block submission if any linked Stock Entries are not submitted
+    pending_entries = frappe.get_all(
+        "Stock Entry",
+        filters={
+            "quality_inspection": doc.name,
+            "docstatus": ["!=", 1]  # anything not submitted
+        },
+        pluck="name"
+    )
+
+    if pending_entries:
+        frappe.throw(
+            f"Quality Inspection {doc.name} cannot be submitted until all Stock Entries "
+            f"({', '.join(pending_entries)}) are submitted."
+        )
     if doc.batch_no:
         batch = frappe.get_doc("Batch", doc.batch_no)
         for row in batch.custom_quality_check_schedule:
@@ -291,8 +334,6 @@ def on_qi_submit(doc, method=None):
 
 
 
-import frappe
-
 @frappe.whitelist()
 def check_stock_entries(qi_name):
     """Return if internal/external stock entries exist for this QI (via Stock Entry Detail)."""
@@ -304,18 +345,15 @@ def check_stock_entries(qi_name):
     if not parents:
         return {"internal_exists": False, "external_exists": False}
 
-    # Internal (any of these two counts as internal)
     internal_exists = frappe.db.exists("Stock Entry", {
         "name": ["in", parents],
         "stock_entry_type": ["in", ["Sample Internal Transfer", "Internal NRGP"]],
         "docstatus": 1
     })
 
-    # External (NRGP)
     external_exists = frappe.db.exists("Stock Entry", {
         "name": ["in", parents],
         "stock_entry_type": "External NRGP",
-        # "docstatus": 1
     })
 
     return {
