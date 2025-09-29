@@ -1,6 +1,17 @@
 import frappe
 import time
 
+
+
+
+def on_submit(doc, method):
+    make_serial_and_barcode_for_fg_item(doc, method)
+    submit_stock_entry_with_qi(doc, method=None)
+
+
+
+
+
 def submit_stock_entry_with_qi(doc, method=None):
     """
     After Stock Entry submission, wait for Serial & Batch Bundle creation
@@ -67,3 +78,92 @@ def submit_stock_entry_with_qi(doc, method=None):
             })
             qi.insert(ignore_permissions=True)
             frappe.log_error(f"QI created for item {item.item_code} with batch {batch_no}", "QI Debug")
+
+
+
+
+
+
+
+def make_serial_and_barcode_for_fg_item(doc, method):
+    """
+    When a Manufacture Stock Entry is submitted:
+    - Check if linked to Work Order
+    - Identify finished good item (t_warehouse present)
+    - If item requires serial numbers, create Serial Number and Barcode doc
+    - Populate child table with all serial numbers generated
+    """
+    if doc.stock_entry_type != "Manufacture" or not doc.work_order:
+        return
+
+    for item in doc.items:
+        if not item.t_warehouse:
+            continue
+
+        has_serial_no = frappe.get_value("Item", item.item_code, "has_serial_no")
+        if not has_serial_no:
+            continue
+
+        # Fetch all serial numbers linked to this Stock Entry and item
+        serial_nos = frappe.get_all(
+            "Serial No",
+            filters={"item_code": item.item_code, "work_order": doc.work_order},
+            pluck="name"
+        )
+
+        if not serial_nos:
+            continue
+
+        # Create parent document
+        snb = frappe.get_doc({
+            "doctype": "Serial Number and Barcode",
+            "item_code": item.item_code,
+            "work_order": doc.work_order,
+            "stock_entry": doc.name
+        })
+
+        # Add child rows for each serial number
+        for sn in serial_nos:
+            snb.append("serial_no_and_barcode_detail", {
+                "serial_number": sn
+            })
+
+        snb.insert()
+        # frappe.db.commit()
+
+
+
+
+
+
+
+# import frappe
+
+# def on_cancel(doc, method):
+#     """
+#     When a Stock Entry is cancelled, remove Serial Number and Barcode docs
+#     linked to its Work Order and finished good items.
+#     """
+#     if doc.stock_entry_type != "Manufacture" or not doc.work_order:
+#         return
+
+#     for item in doc.items:
+#         if not item.t_warehouse:
+#             continue
+
+#         has_serial_no = frappe.get_value("Item", item.item_code, "has_serial_no")
+#         if not has_serial_no:
+#             continue
+
+#         # Find all Serial Number and Barcode docs created for this WO + Item
+#         snb_list = frappe.get_all(
+#             "Serial Number and Barcode",
+#             filters={"item_code": item.item_code, "work_order": doc.work_order, "stock_entry": doc.name},
+#             pluck="name"
+#         )
+
+#         for snb in snb_list:
+#             frappe.delete_doc("Serial Number and Barcode", snb)
+
+    # frappe.db.commit()
+

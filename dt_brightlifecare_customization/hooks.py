@@ -577,7 +577,9 @@ custom_field = [
     "Quality Inspection-custom_coa_externalbilledreceived",
     "Warehouse-custom_internal_nrgp",
     "Batch-custom_batch_manufacturing_report_bmr",
-    "Batch-custom_batch_packaging_report_bpr"
+    "Batch-custom_batch_packaging_report_bpr",
+    "Item-custom_code_to_code_transfer",
+    "Item-custom_code_to_code_transfer_item"
 ]
 
 
