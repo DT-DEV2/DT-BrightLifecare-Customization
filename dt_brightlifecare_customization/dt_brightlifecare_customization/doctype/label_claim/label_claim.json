@@ -6,6 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "section_break_g5ib",
+  "item_code",
+  "item_name",
   "nutritional_information",
   "typical_amino_acid_profile",
   "specific_amino_acids_profile",
@@ -43,13 +45,25 @@
    "fieldtype": "Table",
    "label": "Typical Amino Acid Profile",
    "options": "Typical Amino Acid Profile"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Item Code",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "item_code.item_name",
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-30 12:27:43.593706",
+ "modified": "2025-09-30 12:41:28.696890",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Label Claim",
