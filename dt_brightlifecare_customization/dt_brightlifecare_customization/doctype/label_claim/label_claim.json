@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-30 12:19:27.186679",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_g5ib",
+  "nutritional_information",
+  "typical_amino_acid_profile",
+  "specific_amino_acids_profile",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_g5ib",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Label Claim",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "nutritional_information",
+   "fieldtype": "Table",
+   "label": "Nutritional Information",
+   "options": "Nutritional Information"
+  },
+  {
+   "fieldname": "specific_amino_acids_profile",
+   "fieldtype": "Table",
+   "label": "Specific Amino Acids Profile",
+   "options": "Specific Amino Acid - Amino Acids Profile"
+  },
+  {
+   "fieldname": "typical_amino_acid_profile",
+   "fieldtype": "Table",
+   "label": "Typical Amino Acid Profile",
+   "options": "Typical Amino Acid Profile"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-09-30 12:27:43.593706",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Label Claim",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
