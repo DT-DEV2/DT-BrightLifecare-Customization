@@ -1,0 +1,166 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-30 13:15:07.343146",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_vfow",
+  "batch_packing_quantity",
+  "mfg_date",
+  "mfg_license_no",
+  "product_code_no",
+  "storage_condition",
+  "amended_from",
+  "column_break_kcdh",
+  "theoretical_yield",
+  "expiry_date",
+  "pack_size",
+  "shelf_life",
+  "section_break_aiqr",
+  "date_of_commencement",
+  "area_used",
+  "batch_no",
+  "date",
+  "column_break_rmjd",
+  "date_of_completion",
+  "previous_product",
+  "checked_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_vfow",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Batch Packaging Record - BPR",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "batch_packing_quantity",
+   "fieldtype": "Date",
+   "label": "Batch Packing Quantity"
+  },
+  {
+   "fieldname": "column_break_kcdh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "theoretical_yield",
+   "fieldtype": "Data",
+   "label": "Theoretical Yield"
+  },
+  {
+   "fieldname": "expiry_date",
+   "fieldtype": "Date",
+   "label": "Expiry Date"
+  },
+  {
+   "fieldname": "pack_size",
+   "fieldtype": "Data",
+   "label": "Pack Size"
+  },
+  {
+   "fieldname": "mfg_date",
+   "fieldtype": "Date",
+   "label": "Mfg. Date"
+  },
+  {
+   "fieldname": "product_code_no",
+   "fieldtype": "Data",
+   "label": "Product Code No."
+  },
+  {
+   "fieldname": "shelf_life",
+   "fieldtype": "Int",
+   "label": "Shelf Life"
+  },
+  {
+   "fieldname": "storage_condition",
+   "fieldtype": "Small Text",
+   "label": "Storage Condition"
+  },
+  {
+   "fieldname": "mfg_license_no",
+   "fieldtype": "Int",
+   "label": "Mfg. License No."
+  },
+  {
+   "fieldname": "section_break_aiqr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "date_of_commencement",
+   "fieldtype": "Date",
+   "label": "Date of Commencement"
+  },
+  {
+   "fieldname": "column_break_rmjd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_of_completion",
+   "fieldtype": "Date",
+   "label": "Date of Completion"
+  },
+  {
+   "fieldname": "area_used",
+   "fieldtype": "Data",
+   "label": "Area Used"
+  },
+  {
+   "fieldname": "previous_product",
+   "fieldtype": "Data",
+   "label": "Previous Product"
+  },
+  {
+   "fieldname": "batch_no",
+   "fieldtype": "Data",
+   "label": "Batch No."
+  },
+  {
+   "fieldname": "checked_by",
+   "fieldtype": "Data",
+   "label": "Checked By"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-09-30 13:23:00.971020",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Batch Packaging Record - BPR",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
