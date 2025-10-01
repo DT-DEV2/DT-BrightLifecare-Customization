@@ -5,7 +5,9 @@ import time
 
 
 def on_submit(doc, method):
+    make_se_for_code_to_code_transfer(doc, method)
     make_serial_and_barcode_for_fg_item(doc, method)
+    
     submit_stock_entry_with_qi(doc, method=None)
 
 
@@ -76,7 +78,7 @@ def submit_stock_entry_with_qi(doc, method=None):
                 "batch_no": batch_no,
                 "serial_and_batch_bundle": item.serial_and_batch_bundle
             })
-            qi.insert(ignore_permissions=True)
+            qi.insert()
             frappe.log_error(f"QI created for item {item.item_code} with batch {batch_no}", "QI Debug")
 
 
@@ -167,3 +169,59 @@ def make_serial_and_barcode_for_fg_item(doc, method):
 
     # frappe.db.commit()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+def make_se_for_code_to_code_transfer(doc, method):
+    if doc.stock_entry_type != "Manufacture":
+        return
+
+    for item in doc.items:
+        # Check if code-to-code transfer is enabled for this item
+        ctc = frappe.db.get_value("Item", item.item_code, "custom_code_to_code_transfer")
+        ctc_item = frappe.db.get_value("Item", item.item_code, "custom_code_to_code_transfer_item")
+
+        if ctc and ctc_item:
+            try:
+                CtC_SE = frappe.get_doc({
+                    "doctype": "Stock Entry",
+                    "stock_entry_type": "Code To Code Transfer",
+                    "company": doc.company,
+                    "posting_date": doc.posting_date,
+                    "posting_time": doc.posting_time,
+                    "set_posting_time": 1
+                })
+
+                # Outgoing (from t_warehouse of manufacture entry)
+                CtC_SE.append("items", {
+                    "s_warehouse": item.t_warehouse,
+                    "item_code": item.item_code,
+                    "qty": item.qty
+                })
+
+                # Incoming (into t_warehouse of manufacture entry)
+                CtC_SE.append("items", {
+                    "t_warehouse": item.t_warehouse,
+                    "item_code": ctc_item,
+                    "qty": item.qty
+                })
+
+                # Save and submit
+                CtC_SE.insert()
+                CtC_SE.submit()
+
+                frappe.msgprint(f"Code to Code Transfer created: {CtC_SE.name}")
+
+            except Exception as e:
+                frappe.log_error(frappe.get_traceback(), "Error in make_se_for_code_to_code_transfer")
+                frappe.msgprint(f"Error while creating Code to Code Transfer: {str(e)}")

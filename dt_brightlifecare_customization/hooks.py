@@ -609,7 +609,7 @@ doc_events = {
         "on_submit" : "dt_brightlifecare_customization.public.py.purchase_receipt.submit_purchase_receipt_with_qi",
     },
     "Stock Entry": {
-        "on_submit" : "dt_brightlifecare_customization.public.py.stock_entry.submit_stock_entry_with_qi",
+        "on_submit" : "dt_brightlifecare_customization.public.py.stock_entry.on_submit",
     },
     "Purchase Order": {
         "before_save": "dt_brightlifecare_customization.public.py.purchase_order.before_save"
