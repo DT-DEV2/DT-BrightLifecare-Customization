@@ -5,6 +5,14 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "product_name",
+  "product_code",
+  "master_card_no",
+  "shelf_life_letter_head",
+  "column_break_iuou",
+  "batch_no_letter_head",
+  "batch_size",
+  "revision_no",
   "section_break_exmm",
   "batch_quantity",
   "batch_uom",
@@ -119,6 +127,14 @@
   "blend_output_tab",
   "balance_id_no",
   "blend_output",
+  "dispensing_label_record_tab",
+  "dispensing_label",
+  "no_of_label",
+  "production_on",
+  "attached_by",
+  "enclosures_tab",
+  "enclosure_template",
+  "enclosure_checkpoint",
   "batch_reconciliation_data_sheet_tab",
   "theoretical_batch_size",
   "theoretical_yield_batch",
@@ -127,7 +143,15 @@
   "quantity_of_qc_sample_gm",
   "processloss_during_manufacturing",
   "total_bulk_weight_handed_over_for_packing",
-  "actual_yield_for_packing"
+  "actual_yield_for_packing",
+  "deviation_report_tab",
+  "any_procedural_deviation",
+  "deviation_held_in_production_qa__me",
+  "action_done__planned",
+  "done_by",
+  "approval",
+  "reference_report_no",
+  "deviation_remarks"
  ],
  "fields": [
   {
@@ -752,13 +776,138 @@
   {
    "fieldname": "column_break_ziun",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dispensing_label_record_tab",
+   "fieldtype": "Tab Break",
+   "label": "Dispensing Label Record"
+  },
+  {
+   "description": "Collect all dispensed raw material & attached to BMR",
+   "fieldname": "dispensing_label",
+   "fieldtype": "Attach",
+   "label": "Dispensing Label"
+  },
+  {
+   "fieldname": "no_of_label",
+   "fieldtype": "Data",
+   "label": "No. of Label"
+  },
+  {
+   "fieldname": "production_on",
+   "fieldtype": "Date",
+   "label": "Production on "
+  },
+  {
+   "fieldname": "attached_by",
+   "fieldtype": "Data",
+   "label": "Attached by"
+  },
+  {
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "label": "Product Name"
+  },
+  {
+   "fieldname": "product_code",
+   "fieldtype": "Data",
+   "label": "Product Code"
+  },
+  {
+   "fieldname": "master_card_no",
+   "fieldtype": "Data",
+   "label": "Master Card No."
+  },
+  {
+   "fieldname": "shelf_life_letter_head",
+   "fieldtype": "Data",
+   "label": "Shelf Life"
+  },
+  {
+   "fieldname": "column_break_iuou",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "batch_no_letter_head",
+   "fieldtype": "Data",
+   "label": "Batch No."
+  },
+  {
+   "fieldname": "batch_size",
+   "fieldtype": "Data",
+   "label": "Batch Size"
+  },
+  {
+   "fieldname": "revision_no",
+   "fieldtype": "Int",
+   "label": "Revision No."
+  },
+  {
+   "fieldname": "enclosures_tab",
+   "fieldtype": "Tab Break",
+   "label": "Enclosures"
+  },
+  {
+   "fieldname": "enclosure_template",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Enclosure Template",
+   "options": "Enclosures Template"
+  },
+  {
+   "fieldname": "enclosure_checkpoint",
+   "fieldtype": "Table",
+   "label": "Enclosure Checkpoint",
+   "options": "Enclosure Template Child"
+  },
+  {
+   "fieldname": "deviation_report_tab",
+   "fieldtype": "Tab Break",
+   "label": "Deviation Report"
+  },
+  {
+   "description": "NOTE: Any Breakdown/Deviation to be mentioned with time & action",
+   "fieldname": "any_procedural_deviation",
+   "fieldtype": "Small Text",
+   "label": "Any Procedural Deviation "
+  },
+  {
+   "fieldname": "deviation_held_in_production_qa__me",
+   "fieldtype": "Small Text",
+   "label": "Deviation held in (Production/ QA / ME)"
+  },
+  {
+   "fieldname": "action_done__planned",
+   "fieldtype": "Date",
+   "label": "Action Done / Planned"
+  },
+  {
+   "fieldname": "done_by",
+   "fieldtype": "Data",
+   "label": "Done by:"
+  },
+  {
+   "description": "(Production)(Q.A.)",
+   "fieldname": "approval",
+   "fieldtype": "Data",
+   "label": "Approval:"
+  },
+  {
+   "fieldname": "reference_report_no",
+   "fieldtype": "Data",
+   "label": "Reference Report No."
+  },
+  {
+   "fieldname": "deviation_remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-30 17:54:05.710976",
+ "modified": "2025-10-03 11:14:03.767681",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
