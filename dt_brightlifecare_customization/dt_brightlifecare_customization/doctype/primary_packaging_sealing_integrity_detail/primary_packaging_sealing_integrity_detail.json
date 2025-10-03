@@ -1,0 +1,86 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-03 17:12:19.819591",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "time",
+  "no_of_pack_tested",
+  "sealing_temp_top",
+  "sealing_temp_bottom",
+  "sealing_temp_centre",
+  "conveyor_speed",
+  "vacuum_leakage",
+  "ipqa_sign"
+ ],
+ "fields": [
+  {
+   "fieldname": "time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Time"
+  },
+  {
+   "description": "(Equivalent to per minute conveyor speed)",
+   "fieldname": "no_of_pack_tested",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "No of Pack Tested"
+  },
+  {
+   "fieldname": "sealing_temp_top",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Sealing Temp. Top"
+  },
+  {
+   "fieldname": "sealing_temp_bottom",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Sealing Temp. Bottom"
+  },
+  {
+   "fieldname": "sealing_temp_centre",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Sealing Temp. Centre"
+  },
+  {
+   "description": "(Pack/Minute)",
+   "fieldname": "conveyor_speed",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Conveyor Speed"
+  },
+  {
+   "fieldname": "vacuum_leakage",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Vacuum Leakage",
+   "options": "\nPass\nFail"
+  },
+  {
+   "fieldname": "ipqa_sign",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "IPQA Sign"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-10-03 17:15:35.198213",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Primary Packaging Sealing Integrity Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

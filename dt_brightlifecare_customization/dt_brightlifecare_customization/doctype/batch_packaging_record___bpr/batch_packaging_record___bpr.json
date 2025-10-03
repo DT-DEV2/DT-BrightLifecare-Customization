@@ -25,7 +25,28 @@
   "column_break_rmjd",
   "date_of_completion",
   "previous_product",
-  "checked_by"
+  "checked_by",
+  "master_packing_sheet_tab",
+  "master_packing_sheet_detail",
+  "revision_history_tab",
+  "revision_history_detail",
+  "line_clearance_for_primary_packing_area_tab",
+  "area_cleaned_by",
+  "area_cleaned_date",
+  "cleanliness_checked_by",
+  "cleanliness_checked_date",
+  "section_break_ncjt",
+  "remark",
+  "signature",
+  "signature_with_date_and_time",
+  "packing_material_receiving_tab",
+  "packing_material_receiving_detail",
+  "rh_and_temp_tab",
+  "frquency",
+  "rh_and_temp_detail",
+  "primary_packaging_sealing_integrity_tab",
+  "frequency",
+  "primary_packaging_sealing_integrity_detail"
  ],
  "fields": [
   {
@@ -133,13 +154,122 @@
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "Date"
+  },
+  {
+   "fieldname": "master_packing_sheet_tab",
+   "fieldtype": "Tab Break",
+   "label": "Master Packing Sheet"
+  },
+  {
+   "fieldname": "master_packing_sheet_detail",
+   "fieldtype": "Table",
+   "label": "Master Packing Sheet Detail",
+   "options": "Master Packing Sheet Detail"
+  },
+  {
+   "fieldname": "revision_history_tab",
+   "fieldtype": "Tab Break",
+   "label": "Revision History"
+  },
+  {
+   "fieldname": "line_clearance_for_primary_packing_area_tab",
+   "fieldtype": "Tab Break",
+   "label": "Line Clearance for Primary Packing Area"
+  },
+  {
+   "fieldname": "packing_material_receiving_tab",
+   "fieldtype": "Tab Break",
+   "label": "Packing Material Receiving"
+  },
+  {
+   "fieldname": "rh_and_temp_tab",
+   "fieldtype": "Tab Break",
+   "label": "RH and Temp"
+  },
+  {
+   "fieldname": "frquency",
+   "fieldtype": "Data",
+   "label": "Frquency"
+  },
+  {
+   "fieldname": "primary_packaging_sealing_integrity_tab",
+   "fieldtype": "Tab Break",
+   "label": "Primary Packaging Sealing Integrity"
+  },
+  {
+   "fieldname": "frequency",
+   "fieldtype": "Data",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "revision_history_detail",
+   "fieldtype": "Table",
+   "label": "Revision History Detail",
+   "options": "Revision History Detail"
+  },
+  {
+   "fieldname": "area_cleaned_by",
+   "fieldtype": "Data",
+   "label": "Area Cleaned By"
+  },
+  {
+   "fieldname": "area_cleaned_date",
+   "fieldtype": "Date",
+   "label": "Area Cleaned Date"
+  },
+  {
+   "fieldname": "cleanliness_checked_by",
+   "fieldtype": "Data",
+   "label": "Cleanliness Checked By"
+  },
+  {
+   "fieldname": "cleanliness_checked_date",
+   "fieldtype": "Date",
+   "label": "Cleanliness Checked Date"
+  },
+  {
+   "fieldname": "section_break_ncjt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Small Text",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "signature",
+   "fieldtype": "Data",
+   "label": "Signature"
+  },
+  {
+   "fieldname": "signature_with_date_and_time",
+   "fieldtype": "Datetime",
+   "label": "Signature with Date and Time"
+  },
+  {
+   "fieldname": "packing_material_receiving_detail",
+   "fieldtype": "Table",
+   "label": "Packing Material Receiving Detail",
+   "options": "Packing Material Receiving Detail"
+  },
+  {
+   "fieldname": "rh_and_temp_detail",
+   "fieldtype": "Table",
+   "label": "RH and Temp Detail",
+   "options": "RH and Temp Detail"
+  },
+  {
+   "fieldname": "primary_packaging_sealing_integrity_detail",
+   "fieldtype": "Table",
+   "label": "Primary Packaging Sealing Integrity Detail",
+   "options": "Primary Packaging Sealing Integrity Detail"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-30 13:23:00.971020",
+ "modified": "2025-10-03 17:12:48.047718",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
