@@ -579,7 +579,8 @@ custom_field = [
     "Batch-custom_batch_manufacturing_report_bmr",
     "Batch-custom_batch_packaging_report_bpr",
     "Item-custom_code_to_code_transfer",
-    "Item-custom_code_to_code_transfer_item"
+    "Item-custom_code_to_code_transfer_item",
+    "Item-custom_label_claim"
 ]
 
 

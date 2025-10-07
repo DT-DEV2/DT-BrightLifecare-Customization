@@ -8,8 +8,10 @@
   "section_break_c83t",
   "amended_from",
   "item_code",
-  "product_name",
+  "current_batch_number",
+  "batch_expiration_date",
   "column_break_gkkp",
+  "product_name",
   "comparison_reference_batch",
   "reference_expiration_date",
   "section_break_jqrn",
@@ -72,13 +74,24 @@
    "hidden": 1,
    "label": "Template",
    "options": "QC Sensory Template"
+  },
+  {
+   "fieldname": "current_batch_number",
+   "fieldtype": "Link",
+   "label": "Current Batch Number",
+   "options": "Batch"
+  },
+  {
+   "fieldname": "batch_expiration_date",
+   "fieldtype": "Date",
+   "label": "Batch Expiration Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-03 12:38:07.741572",
+ "modified": "2025-10-07 11:15:49.783765",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "QC Sensory Test",
