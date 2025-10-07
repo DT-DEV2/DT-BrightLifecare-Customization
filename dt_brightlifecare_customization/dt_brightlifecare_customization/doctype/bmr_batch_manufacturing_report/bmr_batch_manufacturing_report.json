@@ -57,6 +57,11 @@
   "reviewing_date",
   "revision_history_tab",
   "revision_history",
+  "label_claim_tab",
+  "label_claim",
+  "nutritional_information",
+  "typical_amino_acid_profile",
+  "specific_amino_acids_profile",
   "line_clearance_for_dispensing_area_tab",
   "previous_product_line",
   "area_cleaned_by",
@@ -810,8 +815,9 @@
   },
   {
    "fieldname": "product_code",
-   "fieldtype": "Data",
-   "label": "Product Code"
+   "fieldtype": "Link",
+   "label": "Product Code",
+   "options": "Item"
   },
   {
    "fieldname": "master_card_no",
@@ -901,13 +907,42 @@
    "fieldname": "deviation_remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "label_claim_tab",
+   "fieldtype": "Tab Break",
+   "label": "Label Claim"
+  },
+  {
+   "fieldname": "nutritional_information",
+   "fieldtype": "Table",
+   "label": "Nutritional Information",
+   "options": "Nutritional Information"
+  },
+  {
+   "fieldname": "typical_amino_acid_profile",
+   "fieldtype": "Table",
+   "label": "Typical Amino Acid Profile",
+   "options": "Typical Amino Acid Profile"
+  },
+  {
+   "fieldname": "specific_amino_acids_profile",
+   "fieldtype": "Table",
+   "label": "Specific Amino Acids Profile",
+   "options": "Specific Amino Acid - Amino Acids Profile"
+  },
+  {
+   "fieldname": "label_claim",
+   "fieldtype": "Link",
+   "label": "Label Claim",
+   "options": "Label Claim"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-03 11:14:03.767681",
+ "modified": "2025-10-07 11:16:36.620358",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
