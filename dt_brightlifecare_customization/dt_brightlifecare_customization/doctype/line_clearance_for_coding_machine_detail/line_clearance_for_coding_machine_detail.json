@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-07 15:39:50.734742",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "time_start",
+  "observation",
+  "remarks",
+  "ipqa",
+  "time_end"
+ ],
+ "fields": [
+  {
+   "fieldname": "time_start",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Time Start"
+  },
+  {
+   "fieldname": "observation",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Observation"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "ipqa",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "IPQA"
+  },
+  {
+   "fieldname": "time_end",
+   "fieldtype": "Data",
+   "label": "Time End"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-10-07 15:44:17.385576",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Line Clearance for Coding Machine Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
