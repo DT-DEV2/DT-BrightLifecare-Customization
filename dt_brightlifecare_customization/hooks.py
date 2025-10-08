@@ -580,7 +580,12 @@ custom_field = [
     "Batch-custom_batch_packaging_report_bpr",
     "Item-custom_code_to_code_transfer",
     "Item-custom_code_to_code_transfer_item",
-    "Item-custom_label_claim"
+    "Item-custom_label_claim",
+    "BOM Item-custom_yield_",
+    "Item-custom_fssai",
+    "Item-custom_enable_bmr",
+    "Item-custom_enable_bpr",
+    "BOM Item-custom_overage_"
 ]
 
 
@@ -663,8 +668,10 @@ doc_events = {
     "Quality Inspection": {
         "validate": "dt_brightlifecare_customization.public.py.quality_inspection.on_qi_validate",
         "on_submit": "dt_brightlifecare_customization.public.py.quality_inspection.on_qi_submit",
+    },
+    "Work Order": {
+        "on_submit": "dt_brightlifecare_customization.public.py.work_order.on_submit"
     }
-
 }
 
 scheduler_events = {
