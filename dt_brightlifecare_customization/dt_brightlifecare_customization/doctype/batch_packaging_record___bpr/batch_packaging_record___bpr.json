@@ -31,6 +31,9 @@
   "revision_history_tab",
   "revision_history_detail",
   "line_clearance_for_primary_packing_area_tab",
+  "previous_product_lcppa",
+  "batch_no_lcppa",
+  "column_break_sgtx",
   "area_cleaned_by",
   "area_cleaned_date",
   "cleanliness_checked_by",
@@ -41,12 +44,41 @@
   "signature_with_date_and_time",
   "packing_material_receiving_tab",
   "packing_material_receiving_detail",
-  "rh_and_temp_tab",
-  "frquency",
-  "rh_and_temp_detail",
+  "rh_temp_tab",
+  "frequency_rht",
+  "rh_temp_detail",
   "primary_packaging_sealing_integrity_tab",
-  "frequency",
-  "primary_packaging_sealing_integrity_detail"
+  "frequency_ppsi",
+  "primary_packaging_sealing_integrity_detail",
+  "line_clearance_for_coding_machine_tab",
+  "machine_id",
+  "product_previous_lccm",
+  "batch_no_lccm",
+  "machine_cleaning_setting_done_by",
+  "section_break_mitp",
+  "machine_setting_check_packing_in_charge",
+  "primary_packing_defects_monitoring_tab",
+  "frequency_ppdm",
+  "line_clearance_for_secondary_packing_area_tab",
+  "area",
+  "batch_no_lcspa",
+  "column_break_zngp",
+  "previous_product_lcspa",
+  "section_break_nwyd",
+  "area_cleaned_by_lcspa",
+  "cleanliness_checked_by_lcspa",
+  "status_updated_by_lcspa",
+  "column_break_nezu",
+  "area_cleaned_date_lcspa",
+  "cleanliness_checked_date_lcspa",
+  "status_updated_date_lcspa",
+  "online_inspectionsecondary_packing_tab",
+  "frequency_oi",
+  "sample_withdrawal_record_tab",
+  "sample_withdrawal_record_detail",
+  "reconcilation_of_packing_material_tab",
+  "excess_label_printed_material_destroyed_by",
+  "excess_label_printed_material_destroyed_date"
  ],
  "fields": [
   {
@@ -182,24 +214,9 @@
    "label": "Packing Material Receiving"
   },
   {
-   "fieldname": "rh_and_temp_tab",
-   "fieldtype": "Tab Break",
-   "label": "RH and Temp"
-  },
-  {
-   "fieldname": "frquency",
-   "fieldtype": "Data",
-   "label": "Frquency"
-  },
-  {
    "fieldname": "primary_packaging_sealing_integrity_tab",
    "fieldtype": "Tab Break",
    "label": "Primary Packaging Sealing Integrity"
-  },
-  {
-   "fieldname": "frequency",
-   "fieldtype": "Data",
-   "label": "Frequency"
   },
   {
    "fieldname": "revision_history_detail",
@@ -253,23 +270,201 @@
    "options": "Packing Material Receiving Detail"
   },
   {
-   "fieldname": "rh_and_temp_detail",
-   "fieldtype": "Table",
-   "label": "RH and Temp Detail",
-   "options": "RH and Temp Detail"
-  },
-  {
    "fieldname": "primary_packaging_sealing_integrity_detail",
    "fieldtype": "Table",
    "label": "Primary Packaging Sealing Integrity Detail",
    "options": "Primary Packaging Sealing Integrity Detail"
+  },
+  {
+   "fieldname": "frequency_rht",
+   "fieldtype": "Data",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "frequency_ppsi",
+   "fieldtype": "Data",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "previous_product_lcppa",
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
+  },
+  {
+   "fieldname": "column_break_sgtx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "batch_no_lcppa",
+   "fieldtype": "Link",
+   "label": "Batch No",
+   "options": "Batch"
+  },
+  {
+   "fieldname": "line_clearance_for_coding_machine_tab",
+   "fieldtype": "Tab Break",
+   "label": "Line Clearance for Coding Machine"
+  },
+  {
+   "fieldname": "machine_id",
+   "fieldtype": "Data",
+   "label": "Machine Id"
+  },
+  {
+   "fieldname": "product_previous_lccm",
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
+  },
+  {
+   "fieldname": "batch_no_lccm",
+   "fieldtype": "Link",
+   "label": "Batch No",
+   "options": "Batch"
+  },
+  {
+   "fieldname": "machine_cleaning_setting_done_by",
+   "fieldtype": "Data",
+   "label": "Machine Cleaning & Setting Done By"
+  },
+  {
+   "fieldname": "rh_temp_tab",
+   "fieldtype": "Tab Break",
+   "label": "RH & Temp"
+  },
+  {
+   "fieldname": "rh_temp_detail",
+   "fieldtype": "Table",
+   "label": "RH & Temp Detail",
+   "options": "RH and Temp Detail"
+  },
+  {
+   "fieldname": "section_break_mitp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "machine_setting_check_packing_in_charge",
+   "fieldtype": "Table",
+   "label": "Machine Setting Check Packing In-charge",
+   "options": "Line Clearance for Coding Machine Detail"
+  },
+  {
+   "fieldname": "primary_packing_defects_monitoring_tab",
+   "fieldtype": "Tab Break",
+   "label": "Primary Packing Defects Monitoring"
+  },
+  {
+   "fieldname": "frequency_ppdm",
+   "fieldtype": "Data",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "line_clearance_for_secondary_packing_area_tab",
+   "fieldtype": "Tab Break",
+   "label": "Line Clearance for Secondary Packing Area"
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Data",
+   "label": "Area"
+  },
+  {
+   "fieldname": "column_break_zngp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "previous_product_lcspa",
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
+  },
+  {
+   "fieldname": "batch_no_lcspa",
+   "fieldtype": "Link",
+   "label": "Batch No",
+   "options": "Batch"
+  },
+  {
+   "fieldname": "area_cleaned_by_lcspa",
+   "fieldtype": "Data",
+   "label": "Area Cleaned By"
+  },
+  {
+   "fieldname": "area_cleaned_date_lcspa",
+   "fieldtype": "Date",
+   "label": "Area Cleaned Date"
+  },
+  {
+   "fieldname": "cleanliness_checked_by_lcspa",
+   "fieldtype": "Data",
+   "label": "Cleanliness Checked By"
+  },
+  {
+   "fieldname": "cleanliness_checked_date_lcspa",
+   "fieldtype": "Date",
+   "label": "Cleanliness Checked Date"
+  },
+  {
+   "fieldname": "section_break_nwyd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_nezu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status_updated_by_lcspa",
+   "fieldtype": "Data",
+   "label": "Status Updated By"
+  },
+  {
+   "fieldname": "status_updated_date_lcspa",
+   "fieldtype": "Date",
+   "label": "Status Updated Date"
+  },
+  {
+   "fieldname": "online_inspectionsecondary_packing_tab",
+   "fieldtype": "Tab Break",
+   "label": "Online Inspection(Secondary Packing)"
+  },
+  {
+   "fieldname": "frequency_oi",
+   "fieldtype": "Data",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "sample_withdrawal_record_tab",
+   "fieldtype": "Tab Break",
+   "label": "Sample Withdrawal Record"
+  },
+  {
+   "fieldname": "sample_withdrawal_record_detail",
+   "fieldtype": "Table",
+   "label": "Sample Withdrawal Record Detail",
+   "options": "Sample Withdrawal Record Detail"
+  },
+  {
+   "fieldname": "reconcilation_of_packing_material_tab",
+   "fieldtype": "Tab Break",
+   "label": "Reconcilation of Packing Material"
+  },
+  {
+   "fieldname": "excess_label_printed_material_destroyed_by",
+   "fieldtype": "Data",
+   "label": "Excess Label Printed Material Destroyed by"
+  },
+  {
+   "fieldname": "excess_label_printed_material_destroyed_date",
+   "fieldtype": "Date",
+   "label": "Excess Label Printed Material Destroyed Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-03 17:12:48.047718",
+ "modified": "2025-10-07 17:08:24.574439",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
