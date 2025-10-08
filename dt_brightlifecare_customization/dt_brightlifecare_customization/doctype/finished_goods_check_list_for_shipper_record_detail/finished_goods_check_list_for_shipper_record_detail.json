@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-08 11:47:53.266604",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "shipper_no",
+  "date",
+  "time",
+  "leakage_defect",
+  "wowrong_batch_code",
+  "less_count",
+  "wo_sealleakage",
+  "coding_height",
+  "dirty_wrapper",
+  "foreign_material",
+  "less_weight",
+  "wrapper_defect",
+  "any_other"
+ ],
+ "fields": [
+  {
+   "fieldname": "shipper_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Shipper No."
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date"
+  },
+  {
+   "fieldname": "time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Time"
+  },
+  {
+   "fieldname": "leakage_defect",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Leakage Defect"
+  },
+  {
+   "fieldname": "wowrong_batch_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "W/O/Wrong Batch Code"
+  },
+  {
+   "fieldname": "less_count",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Less Count"
+  },
+  {
+   "fieldname": "wo_sealleakage",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "W/O Seal/Leakage"
+  },
+  {
+   "fieldname": "coding_height",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Coding Height"
+  },
+  {
+   "fieldname": "dirty_wrapper",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Dirty Wrapper"
+  },
+  {
+   "fieldname": "foreign_material",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Foreign Material"
+  },
+  {
+   "fieldname": "less_weight",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Less Weight"
+  },
+  {
+   "fieldname": "wrapper_defect",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Wrapper Defect"
+  },
+  {
+   "fieldname": "any_other",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Any Other"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-10-08 11:51:05.257702",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Finished Goods Check List for Shipper Record Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

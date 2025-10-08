@@ -1,6 +1,19 @@
 import frappe
 import time
 
+
+
+
+def on_submit(doc, method):
+    make_se_for_code_to_code_transfer(doc, method)
+    make_serial_and_barcode_for_fg_item(doc, method)
+    
+    submit_stock_entry_with_qi(doc, method=None)
+
+
+
+
+
 def submit_stock_entry_with_qi(doc, method=None):
     """
     After Stock Entry submission, wait for Serial & Batch Bundle creation
@@ -65,5 +78,150 @@ def submit_stock_entry_with_qi(doc, method=None):
                 "batch_no": batch_no,
                 "serial_and_batch_bundle": item.serial_and_batch_bundle
             })
-            qi.insert(ignore_permissions=True)
+            qi.insert()
             frappe.log_error(f"QI created for item {item.item_code} with batch {batch_no}", "QI Debug")
+
+
+
+
+
+
+
+def make_serial_and_barcode_for_fg_item(doc, method):
+    """
+    When a Manufacture Stock Entry is submitted:
+    - Check if linked to Work Order
+    - Identify finished good item (t_warehouse present)
+    - If item requires serial numbers, create Serial Number and Barcode doc
+    - Populate child table with all serial numbers generated
+    """
+    if doc.stock_entry_type != "Manufacture" or not doc.work_order:
+        return
+
+    for item in doc.items:
+        if not item.t_warehouse:
+            continue
+
+        has_serial_no = frappe.get_value("Item", item.item_code, "has_serial_no")
+        if not has_serial_no:
+            continue
+
+        # Fetch all serial numbers linked to this Stock Entry and item
+        serial_nos = frappe.get_all(
+            "Serial No",
+            filters={"item_code": item.item_code, "work_order": doc.work_order},
+            pluck="name"
+        )
+
+        if not serial_nos:
+            continue
+
+        # Create parent document
+        snb = frappe.get_doc({
+            "doctype": "Serial Number and Barcode",
+            "item_code": item.item_code,
+            "work_order": doc.work_order,
+            "stock_entry": doc.name
+        })
+
+        # Add child rows for each serial number
+        for sn in serial_nos:
+            snb.append("serial_no_and_barcode_detail", {
+                "serial_number": sn
+            })
+
+        snb.insert()
+        # frappe.db.commit()
+
+
+
+
+
+
+
+# import frappe
+
+# def on_cancel(doc, method):
+#     """
+#     When a Stock Entry is cancelled, remove Serial Number and Barcode docs
+#     linked to its Work Order and finished good items.
+#     """
+#     if doc.stock_entry_type != "Manufacture" or not doc.work_order:
+#         return
+
+#     for item in doc.items:
+#         if not item.t_warehouse:
+#             continue
+
+#         has_serial_no = frappe.get_value("Item", item.item_code, "has_serial_no")
+#         if not has_serial_no:
+#             continue
+
+#         # Find all Serial Number and Barcode docs created for this WO + Item
+#         snb_list = frappe.get_all(
+#             "Serial Number and Barcode",
+#             filters={"item_code": item.item_code, "work_order": doc.work_order, "stock_entry": doc.name},
+#             pluck="name"
+#         )
+
+#         for snb in snb_list:
+#             frappe.delete_doc("Serial Number and Barcode", snb)
+
+    # frappe.db.commit()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def make_se_for_code_to_code_transfer(doc, method):
+    if doc.stock_entry_type != "Manufacture":
+        return
+
+    for item in doc.items:
+        # Check if code-to-code transfer is enabled for this item
+        ctc = frappe.db.get_value("Item", item.item_code, "custom_code_to_code_transfer")
+        ctc_item = frappe.db.get_value("Item", item.item_code, "custom_code_to_code_transfer_item")
+
+        if ctc and ctc_item:
+            try:
+                CtC_SE = frappe.get_doc({
+                    "doctype": "Stock Entry",
+                    "stock_entry_type": "Code To Code Transfer",
+                    "company": doc.company,
+                    "posting_date": doc.posting_date,
+                    "posting_time": doc.posting_time,
+                    "set_posting_time": 1
+                })
+
+                # Outgoing (from t_warehouse of manufacture entry)
+                CtC_SE.append("items", {
+                    "s_warehouse": item.t_warehouse,
+                    "item_code": item.item_code,
+                    "qty": item.qty
+                })
+
+                # Incoming (into t_warehouse of manufacture entry)
+                CtC_SE.append("items", {
+                    "t_warehouse": item.t_warehouse,
+                    "item_code": ctc_item,
+                    "qty": item.qty
+                })
+
+                # Save and submit
+                CtC_SE.insert()
+                CtC_SE.submit()
+
+                frappe.msgprint(f"Code to Code Transfer created: {CtC_SE.name}")
+
+            except Exception as e:
+                frappe.log_error(frappe.get_traceback(), "Error in make_se_for_code_to_code_transfer")
+                frappe.msgprint(f"Error while creating Code to Code Transfer: {str(e)}")

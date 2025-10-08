@@ -577,7 +577,10 @@ custom_field = [
     "Quality Inspection-custom_coa_externalbilledreceived",
     "Warehouse-custom_internal_nrgp",
     "Batch-custom_batch_manufacturing_report_bmr",
-    "Batch-custom_batch_packaging_report_bpr"
+    "Batch-custom_batch_packaging_report_bpr",
+    "Item-custom_code_to_code_transfer",
+    "Item-custom_code_to_code_transfer_item",
+    "Item-custom_label_claim"
 ]
 
 
@@ -607,7 +610,7 @@ doc_events = {
         "on_submit" : "dt_brightlifecare_customization.public.py.purchase_receipt.submit_purchase_receipt_with_qi",
     },
     "Stock Entry": {
-        "on_submit" : "dt_brightlifecare_customization.public.py.stock_entry.submit_stock_entry_with_qi",
+        "on_submit" : "dt_brightlifecare_customization.public.py.stock_entry.on_submit",
     },
     "Purchase Order": {
         "before_save": "dt_brightlifecare_customization.public.py.purchase_order.before_save"

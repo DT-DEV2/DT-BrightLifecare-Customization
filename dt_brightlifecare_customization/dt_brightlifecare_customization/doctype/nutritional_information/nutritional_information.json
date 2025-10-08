@@ -1,0 +1,47 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-30 12:20:01.961896",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "parameters",
+  "per_serving",
+  "per_100g"
+ ],
+ "fields": [
+  {
+   "fieldname": "parameters",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Parameters"
+  },
+  {
+   "fieldname": "per_100g",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Per 100g"
+  },
+  {
+   "fieldname": "per_serving",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Per Serving"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-09-30 12:39:30.492179",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Nutritional Information",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

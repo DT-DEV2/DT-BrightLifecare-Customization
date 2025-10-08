@@ -1,0 +1,969 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-26 12:43:09.152719",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "product_name",
+  "product_code",
+  "master_card_no",
+  "shelf_life_letter_head",
+  "column_break_iuou",
+  "batch_no_letter_head",
+  "batch_size",
+  "revision_no",
+  "section_break_exmm",
+  "batch_quantity",
+  "batch_uom",
+  "amended_from",
+  "column_break_hfel",
+  "theoretical_yield",
+  "mfg_date",
+  "exp_date",
+  "section_break_uqtx",
+  "document_issued_by",
+  "document_received_by",
+  "column_break_tghs",
+  "date",
+  "receiving_date",
+  "section_break_qhqv",
+  "document_supersedes",
+  "fssai_mfg_license_no",
+  "shelf_life",
+  "manufactured_for",
+  "column_break_ftcd",
+  "reason_for_change",
+  "product_code_no",
+  "storage_conditions",
+  "section_break_xtvh",
+  "date_of_commencement",
+  "area_used",
+  "batch_no",
+  "checking_date",
+  "column_break_mofy",
+  "date_of_completion",
+  "previous_product",
+  "checked_by",
+  "section_break_txlg",
+  "actual_yield",
+  "date_of_packing",
+  "final_checked_by",
+  "reviewed_by",
+  "column_break_cixr",
+  "total_yield",
+  "quantity",
+  "final_checking_date",
+  "reviewing_date",
+  "revision_history_tab",
+  "revision_history",
+  "label_claim_tab",
+  "label_claim",
+  "nutritional_information",
+  "typical_amino_acid_profile",
+  "specific_amino_acids_profile",
+  "line_clearance_for_dispensing_area_tab",
+  "previous_product_line",
+  "area_cleaned_by",
+  "cleanliness_checked_by",
+  "balance_id__no",
+  "column_break_qvzg",
+  "batch_no_line",
+  "line_clearance_cleaned_date",
+  "cleanliness_checked_by_date",
+  "section_break_ubbe",
+  "line_clearance_template",
+  "line_clearance",
+  "remarks",
+  "section_break_iyba",
+  "signature_production",
+  "signature_ipqa",
+  "column_break_udeq",
+  "date_time_production",
+  "date_time_ipqa",
+  "bill_of_material_weighing_record_tab",
+  "issue_raw_material_as_per_sop_no",
+  "balance_no",
+  "temp",
+  "humidity",
+  "section_break_wdtx",
+  "requisition_given_by",
+  "area_cleanliness_checked_by",
+  "store",
+  "previous_product_1",
+  "material_required_on",
+  "production",
+  "column_break_kbvw",
+  "requisition_date",
+  "cleanlineschecking_date",
+  "storage_date",
+  "b_no",
+  "issued_on",
+  "line_clearance_of_powder_manufacturing_tab",
+  "line_clearance_given_by_as_per_sop",
+  "certified_date_time",
+  "previous_product_powder",
+  "batch_no_powder",
+  "check_point_section",
+  "check_rinse_test_of_equipment_is_done_qc_report_available",
+  "check_general_cleanliness_and_housekeeping_of_the_area",
+  "check_any_person_exposed_to_the_product",
+  "check_cleaning_of_duct_filter_equipment",
+  "check_testing_equipment_such_as_wet_and_dry",
+  "check_weighing_balance_verified_recorded",
+  "check_all_tools_are_properly_clean_in_good_condition",
+  "check_no_leakage_in_sifter",
+  "check_adequate_light_in_area",
+  "check_the_waste_bins_are_empty_and_labeled_properly",
+  "seive_integrity_tab",
+  "seive_id",
+  "sieve_integrity",
+  "frequency",
+  "sieve_date",
+  "time",
+  "sieve_integrity_template",
+  "sieve_integrity_template_results",
+  "section_break_xbxy",
+  "signature_sieve_pro",
+  "signature_sieve_ipqa",
+  "column_break_ziun",
+  "date_sieve_pro",
+  "date_sieve_ipqa",
+  "blend_output_tab",
+  "balance_id_no",
+  "blend_output",
+  "dispensing_label_record_tab",
+  "dispensing_label",
+  "no_of_label",
+  "production_on",
+  "attached_by",
+  "enclosures_tab",
+  "enclosure_template",
+  "enclosure_checkpoint",
+  "batch_reconciliation_data_sheet_tab",
+  "theoretical_batch_size",
+  "theoretical_yield_batch",
+  "bulk_weight_found_after_manufacturing",
+  "actual_yield_after_manufacturing",
+  "quantity_of_qc_sample_gm",
+  "processloss_during_manufacturing",
+  "total_bulk_weight_handed_over_for_packing",
+  "actual_yield_for_packing",
+  "deviation_report_tab",
+  "any_procedural_deviation",
+  "deviation_held_in_production_qa__me",
+  "action_done__planned",
+  "done_by",
+  "approval",
+  "reference_report_no",
+  "deviation_remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_exmm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "BMR-Batch Manufacturing Report",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "batch_quantity",
+   "fieldtype": "Data",
+   "label": "Batch Quantity"
+  },
+  {
+   "fieldname": "batch_uom",
+   "fieldtype": "Data",
+   "label": "Batch UOM"
+  },
+  {
+   "fieldname": "theoretical_yield",
+   "fieldtype": "Data",
+   "label": "Theoretical Yield"
+  },
+  {
+   "fieldname": "column_break_hfel",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mfg_date",
+   "fieldtype": "Date",
+   "label": "Mfg. Date"
+  },
+  {
+   "fieldname": "exp_date",
+   "fieldtype": "Date",
+   "label": "Exp. Date"
+  },
+  {
+   "fieldname": "section_break_uqtx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "document_issued_by",
+   "fieldtype": "Data",
+   "label": "Document Issued By"
+  },
+  {
+   "fieldname": "column_break_tghs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Issuing Date"
+  },
+  {
+   "fieldname": "document_received_by",
+   "fieldtype": "Data",
+   "label": "Document Received By"
+  },
+  {
+   "fieldname": "receiving_date",
+   "fieldtype": "Date",
+   "label": "Receiving Date"
+  },
+  {
+   "fieldname": "section_break_qhqv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "document_supersedes",
+   "fieldtype": "Data",
+   "label": "Document Supersedes"
+  },
+  {
+   "fieldname": "column_break_ftcd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reason_for_change",
+   "fieldtype": "Data",
+   "label": "Reason for Change"
+  },
+  {
+   "fieldname": "fssai_mfg_license_no",
+   "fieldtype": "Int",
+   "label": "FSSAI Mfg. License No."
+  },
+  {
+   "fieldname": "product_code_no",
+   "fieldtype": "Link",
+   "label": "Product Code No.",
+   "options": "Item"
+  },
+  {
+   "fieldname": "shelf_life",
+   "fieldtype": "Data",
+   "label": "Shelf Life"
+  },
+  {
+   "fieldname": "storage_conditions",
+   "fieldtype": "Small Text",
+   "label": "Storage Conditions"
+  },
+  {
+   "fieldname": "manufactured_for",
+   "fieldtype": "Link",
+   "label": "Manufactured for",
+   "options": "Company"
+  },
+  {
+   "fieldname": "section_break_xtvh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "date_of_commencement",
+   "fieldtype": "Date",
+   "label": "Date of Commencement"
+  },
+  {
+   "fieldname": "column_break_mofy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_of_completion",
+   "fieldtype": "Date",
+   "label": "Date of Completion"
+  },
+  {
+   "fieldname": "area_used",
+   "fieldtype": "Data",
+   "label": "Area Used"
+  },
+  {
+   "fieldname": "previous_product",
+   "fieldtype": "Data",
+   "label": "Previous Product"
+  },
+  {
+   "fieldname": "batch_no",
+   "fieldtype": "Data",
+   "label": "Batch No."
+  },
+  {
+   "fieldname": "checked_by",
+   "fieldtype": "Data",
+   "label": "Checked By"
+  },
+  {
+   "fieldname": "checking_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "section_break_txlg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "actual_yield",
+   "fieldtype": "Data",
+   "label": "Actual Yield"
+  },
+  {
+   "fieldname": "column_break_cixr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_yield",
+   "fieldtype": "Data",
+   "label": "Total Yield"
+  },
+  {
+   "fieldname": "date_of_packing",
+   "fieldtype": "Date",
+   "label": "Date of Packing"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "final_checked_by",
+   "fieldtype": "Data",
+   "label": "Checked By"
+  },
+  {
+   "fieldname": "final_checking_date",
+   "fieldtype": "Date",
+   "label": "Checking Date"
+  },
+  {
+   "fieldname": "reviewed_by",
+   "fieldtype": "Data",
+   "label": "Reviewed By"
+  },
+  {
+   "fieldname": "reviewing_date",
+   "fieldtype": "Date",
+   "label": "Reviewing Date"
+  },
+  {
+   "fieldname": "revision_history_tab",
+   "fieldtype": "Tab Break",
+   "label": "Revision History"
+  },
+  {
+   "fieldname": "revision_history",
+   "fieldtype": "Table",
+   "label": "Revision History",
+   "options": "Revision History"
+  },
+  {
+   "fieldname": "blend_output_tab",
+   "fieldtype": "Tab Break",
+   "label": "Blend Output"
+  },
+  {
+   "fieldname": "balance_id_no",
+   "fieldtype": "Data",
+   "label": "Balance Id No"
+  },
+  {
+   "fieldname": "blend_output",
+   "fieldtype": "Table",
+   "label": "Blend Output",
+   "options": "Blend Output"
+  },
+  {
+   "fieldname": "batch_reconciliation_data_sheet_tab",
+   "fieldtype": "Tab Break",
+   "label": "Batch Reconciliation Data Sheet"
+  },
+  {
+   "fieldname": "theoretical_batch_size",
+   "fieldtype": "Data",
+   "label": "Theoretical Batch Size"
+  },
+  {
+   "fieldname": "theoretical_yield_batch",
+   "fieldtype": "Data",
+   "label": "Theoretical Yield"
+  },
+  {
+   "fieldname": "bulk_weight_found_after_manufacturing",
+   "fieldtype": "Float",
+   "label": "Bulk Weight found after manufacturing"
+  },
+  {
+   "fieldname": "actual_yield_after_manufacturing",
+   "fieldtype": "Data",
+   "label": "Actual Yield after manufacturing"
+  },
+  {
+   "fieldname": "quantity_of_qc_sample_gm",
+   "fieldtype": "Float",
+   "label": "Quantity of QC sample (gm)"
+  },
+  {
+   "fieldname": "processloss_during_manufacturing",
+   "fieldtype": "Data",
+   "label": "Process loss during manufacturing"
+  },
+  {
+   "fieldname": "total_bulk_weight_handed_over_for_packing",
+   "fieldtype": "Data",
+   "label": "Total Bulk weight handed over for packing"
+  },
+  {
+   "fieldname": "actual_yield_for_packing",
+   "fieldtype": "Data",
+   "label": "Actual Yield for Packing"
+  },
+  {
+   "fieldname": "bill_of_material_weighing_record_tab",
+   "fieldtype": "Tab Break",
+   "label": "Bill Of Material/Weighing Record"
+  },
+  {
+   "fieldname": "issue_raw_material_as_per_sop_no",
+   "fieldtype": "Data",
+   "label": "Issue Raw Material as per SOP No."
+  },
+  {
+   "fieldname": "balance_no",
+   "fieldtype": "Data",
+   "label": "Balance ID No."
+  },
+  {
+   "fieldname": "temp",
+   "fieldtype": "Data",
+   "label": "Temp"
+  },
+  {
+   "fieldname": "humidity",
+   "fieldtype": "Data",
+   "label": "Humidity"
+  },
+  {
+   "fieldname": "section_break_wdtx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "requisition_given_by",
+   "fieldtype": "Data",
+   "label": "Requisition given by"
+  },
+  {
+   "fieldname": "column_break_kbvw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "requisition_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "area_cleanliness_checked_by",
+   "fieldtype": "Data",
+   "label": "Area Cleanliness Checked by"
+  },
+  {
+   "fieldname": "cleanlineschecking_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "store",
+   "fieldtype": "Data",
+   "label": "Store"
+  },
+  {
+   "fieldname": "storage_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "previous_product_1",
+   "fieldtype": "Data",
+   "label": "Previous Product"
+  },
+  {
+   "fieldname": "material_required_on",
+   "fieldtype": "Date",
+   "label": "Material Required on"
+  },
+  {
+   "fieldname": "b_no",
+   "fieldtype": "Data",
+   "label": "B. No."
+  },
+  {
+   "fieldname": "issued_on",
+   "fieldtype": "Date",
+   "label": "Issued On"
+  },
+  {
+   "fieldname": "production",
+   "fieldtype": "Data",
+   "label": "Production"
+  },
+  {
+   "fieldname": "line_clearance_for_dispensing_area_tab",
+   "fieldtype": "Tab Break",
+   "label": "Line Clearance for Dispensing Area"
+  },
+  {
+   "fieldname": "line_clearance_template",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Line Clearance Template",
+   "options": "Line Clearance for Dispensing Area"
+  },
+  {
+   "fieldname": "line_clearance",
+   "fieldtype": "Table",
+   "label": "Line Clearance ",
+   "options": "Line Clearance Template"
+  },
+  {
+   "fieldname": "previous_product_line",
+   "fieldtype": "Data",
+   "label": "Previous Product"
+  },
+  {
+   "fieldname": "section_break_ubbe",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_qvzg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "batch_no_line",
+   "fieldtype": "Date",
+   "label": "Batch No"
+  },
+  {
+   "fieldname": "area_cleaned_by",
+   "fieldtype": "Data",
+   "label": "Area Cleaned By"
+  },
+  {
+   "fieldname": "line_clearance_cleaned_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "cleanliness_checked_by",
+   "fieldtype": "Data",
+   "label": "Cleanliness Checked By"
+  },
+  {
+   "fieldname": "cleanliness_checked_by_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "balance_id__no",
+   "fieldtype": "Data",
+   "label": "Balance Id  No"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "signature_production",
+   "fieldtype": "Data",
+   "label": "Signature (Production)"
+  },
+  {
+   "fieldname": "section_break_iyba",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_udeq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_time_production",
+   "fieldtype": "Datetime",
+   "label": "Date & Time (Production)"
+  },
+  {
+   "fieldname": "signature_ipqa",
+   "fieldtype": "Data",
+   "label": "Signature (IPQA)"
+  },
+  {
+   "fieldname": "date_time_ipqa",
+   "fieldtype": "Datetime",
+   "label": "Date & Time (IPQA)"
+  },
+  {
+   "fieldname": "line_clearance_of_powder_manufacturing_tab",
+   "fieldtype": "Tab Break",
+   "label": "Line Clearance of Powder Manufacturing"
+  },
+  {
+   "fieldname": "line_clearance_given_by_as_per_sop",
+   "fieldtype": "Data",
+   "label": "Line Clearance given by as per SOP"
+  },
+  {
+   "fieldname": "certified_date_time",
+   "fieldtype": "Datetime",
+   "label": "Certified by (Q.A.) Date & Time"
+  },
+  {
+   "fieldname": "previous_product_powder",
+   "fieldtype": "Data",
+   "label": "Previous Product"
+  },
+  {
+   "fieldname": "batch_no_powder",
+   "fieldtype": "Data",
+   "label": "Batch No"
+  },
+  {
+   "fieldname": "check_point_section",
+   "fieldtype": "Section Break",
+   "label": "Check Point"
+  },
+  {
+   "fieldname": "check_rinse_test_of_equipment_is_done_qc_report_available",
+   "fieldtype": "Select",
+   "label": "Check Rinse Test of equipment is done & QC report available",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "check_general_cleanliness_and_housekeeping_of_the_area",
+   "fieldtype": "Select",
+   "label": "Check General Cleanliness and housekeeping of the area",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "check_any_person_exposed_to_the_product",
+   "fieldtype": "Select",
+   "label": "Check any person exposed to the product is not suffering from disease and open wound",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "check_cleaning_of_duct_filter_equipment",
+   "fieldtype": "Select",
+   "label": "Check cleaning of duct filter, Equipment surface, Blander platform walls, floor and corners are Satisfactory",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "check_testing_equipment_such_as_wet_and_dry",
+   "fieldtype": "Select",
+   "label": "Check testing equipment such as wet and dry bulb thermometers and other measuring tools are calibrated and verified",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "check_weighing_balance_verified_recorded",
+   "fieldtype": "Select",
+   "label": "Check weighing balance verified & recorded",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "check_all_tools_are_properly_clean_in_good_condition",
+   "fieldtype": "Select",
+   "label": "Check all tools are properly clean & in good condition",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "check_no_leakage_in_sifter",
+   "fieldtype": "Select",
+   "label": "Check no leakage in sifter",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "check_adequate_light_in_area",
+   "fieldtype": "Select",
+   "label": "Check adequate light in area",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "check_the_waste_bins_are_empty_and_labeled_properly",
+   "fieldtype": "Select",
+   "label": "Check the waste bins are empty and labeled properly",
+   "options": "\nSatisfactory\nNot Satisfactory\nNot Applicable (NA)"
+  },
+  {
+   "fieldname": "seive_integrity_tab",
+   "fieldtype": "Tab Break",
+   "label": "Sieve Integrity"
+  },
+  {
+   "fieldname": "seive_id",
+   "fieldtype": "Data",
+   "label": "Sieve ID"
+  },
+  {
+   "fieldname": "sieve_integrity",
+   "fieldtype": "Table",
+   "label": "Sieve Integrity",
+   "options": "Sieve Integrity"
+  },
+  {
+   "fieldname": "frequency",
+   "fieldtype": "Section Break",
+   "label": "Frequency: After Every Two Hours"
+  },
+  {
+   "fieldname": "sieve_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "time",
+   "fieldtype": "Time",
+   "label": "Time"
+  },
+  {
+   "fieldname": "sieve_integrity_template",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Sieve Integrity Template",
+   "options": "Sieve Integrity Template"
+  },
+  {
+   "fieldname": "sieve_integrity_template_results",
+   "fieldtype": "Table",
+   "label": "Sieve Integrity Template Results",
+   "options": "Sieve Integrity Template Child"
+  },
+  {
+   "fieldname": "signature_sieve_pro",
+   "fieldtype": "Data",
+   "label": "Signature (Production)"
+  },
+  {
+   "fieldname": "date_sieve_pro",
+   "fieldtype": "Date",
+   "label": "Date (Production)"
+  },
+  {
+   "fieldname": "signature_sieve_ipqa",
+   "fieldtype": "Data",
+   "label": "Signature (IPQA)"
+  },
+  {
+   "fieldname": "date_sieve_ipqa",
+   "fieldtype": "Date",
+   "label": "Date (IPQA)"
+  },
+  {
+   "fieldname": "section_break_xbxy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_ziun",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dispensing_label_record_tab",
+   "fieldtype": "Tab Break",
+   "label": "Dispensing Label Record"
+  },
+  {
+   "description": "Collect all dispensed raw material & attached to BMR",
+   "fieldname": "dispensing_label",
+   "fieldtype": "Attach",
+   "label": "Dispensing Label"
+  },
+  {
+   "fieldname": "no_of_label",
+   "fieldtype": "Data",
+   "label": "No. of Label"
+  },
+  {
+   "fieldname": "production_on",
+   "fieldtype": "Date",
+   "label": "Production on "
+  },
+  {
+   "fieldname": "attached_by",
+   "fieldtype": "Data",
+   "label": "Attached by"
+  },
+  {
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "label": "Product Name"
+  },
+  {
+   "fieldname": "product_code",
+   "fieldtype": "Link",
+   "label": "Product Code",
+   "options": "Item"
+  },
+  {
+   "fieldname": "master_card_no",
+   "fieldtype": "Data",
+   "label": "Master Card No."
+  },
+  {
+   "fieldname": "shelf_life_letter_head",
+   "fieldtype": "Data",
+   "label": "Shelf Life"
+  },
+  {
+   "fieldname": "column_break_iuou",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "batch_no_letter_head",
+   "fieldtype": "Data",
+   "label": "Batch No."
+  },
+  {
+   "fieldname": "batch_size",
+   "fieldtype": "Data",
+   "label": "Batch Size"
+  },
+  {
+   "fieldname": "revision_no",
+   "fieldtype": "Int",
+   "label": "Revision No."
+  },
+  {
+   "fieldname": "enclosures_tab",
+   "fieldtype": "Tab Break",
+   "label": "Enclosures"
+  },
+  {
+   "fieldname": "enclosure_template",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Enclosure Template",
+   "options": "Enclosures Template"
+  },
+  {
+   "fieldname": "enclosure_checkpoint",
+   "fieldtype": "Table",
+   "label": "Enclosure Checkpoint",
+   "options": "Enclosure Template Child"
+  },
+  {
+   "fieldname": "deviation_report_tab",
+   "fieldtype": "Tab Break",
+   "label": "Deviation Report"
+  },
+  {
+   "description": "NOTE: Any Breakdown/Deviation to be mentioned with time & action",
+   "fieldname": "any_procedural_deviation",
+   "fieldtype": "Small Text",
+   "label": "Any Procedural Deviation "
+  },
+  {
+   "fieldname": "deviation_held_in_production_qa__me",
+   "fieldtype": "Small Text",
+   "label": "Deviation held in (Production/ QA / ME)"
+  },
+  {
+   "fieldname": "action_done__planned",
+   "fieldtype": "Date",
+   "label": "Action Done / Planned"
+  },
+  {
+   "fieldname": "done_by",
+   "fieldtype": "Data",
+   "label": "Done by:"
+  },
+  {
+   "description": "(Production)(Q.A.)",
+   "fieldname": "approval",
+   "fieldtype": "Data",
+   "label": "Approval:"
+  },
+  {
+   "fieldname": "reference_report_no",
+   "fieldtype": "Data",
+   "label": "Reference Report No."
+  },
+  {
+   "fieldname": "deviation_remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "label_claim_tab",
+   "fieldtype": "Tab Break",
+   "label": "Label Claim"
+  },
+  {
+   "fieldname": "nutritional_information",
+   "fieldtype": "Table",
+   "label": "Nutritional Information",
+   "options": "Nutritional Information"
+  },
+  {
+   "fieldname": "typical_amino_acid_profile",
+   "fieldtype": "Table",
+   "label": "Typical Amino Acid Profile",
+   "options": "Typical Amino Acid Profile"
+  },
+  {
+   "fieldname": "specific_amino_acids_profile",
+   "fieldtype": "Table",
+   "label": "Specific Amino Acids Profile",
+   "options": "Specific Amino Acid - Amino Acids Profile"
+  },
+  {
+   "fieldname": "label_claim",
+   "fieldtype": "Link",
+   "label": "Label Claim",
+   "options": "Label Claim"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-10-07 11:16:36.620358",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "BMR-Batch Manufacturing Report",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,800 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-30 13:15:07.343146",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_vfow",
+  "batch_packing_quantity",
+  "mfg_date",
+  "mfg_license_no",
+  "product_code_no",
+  "storage_condition",
+  "amended_from",
+  "column_break_kcdh",
+  "theoretical_yield",
+  "expiry_date",
+  "pack_size",
+  "shelf_life",
+  "section_break_aiqr",
+  "date_of_commencement",
+  "area_used",
+  "batch_no",
+  "date",
+  "column_break_rmjd",
+  "date_of_completion",
+  "previous_product",
+  "checked_by",
+  "master_packing_sheet_tab",
+  "master_packing_sheet_detail",
+  "revision_history_tab",
+  "revision_history_detail",
+  "line_clearance_for_primary_packing_area_tab",
+  "previous_product_lcppa",
+  "batch_no_lcppa",
+  "column_break_sgtx",
+  "area_cleaned_by",
+  "area_cleaned_date",
+  "cleanliness_checked_by",
+  "cleanliness_checked_date",
+  "section_break_ncjt",
+  "remark",
+  "signature",
+  "signature_with_date_and_time",
+  "packing_material_receiving_tab",
+  "packing_material_receiving_detail",
+  "rh_temp_tab",
+  "frequency_rht",
+  "rh_temp_detail",
+  "primary_packaging_sealing_integrity_tab",
+  "frequency_ppsi",
+  "primary_packaging_sealing_integrity_detail",
+  "line_clearance_for_coding_machine_tab",
+  "machine_id",
+  "product_previous_lccm",
+  "batch_no_lccm",
+  "machine_cleaning_setting_done_by",
+  "section_break_mitp",
+  "machine_setting_check_packing_in_charge",
+  "primary_packing_defects_monitoring_tab",
+  "frequency_ppdm",
+  "line_clearance_for_secondary_packing_area_tab",
+  "area",
+  "batch_no_lcspa",
+  "column_break_zngp",
+  "previous_product_lcspa",
+  "section_break_nwyd",
+  "area_cleaned_by_lcspa",
+  "cleanliness_checked_by_lcspa",
+  "status_updated_by_lcspa",
+  "column_break_nezu",
+  "area_cleaned_date_lcspa",
+  "cleanliness_checked_date_lcspa",
+  "status_updated_date_lcspa",
+  "online_inspectionsecondary_packing_tab",
+  "frequency_oi",
+  "sample_withdrawal_record_tab",
+  "sample_withdrawal_record_detail",
+  "reconcilation_of_packing_material_tab",
+  "excess_label_printed_material_destroyed_by",
+  "excess_label_printed_material_destroyed_date",
+  "excess_material_returnconsumption_memo_tab",
+  "excess_return_section",
+  "excess_return_detail",
+  "excess_consumption_section",
+  "excess_consumption_detail",
+  "section_break_eipk",
+  "material_requested_by",
+  "reason_for_excess_requirement",
+  "section_break_pqdd",
+  "packing_in_charge",
+  "material_issued_by",
+  "quality_in_charge",
+  "quality_manager",
+  "shipper_weighing_tab",
+  "balance_id_no",
+  "column_break_abha",
+  "std_weight",
+  "section_break_nhtq",
+  "shipper_weighing_detail",
+  "qc_finished_sample_intimation_srs_no",
+  "section_break_xvtb",
+  "performed_by_sign_date",
+  "checked_by_sign_date",
+  "verified_by_sign_date",
+  "finished_goods_check_list_for_shipper_record_tab",
+  "finished_goods_check_list_for_shipper_record_detail",
+  "remarks",
+  "section_break_udcs",
+  "performed_by_sign_date_fgclsr",
+  "checked_by_sign_date_fgclsr",
+  "verified_by_sign_date_fgclsr",
+  "bar_weight_during_fg_inspection_tab",
+  "balance_id_no_bwfgi",
+  "column_break_ykkr",
+  "std_weight_bwfgi",
+  "section_break_vdsi",
+  "bar_weight_during_fg_inspection_detail",
+  "deviation_report_tab",
+  "any_procedural_deviation",
+  "section_break_spfe",
+  "deviation_held_in_productionqame",
+  "action_doneplanned",
+  "done_by",
+  "approval",
+  "production_qa",
+  "section_break_rkmj",
+  "reference_report_no",
+  "remarks_dr",
+  "section_break_hxng",
+  "performed_by_sign_date_dr",
+  "checked_by_sign_date_dr",
+  "verified_by_sign_date_dr"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_vfow",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Batch Packaging Record - BPR",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "batch_packing_quantity",
+   "fieldtype": "Date",
+   "label": "Batch Packing Quantity"
+  },
+  {
+   "fieldname": "column_break_kcdh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "theoretical_yield",
+   "fieldtype": "Data",
+   "label": "Theoretical Yield"
+  },
+  {
+   "fieldname": "expiry_date",
+   "fieldtype": "Date",
+   "label": "Expiry Date"
+  },
+  {
+   "fieldname": "pack_size",
+   "fieldtype": "Data",
+   "label": "Pack Size"
+  },
+  {
+   "fieldname": "mfg_date",
+   "fieldtype": "Date",
+   "label": "Mfg. Date"
+  },
+  {
+   "fieldname": "product_code_no",
+   "fieldtype": "Data",
+   "label": "Product Code No."
+  },
+  {
+   "fieldname": "shelf_life",
+   "fieldtype": "Int",
+   "label": "Shelf Life"
+  },
+  {
+   "fieldname": "storage_condition",
+   "fieldtype": "Small Text",
+   "label": "Storage Condition"
+  },
+  {
+   "fieldname": "mfg_license_no",
+   "fieldtype": "Int",
+   "label": "Mfg. License No."
+  },
+  {
+   "fieldname": "section_break_aiqr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "date_of_commencement",
+   "fieldtype": "Date",
+   "label": "Date of Commencement"
+  },
+  {
+   "fieldname": "column_break_rmjd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_of_completion",
+   "fieldtype": "Date",
+   "label": "Date of Completion"
+  },
+  {
+   "fieldname": "area_used",
+   "fieldtype": "Data",
+   "label": "Area Used"
+  },
+  {
+   "fieldname": "previous_product",
+   "fieldtype": "Data",
+   "label": "Previous Product"
+  },
+  {
+   "fieldname": "batch_no",
+   "fieldtype": "Data",
+   "label": "Batch No."
+  },
+  {
+   "fieldname": "checked_by",
+   "fieldtype": "Data",
+   "label": "Checked By"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "master_packing_sheet_tab",
+   "fieldtype": "Tab Break",
+   "label": "Master Packing Sheet"
+  },
+  {
+   "fieldname": "master_packing_sheet_detail",
+   "fieldtype": "Table",
+   "label": "Master Packing Sheet Detail",
+   "options": "Master Packing Sheet Detail"
+  },
+  {
+   "fieldname": "revision_history_tab",
+   "fieldtype": "Tab Break",
+   "label": "Revision History"
+  },
+  {
+   "fieldname": "line_clearance_for_primary_packing_area_tab",
+   "fieldtype": "Tab Break",
+   "label": "Line Clearance for Primary Packing Area"
+  },
+  {
+   "fieldname": "packing_material_receiving_tab",
+   "fieldtype": "Tab Break",
+   "label": "Packing Material Receiving"
+  },
+  {
+   "fieldname": "primary_packaging_sealing_integrity_tab",
+   "fieldtype": "Tab Break",
+   "label": "Primary Packaging Sealing Integrity"
+  },
+  {
+   "fieldname": "revision_history_detail",
+   "fieldtype": "Table",
+   "label": "Revision History Detail",
+   "options": "Revision History Detail"
+  },
+  {
+   "fieldname": "area_cleaned_by",
+   "fieldtype": "Data",
+   "label": "Area Cleaned By"
+  },
+  {
+   "fieldname": "area_cleaned_date",
+   "fieldtype": "Date",
+   "label": "Area Cleaned Date"
+  },
+  {
+   "fieldname": "cleanliness_checked_by",
+   "fieldtype": "Data",
+   "label": "Cleanliness Checked By"
+  },
+  {
+   "fieldname": "cleanliness_checked_date",
+   "fieldtype": "Date",
+   "label": "Cleanliness Checked Date"
+  },
+  {
+   "fieldname": "section_break_ncjt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "remark",
+   "fieldtype": "Small Text",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "signature",
+   "fieldtype": "Data",
+   "label": "Signature"
+  },
+  {
+   "fieldname": "signature_with_date_and_time",
+   "fieldtype": "Datetime",
+   "label": "Signature with Date and Time"
+  },
+  {
+   "fieldname": "packing_material_receiving_detail",
+   "fieldtype": "Table",
+   "label": "Packing Material Receiving Detail",
+   "options": "Packing Material Receiving Detail"
+  },
+  {
+   "fieldname": "primary_packaging_sealing_integrity_detail",
+   "fieldtype": "Table",
+   "label": "Primary Packaging Sealing Integrity Detail",
+   "options": "Primary Packaging Sealing Integrity Detail"
+  },
+  {
+   "fieldname": "frequency_rht",
+   "fieldtype": "Data",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "frequency_ppsi",
+   "fieldtype": "Data",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "previous_product_lcppa",
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
+  },
+  {
+   "fieldname": "column_break_sgtx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "batch_no_lcppa",
+   "fieldtype": "Link",
+   "label": "Batch No",
+   "options": "Batch"
+  },
+  {
+   "fieldname": "line_clearance_for_coding_machine_tab",
+   "fieldtype": "Tab Break",
+   "label": "Line Clearance for Coding Machine"
+  },
+  {
+   "fieldname": "machine_id",
+   "fieldtype": "Data",
+   "label": "Machine Id"
+  },
+  {
+   "fieldname": "product_previous_lccm",
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
+  },
+  {
+   "fieldname": "batch_no_lccm",
+   "fieldtype": "Link",
+   "label": "Batch No",
+   "options": "Batch"
+  },
+  {
+   "fieldname": "machine_cleaning_setting_done_by",
+   "fieldtype": "Data",
+   "label": "Machine Cleaning & Setting Done By"
+  },
+  {
+   "fieldname": "rh_temp_tab",
+   "fieldtype": "Tab Break",
+   "label": "RH & Temp"
+  },
+  {
+   "fieldname": "rh_temp_detail",
+   "fieldtype": "Table",
+   "label": "RH & Temp Detail",
+   "options": "RH and Temp Detail"
+  },
+  {
+   "fieldname": "section_break_mitp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "machine_setting_check_packing_in_charge",
+   "fieldtype": "Table",
+   "label": "Machine Setting Check Packing In-charge",
+   "options": "Line Clearance for Coding Machine Detail"
+  },
+  {
+   "fieldname": "primary_packing_defects_monitoring_tab",
+   "fieldtype": "Tab Break",
+   "label": "Primary Packing Defects Monitoring"
+  },
+  {
+   "fieldname": "frequency_ppdm",
+   "fieldtype": "Data",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "line_clearance_for_secondary_packing_area_tab",
+   "fieldtype": "Tab Break",
+   "label": "Line Clearance for Secondary Packing Area"
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Data",
+   "label": "Area"
+  },
+  {
+   "fieldname": "column_break_zngp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "previous_product_lcspa",
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
+  },
+  {
+   "fieldname": "batch_no_lcspa",
+   "fieldtype": "Link",
+   "label": "Batch No",
+   "options": "Batch"
+  },
+  {
+   "fieldname": "area_cleaned_by_lcspa",
+   "fieldtype": "Data",
+   "label": "Area Cleaned By"
+  },
+  {
+   "fieldname": "area_cleaned_date_lcspa",
+   "fieldtype": "Date",
+   "label": "Area Cleaned Date"
+  },
+  {
+   "fieldname": "cleanliness_checked_by_lcspa",
+   "fieldtype": "Data",
+   "label": "Cleanliness Checked By"
+  },
+  {
+   "fieldname": "cleanliness_checked_date_lcspa",
+   "fieldtype": "Date",
+   "label": "Cleanliness Checked Date"
+  },
+  {
+   "fieldname": "section_break_nwyd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_nezu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status_updated_by_lcspa",
+   "fieldtype": "Data",
+   "label": "Status Updated By"
+  },
+  {
+   "fieldname": "status_updated_date_lcspa",
+   "fieldtype": "Date",
+   "label": "Status Updated Date"
+  },
+  {
+   "fieldname": "online_inspectionsecondary_packing_tab",
+   "fieldtype": "Tab Break",
+   "label": "Online Inspection(Secondary Packing)"
+  },
+  {
+   "fieldname": "frequency_oi",
+   "fieldtype": "Data",
+   "label": "Frequency"
+  },
+  {
+   "fieldname": "sample_withdrawal_record_tab",
+   "fieldtype": "Tab Break",
+   "label": "Sample Withdrawal Record"
+  },
+  {
+   "fieldname": "sample_withdrawal_record_detail",
+   "fieldtype": "Table",
+   "label": "Sample Withdrawal Record Detail",
+   "options": "Sample Withdrawal Record Detail"
+  },
+  {
+   "fieldname": "reconcilation_of_packing_material_tab",
+   "fieldtype": "Tab Break",
+   "label": "Reconcilation of Packing Material"
+  },
+  {
+   "fieldname": "excess_label_printed_material_destroyed_by",
+   "fieldtype": "Data",
+   "label": "Excess Label Printed Material Destroyed by"
+  },
+  {
+   "fieldname": "excess_label_printed_material_destroyed_date",
+   "fieldtype": "Date",
+   "label": "Excess Label Printed Material Destroyed Date"
+  },
+  {
+   "fieldname": "excess_material_returnconsumption_memo_tab",
+   "fieldtype": "Tab Break",
+   "label": "Excess Material Return/Consumption Memo"
+  },
+  {
+   "fieldname": "excess_return_section",
+   "fieldtype": "Section Break",
+   "label": "Excess Return"
+  },
+  {
+   "fieldname": "excess_return_detail",
+   "fieldtype": "Table",
+   "label": "Excess Return Detail",
+   "options": "Excess Return Detail"
+  },
+  {
+   "fieldname": "excess_consumption_section",
+   "fieldtype": "Section Break",
+   "label": "Excess Consumption"
+  },
+  {
+   "fieldname": "excess_consumption_detail",
+   "fieldtype": "Table",
+   "label": "Excess Consumption Detail",
+   "options": "Excess Consumption Detail"
+  },
+  {
+   "fieldname": "section_break_eipk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "material_requested_by",
+   "fieldtype": "Data",
+   "label": "Material Requested By"
+  },
+  {
+   "fieldname": "reason_for_excess_requirement",
+   "fieldtype": "Small Text",
+   "label": "Reason for Excess Requirement"
+  },
+  {
+   "fieldname": "section_break_pqdd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "packing_in_charge",
+   "fieldtype": "Data",
+   "label": "Packing In-charge"
+  },
+  {
+   "fieldname": "material_issued_by",
+   "fieldtype": "Data",
+   "label": "Material Issued By"
+  },
+  {
+   "fieldname": "quality_in_charge",
+   "fieldtype": "Data",
+   "label": "Quality In-charge"
+  },
+  {
+   "fieldname": "quality_manager",
+   "fieldtype": "Data",
+   "label": "Quality Manager"
+  },
+  {
+   "fieldname": "shipper_weighing_tab",
+   "fieldtype": "Tab Break",
+   "label": "Shipper Weighing"
+  },
+  {
+   "fieldname": "balance_id_no",
+   "fieldtype": "Data",
+   "label": "Balance ID No"
+  },
+  {
+   "fieldname": "column_break_abha",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "std_weight",
+   "fieldtype": "Data",
+   "label": "Std. Weight"
+  },
+  {
+   "fieldname": "section_break_nhtq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "(If Loose shipper. mention the quantity of wrappers as well) ",
+   "fieldname": "shipper_weighing_detail",
+   "fieldtype": "Table",
+   "label": "Shipper Weighing Detail",
+   "options": "Shipper Weighing Detail"
+  },
+  {
+   "fieldname": "qc_finished_sample_intimation_srs_no",
+   "fieldtype": "Data",
+   "label": "Q.C. Finished Sample Intimation (SRS) No"
+  },
+  {
+   "fieldname": "section_break_xvtb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_sign_date",
+   "fieldtype": "Data",
+   "label": "Performed by Sign & Date"
+  },
+  {
+   "fieldname": "checked_by_sign_date",
+   "fieldtype": "Data",
+   "label": "Checked by Sign & Date"
+  },
+  {
+   "fieldname": "verified_by_sign_date",
+   "fieldtype": "Data",
+   "label": "Verified by Sign & Date"
+  },
+  {
+   "fieldname": "finished_goods_check_list_for_shipper_record_tab",
+   "fieldtype": "Tab Break",
+   "label": "Finished Goods Check List for Shipper Record"
+  },
+  {
+   "fieldname": "finished_goods_check_list_for_shipper_record_detail",
+   "fieldtype": "Table",
+   "label": "Finished Goods Check List for Shipper Record Detail",
+   "options": "Finished Goods Check List for Shipper Record Detail"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "section_break_udcs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_sign_date_fgclsr",
+   "fieldtype": "Data",
+   "label": "Performed by Sign Date"
+  },
+  {
+   "fieldname": "checked_by_sign_date_fgclsr",
+   "fieldtype": "Data",
+   "label": "Checked by Sign Date"
+  },
+  {
+   "fieldname": "verified_by_sign_date_fgclsr",
+   "fieldtype": "Data",
+   "label": "Verified by Sign Date"
+  },
+  {
+   "fieldname": "bar_weight_during_fg_inspection_tab",
+   "fieldtype": "Tab Break",
+   "label": "Bar Weight During FG Inspection"
+  },
+  {
+   "fieldname": "balance_id_no_bwfgi",
+   "fieldtype": "Data",
+   "label": "Balance ID No"
+  },
+  {
+   "fieldname": "column_break_ykkr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "std_weight_bwfgi",
+   "fieldtype": "Data",
+   "label": "Std. Weight"
+  },
+  {
+   "fieldname": "section_break_vdsi",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "bar_weight_during_fg_inspection_detail",
+   "fieldtype": "Table",
+   "label": "Bar Weight During FG Inspection Detail",
+   "options": "Bar Weight During FG Inspection Detail"
+  },
+  {
+   "fieldname": "deviation_report_tab",
+   "fieldtype": "Tab Break",
+   "label": "Deviation Report"
+  },
+  {
+   "description": "(Note: Any Breakdown/Deviation to be mentioned with time reason & action)",
+   "fieldname": "any_procedural_deviation",
+   "fieldtype": "Small Text",
+   "label": "Any Procedural Deviation"
+  },
+  {
+   "fieldname": "section_break_spfe",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "deviation_held_in_productionqame",
+   "fieldtype": "Small Text",
+   "label": "Deviation held in (Production/QA/ME)"
+  },
+  {
+   "fieldname": "action_doneplanned",
+   "fieldtype": "Data",
+   "label": "Action Done/Planned"
+  },
+  {
+   "fieldname": "done_by",
+   "fieldtype": "Data",
+   "label": "Done By"
+  },
+  {
+   "fieldname": "approval",
+   "fieldtype": "Data",
+   "label": "Approval"
+  },
+  {
+   "fieldname": "production_qa",
+   "fieldtype": "Data",
+   "label": "(Production) (Q.A.)"
+  },
+  {
+   "fieldname": "section_break_rkmj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "reference_report_no",
+   "fieldtype": "Data",
+   "label": "Reference Report No."
+  },
+  {
+   "description": "(Note: Above section is to be completed post filling & before releasing of batch)",
+   "fieldname": "remarks_dr",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "section_break_hxng",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_sign_date_dr",
+   "fieldtype": "Data",
+   "label": "Performed by Sign & Date"
+  },
+  {
+   "fieldname": "checked_by_sign_date_dr",
+   "fieldtype": "Data",
+   "label": "Checked by Sign & Date"
+  },
+  {
+   "fieldname": "verified_by_sign_date_dr",
+   "fieldtype": "Data",
+   "label": "Verified by Sign & Date"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-10-08 13:29:02.243240",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Batch Packaging Record - BPR",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

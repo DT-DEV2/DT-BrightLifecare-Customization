@@ -1,0 +1,58 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-03 12:02:40.624127",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "properties",
+  "in_process_when_int_is_being_made",
+  "bulk_analysis_when_int_is_completed",
+  "finished_good_when_znut_is_being_packed"
+ ],
+ "fields": [
+  {
+   "fieldname": "properties",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Properties"
+  },
+  {
+   "fieldname": "in_process_when_int_is_being_made",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "In Process (When INT is being made)"
+  },
+  {
+   "fieldname": "bulk_analysis_when_int_is_completed",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Bulk Analysis (When INT is completed)"
+  },
+  {
+   "fieldname": "finished_good_when_znut_is_being_packed",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Finished Good (When ZNUT is being packed)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-10-03 12:10:35.170389",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "QC Sensory Child",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
