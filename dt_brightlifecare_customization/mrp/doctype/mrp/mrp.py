@@ -9,6 +9,20 @@ from frappe.utils import now_datetime, flt, get_time, getdate, nowdate, add_days
 from datetime import datetime, timedelta
 import time
 
+from erpnext.manufacturing.doctype.work_order.work_order import make_stock_entry
+
+
+def _get_wip_warehouse(fg_warehouse):
+    """Return custom WIP warehouse configured on the finished good warehouse."""
+    if not fg_warehouse:
+        return None
+
+    return frappe.db.get_value(
+        "Warehouse",
+        fg_warehouse,
+        "custom_workinprogress_warehouse",
+    )
+
 class MRP(Document):
     def on_submit(self):
         create_mrp_reservation_entries(self)
@@ -273,6 +287,8 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 	from erpnext.stock.doctype.batch.batch import get_batch_qty
 	from frappe.utils import getdate, nowdate
 	import json
+	
+	explode_bom(mrp_name)
 
 	if isinstance(warehouses, str):
 		try:
@@ -592,6 +608,8 @@ def make_material_request(mrp_name):
     mrp = frappe.get_doc("MRP", mrp_name)
 
     created = []
+    work_orders_created = []
+    stock_entries_created = []
 
 
     # Build per-row entries so we can set custom_mrp_raw_material_item accurately
@@ -692,6 +710,8 @@ def make_work_orders(mrp_name):
     mrp = frappe.get_doc("MRP", mrp_name)
 
     created = []
+    work_orders_created = []
+    stock_entries_created = []
     for row in mrp.get("material_request_items", []):
         if not row.get("bom_no") or flt(row.get("material_requested_qty") or 0) <= 0:
             continue
@@ -702,15 +722,30 @@ def make_work_orders(mrp_name):
         wo.bom_no = row.bom_no
         wo.qty = flt(row.material_requested_qty)
         # Use destination warehouse on the MR row as FG warehouse if available
-        wo.fg_warehouse = row.get("warehouse")
+        fg_warehouse = row.get("warehouse")
+        wo.fg_warehouse = fg_warehouse
+        if not fg_warehouse:
+            frappe.throw(_(f"Finished Goods Warehouse is mandatory for Work Order of item {row.item_code}."))
+
+        wip_warehouse = _get_wip_warehouse(fg_warehouse)
+        if not wip_warehouse:
+            frappe.throw(_(f"Configure Custom Work In Progress Warehouse for {fg_warehouse} to create Work Orders."))
+        wo.wip_warehouse = wip_warehouse
         # Planned dates
         wo.planned_start_date = nowdate()
+        wo.use_multi_level_bom = 0
 
         # Link back to MRP if custom field exists
         if frappe.get_meta("Work Order").get_field("custom_mrp"):
             wo.set("custom_mrp", mrp.name)
         wo.insert()
-        created.append({"doctype": "Work Order", "name": wo.name})
+        wo.submit()
+        work_orders_created.append({"doctype": "Work Order", "name": wo.name})
+
+        stock_entry_data = make_stock_entry(wo.name, "Material Transfer for Manufacture")
+        stock_entry_doc = frappe.get_doc(stock_entry_data)
+        stock_entry_doc.insert()
+        stock_entries_created.append({"doctype": "Stock Entry", "name": stock_entry_doc.name})
 
     # Also create Work Orders for Sub Assembly Items where manufacturing type is In House
     for srow in mrp.get("sub_assembly_items", []):
@@ -725,12 +760,39 @@ def make_work_orders(mrp_name):
         wo.production_item = srow.production_item
         wo.bom_no = srow.bom_no
         wo.qty = flt(srow.qty)
-        wo.fg_warehouse = srow.get("fg_warehouse")
+        fg_warehouse = srow.get("fg_warehouse")
+        wo.fg_warehouse = fg_warehouse
+        if not fg_warehouse:
+            frappe.throw(_(f"Finished Goods Warehouse is mandatory for Work Order of item {srow.production_item}."))
+
+        wip_warehouse = _get_wip_warehouse(fg_warehouse)
+        if not wip_warehouse:
+            frappe.throw(_(f"Configure Custom Work In Progress Warehouse for {fg_warehouse} to create Work Orders."))
+        wo.wip_warehouse = wip_warehouse
         wo.planned_start_date = nowdate()
+        # wo.use_multi_level_bom = 0
         if frappe.get_meta("Work Order").get_field("custom_mrp"):
             wo.set("custom_mrp", mrp.name)
         wo.insert()
-        created.append({"doctype": "Work Order", "name": wo.name})
+        wo.submit()
+        work_orders_created.append({"doctype": "Work Order", "name": wo.name})
 
-    frappe.msgprint(_(f"Created {len(created)} Work Order(s)."))
+        stock_entry_data = make_stock_entry(wo.name, "Material Transfer for Manufacture")
+        stock_entry_doc = frappe.get_doc(stock_entry_data)
+        stock_entry_doc.insert()
+        stock_entries_created.append({"doctype": "Stock Entry", "name": stock_entry_doc.name})
+
+    created.extend(work_orders_created)
+    created.extend(stock_entries_created)
+
+    if work_orders_created or stock_entries_created:
+        summary_parts = []
+        if work_orders_created:
+            summary_parts.append(_("{0} Work Order(s)").format(len(work_orders_created)))
+        if stock_entries_created:
+            summary_parts.append(_("{0} Stock Entry(s)").format(len(stock_entries_created)))
+        frappe.msgprint(_("Created {0}.").format(" and ".join(summary_parts)))
+    else:
+        frappe.msgprint(_("No Work Orders created."))
+
     return {"created": created}
