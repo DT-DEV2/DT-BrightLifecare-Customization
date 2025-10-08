@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-08 11:18:10.193346",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "code__no",
+  "packing_material",
+  "unit",
+  "ar_no",
+  "returned_quantity",
+  "returned_byon",
+  "received_byon"
+ ],
+ "fields": [
+  {
+   "fieldname": "code__no",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Code  No.",
+   "options": "Item"
+  },
+  {
+   "fieldname": "packing_material",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Packing Material"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Unit",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "ar_no",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "A.R. No.",
+   "options": "Quality Inspection"
+  },
+  {
+   "fieldname": "returned_quantity",
+   "fieldtype": "Float",
+   "label": "Returned Quantity"
+  },
+  {
+   "fieldname": "returned_byon",
+   "fieldtype": "Data",
+   "label": "Returned By/On"
+  },
+  {
+   "fieldname": "received_byon",
+   "fieldtype": "Data",
+   "label": "Received By/On"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-10-08 11:21:02.791145",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Excess Return Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
