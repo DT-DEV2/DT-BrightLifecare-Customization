@@ -1,6 +1,10 @@
 import frappe
 from frappe.utils import flt
 from frappe import _
+from dt_brightlifecare_customization.mrp.doctype.mrp.mrp import (
+    explode_bom,
+    get_sub_assembly_items,
+)
 
 
 @frappe.whitelist()
@@ -54,6 +58,9 @@ def create_mrp(material_request, use_defaults=False):
         })
 
     new_mrp_doc.insert()
+    # Populate sub-assemblies and raw materials automatically for the new MRP
+    get_sub_assembly_items(new_mrp_doc.name)
+    explode_bom(new_mrp_doc.name)
 
     return new_mrp_doc.as_dict()
 

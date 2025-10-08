@@ -114,6 +114,7 @@
    "description": "This will explode the above BOMs to retrieve raw material and packing material details for both finished goods and semi-finished goods.",
    "fieldname": "explode_bom",
    "fieldtype": "Button",
+   "hidden": 1,
    "label": "Explode BOM"
   },
   {
@@ -168,6 +169,7 @@
   {
    "fieldname": "get_sub_assembly_items",
    "fieldtype": "Button",
+   "hidden": 1,
    "label": "Get Sub Assembly Items"
   }
  ],
@@ -192,7 +194,7 @@
    "link_fieldname": "custom_mrp"
   }
  ],
- "modified": "2025-09-17 12:17:31.641401",
+ "modified": "2025-09-26 15:14:30.986481",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",
