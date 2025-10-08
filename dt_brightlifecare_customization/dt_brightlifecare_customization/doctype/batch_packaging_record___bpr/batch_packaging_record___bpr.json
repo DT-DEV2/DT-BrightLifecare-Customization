@@ -109,7 +109,28 @@
   "section_break_udcs",
   "performed_by_sign_date_fgclsr",
   "checked_by_sign_date_fgclsr",
-  "verified_by_sign_date_fgclsr"
+  "verified_by_sign_date_fgclsr",
+  "bar_weight_during_fg_inspection_tab",
+  "balance_id_no_bwfgi",
+  "column_break_ykkr",
+  "std_weight_bwfgi",
+  "section_break_vdsi",
+  "bar_weight_during_fg_inspection_detail",
+  "deviation_report_tab",
+  "any_procedural_deviation",
+  "section_break_spfe",
+  "deviation_held_in_productionqame",
+  "action_doneplanned",
+  "done_by",
+  "approval",
+  "production_qa",
+  "section_break_rkmj",
+  "reference_report_no",
+  "remarks_dr",
+  "section_break_hxng",
+  "performed_by_sign_date_dr",
+  "checked_by_sign_date_dr",
+  "verified_by_sign_date_dr"
  ],
  "fields": [
   {
@@ -643,13 +664,116 @@
    "fieldname": "verified_by_sign_date_fgclsr",
    "fieldtype": "Data",
    "label": "Verified by Sign Date"
+  },
+  {
+   "fieldname": "bar_weight_during_fg_inspection_tab",
+   "fieldtype": "Tab Break",
+   "label": "Bar Weight During FG Inspection"
+  },
+  {
+   "fieldname": "balance_id_no_bwfgi",
+   "fieldtype": "Data",
+   "label": "Balance ID No"
+  },
+  {
+   "fieldname": "column_break_ykkr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "std_weight_bwfgi",
+   "fieldtype": "Data",
+   "label": "Std. Weight"
+  },
+  {
+   "fieldname": "section_break_vdsi",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "bar_weight_during_fg_inspection_detail",
+   "fieldtype": "Table",
+   "label": "Bar Weight During FG Inspection Detail",
+   "options": "Bar Weight During FG Inspection Detail"
+  },
+  {
+   "fieldname": "deviation_report_tab",
+   "fieldtype": "Tab Break",
+   "label": "Deviation Report"
+  },
+  {
+   "description": "(Note: Any Breakdown/Deviation to be mentioned with time reason & action)",
+   "fieldname": "any_procedural_deviation",
+   "fieldtype": "Small Text",
+   "label": "Any Procedural Deviation"
+  },
+  {
+   "fieldname": "section_break_spfe",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "deviation_held_in_productionqame",
+   "fieldtype": "Small Text",
+   "label": "Deviation held in (Production/QA/ME)"
+  },
+  {
+   "fieldname": "action_doneplanned",
+   "fieldtype": "Data",
+   "label": "Action Done/Planned"
+  },
+  {
+   "fieldname": "done_by",
+   "fieldtype": "Data",
+   "label": "Done By"
+  },
+  {
+   "fieldname": "approval",
+   "fieldtype": "Data",
+   "label": "Approval"
+  },
+  {
+   "fieldname": "production_qa",
+   "fieldtype": "Data",
+   "label": "(Production) (Q.A.)"
+  },
+  {
+   "fieldname": "section_break_rkmj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "reference_report_no",
+   "fieldtype": "Data",
+   "label": "Reference Report No."
+  },
+  {
+   "description": "(Note: Above section is to be completed post filling & before releasing of batch)",
+   "fieldname": "remarks_dr",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "section_break_hxng",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_sign_date_dr",
+   "fieldtype": "Data",
+   "label": "Performed by Sign & Date"
+  },
+  {
+   "fieldname": "checked_by_sign_date_dr",
+   "fieldtype": "Data",
+   "label": "Checked by Sign & Date"
+  },
+  {
+   "fieldname": "verified_by_sign_date_dr",
+   "fieldtype": "Data",
+   "label": "Verified by Sign & Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-08 11:53:56.731318",
+ "modified": "2025-10-08 13:29:02.243240",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
