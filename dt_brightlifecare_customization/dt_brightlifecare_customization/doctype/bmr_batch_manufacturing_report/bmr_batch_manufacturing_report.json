@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:{batch_no_letter_head}-{product_code}",
  "creation": "2025-09-26 12:43:09.152719",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -15,7 +16,7 @@
   "revision_no",
   "reference_name",
   "section_break_exmm",
-  "batch_quantity",
+  "bom_quantity",
   "batch_uom",
   "amended_from",
   "column_break_hfel",
@@ -180,11 +181,6 @@
    "search_index": 1
   },
   {
-   "fieldname": "batch_quantity",
-   "fieldtype": "Data",
-   "label": "Batch Quantity"
-  },
-  {
    "fieldname": "batch_uom",
    "fieldtype": "Link",
    "label": "Batch UOM",
@@ -229,8 +225,9 @@
   },
   {
    "fieldname": "document_received_by",
-   "fieldtype": "Data",
-   "label": "Document Received By"
+   "fieldtype": "Link",
+   "label": "Document Received By",
+   "options": "User"
   },
   {
    "fieldname": "receiving_date",
@@ -423,7 +420,6 @@
    "label": "Bulk Weight found after manufacturing (Kg)"
   },
   {
-   "description": "(Limit: 99.00-100.00%)",
    "fieldname": "actual_yield_after_manufacturing",
    "fieldtype": "Data",
    "label": "Actual Yield after manufacturing (%)"
@@ -444,7 +440,6 @@
    "label": "Total Bulk weight handed over for packing (Kg)"
   },
   {
-   "description": "(Limit: 99.00-100.00%)",
    "fieldname": "actual_yield_for_packing",
    "fieldtype": "Data",
    "label": "Actual Yield for Packing"
@@ -827,13 +822,15 @@
   {
    "fieldname": "product_name",
    "fieldtype": "Data",
-   "label": "Product Name"
+   "label": "Product Name",
+   "read_only": 1
   },
   {
    "fieldname": "product_code",
    "fieldtype": "Link",
    "label": "Product Code",
-   "options": "Item"
+   "options": "Item",
+   "read_only": 1
   },
   {
    "fieldname": "master_card_no",
@@ -843,7 +840,8 @@
   {
    "fieldname": "shelf_life_letter_head",
    "fieldtype": "Data",
-   "label": "Shelf Life"
+   "label": "Shelf Life",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_iuou",
@@ -853,7 +851,8 @@
    "fieldname": "batch_no_letter_head",
    "fieldtype": "Link",
    "label": "Batch No.",
-   "options": "Batch"
+   "options": "Batch",
+   "read_only": 1
   },
   {
    "fieldname": "batch_size",
@@ -958,7 +957,8 @@
    "fieldname": "reference_name",
    "fieldtype": "Link",
    "label": "Reference Work Order",
-   "options": "Work Order"
+   "options": "Work Order",
+   "read_only": 1
   },
   {
    "fieldname": "master_formula_sheet_tab",
@@ -984,18 +984,25 @@
   },
   {
    "fieldname": "flowchart",
-   "fieldtype": "Small Text",
-   "label": "Flowchart"
+   "fieldtype": "Long Text",
+   "label": "Flowchart",
+   "read_only": 1
+  },
+  {
+   "fieldname": "bom_quantity",
+   "fieldtype": "Data",
+   "label": "BOM Quantity"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-09 14:32:00.665827",
+ "modified": "2025-10-09 16:57:33.604430",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

@@ -9,6 +9,7 @@ def on_submit(doc, method):
 
     # Get item details
     item = frappe.get_doc("Item", doc.production_item)
+    warehouse = frappe.get_doc("Warehouse", doc.fg_warehouse)
 
     if not item.get("custom_enable_bmr"):
         return  # BMR creation not enabled for this item
@@ -27,7 +28,7 @@ def on_submit(doc, method):
 
     # Create BMR document
     bmr = frappe.new_doc("BMR-Batch Manufacturing Report")
-
+    bom_doc = frappe.get_doc("BOM", doc.bom_no)
     # ---- Work Order fields ----
     bmr.product_code = doc.production_item
     bmr.product_name = doc.item_name
@@ -35,23 +36,29 @@ def on_submit(doc, method):
 
     # ---- Batch fields ----
     bmr.batch_no_letter_head = batch.name
-    bmr.batch_quantity = batch.batch_qty
     bmr.batch_uom = batch.stock_uom
     bmr.mfg_date = batch.manufacturing_date
     bmr.exp_date = batch.expiry_date
+
+    # ---- BOM fields ----
+    bmr.bom_quantity = bom_doc.quantity
+    bmr.theoretical_yield = bom_doc.custom_theoretical_yield_
+    bmr.theoretical_yield_batch = bom_doc.custom_theoretical_yield_
+
+    # ---- Warehouse fields ----
+    bmr.fssai_mfg_license_no = warehouse.custom_manufcaturing_fssai_license
 
     # ---- Item Master fields ----
     bmr.shelf_life_letter_head = item.shelf_life_in_days
     bmr.shelf_life = item.shelf_life_in_days
     bmr.product_code_no = doc.production_item
-    bmr.fssai_mfg_license_no = item.custom_fssai
     bmr.storage_conditions = item.custom_storage_condition
+    bmr.manufactured_for = doc.company
 
     # ---- System / User fields ----
     bmr.document_issued_by = frappe.session.user
     bmr.date = doc.modified
-    bmr.document_received_by = frappe.session.user
-    bmr.receiving_date = nowdate()
+    
 
     # ---- Fetch BOM items and populate formula_sheet ----
     if doc.bom_no:
@@ -59,12 +66,19 @@ def on_submit(doc, method):
         for bom_item in bom_doc.items:
             bmr.append("formula_sheet", {
                 "material_code": bom_item.item_code,
+                "ingredients": bom_item.item_name,
                 "uom": bom_item.stock_uom,
                 "act_req_qty_as_per_batch": bom_item.get("custom_formulation_quantity") or 0,
                 "overage": bom_item.get("custom_overage_") or 0,
                 "material_req_as_per_batch": bom_item.get("stock_qty") or 0
             })
-
+    # ---- Fetch BOM items and populate sieve_integrity ----
+    if doc.bom_no:
+        bom_doc = frappe.get_doc("BOM", doc.bom_no)
+        for bom_operations in bom_doc.operations:
+            bmr.append("sieve_integrity", {
+                "seive_size": bom_operations.operation,
+            })
     # Save as Draft
     bmr.insert()
     frappe.msgprint(f"BMR created in Draft: <b>{bmr.name}</b>")
