@@ -132,6 +132,8 @@
   "column_break_ziun",
   "date_sieve_pro",
   "date_sieve_ipqa",
+  "flow_chart_of_manufacturing_process_tab",
+  "flowchart",
   "blend_output_tab",
   "balance_id_no",
   "blend_output",
@@ -974,13 +976,23 @@
    "fieldtype": "Link",
    "label": "Batch UOM",
    "options": "UOM"
+  },
+  {
+   "fieldname": "flow_chart_of_manufacturing_process_tab",
+   "fieldtype": "Tab Break",
+   "label": "Flow Chart Of Manufacturing Process"
+  },
+  {
+   "fieldname": "flowchart",
+   "fieldtype": "Small Text",
+   "label": "Flowchart"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-08 17:43:53.871443",
+ "modified": "2025-10-09 14:32:00.665827",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
