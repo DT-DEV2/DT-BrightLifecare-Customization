@@ -16,7 +16,7 @@
   "actual_required_qty",
   "std_qty_per_batch",
   "column_break_yiya",
-  "_oa",
+  "oa",
   "actual_batch_size_qty",
   "unit"
  ],
@@ -61,12 +61,6 @@
    "label": "Std Qty per Batch"
   },
   {
-   "fieldname": "_oa",
-   "fieldtype": "Percent",
-   "in_list_view": 1,
-   "label": "% OA"
-  },
-  {
    "fieldname": "actual_batch_size_qty",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -96,13 +90,19 @@
   {
    "fieldname": "column_break_yiya",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "oa",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "% OA"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-03 14:46:55.464140",
+ "modified": "2025-10-09 10:16:10.175257",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Master Packing Sheet Detail",

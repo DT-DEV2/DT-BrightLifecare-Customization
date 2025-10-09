@@ -5,6 +5,14 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "product_code",
+  "product_name",
+  "master_card_no",
+  "shelf_life_1",
+  "column_break_shbk",
+  "batch_no_1",
+  "batch_size",
+  "revision_no",
   "section_break_vfow",
   "batch_packing_quantity",
   "mfg_date",
@@ -26,11 +34,24 @@
   "date_of_completion",
   "previous_product",
   "checked_by",
+  "section_break_oshb",
+  "qty_received_from_production",
+  "dispatched_quantity",
+  "samples_for_analysis",
+  "column_break_dqda",
+  "actual_quantity_packed",
+  "control_sample",
+  "date_of_packing",
+  "section_break_twmd",
+  "prepared_by_quality_executive",
+  "reviewed_by_production_manager",
+  "approved_by_quality_manager",
   "master_packing_sheet_tab",
   "master_packing_sheet_detail",
   "revision_history_tab",
   "revision_history_detail",
   "line_clearance_for_primary_packing_area_tab",
+  "section_break_ukay",
   "previous_product_lcppa",
   "batch_no_lcppa",
   "column_break_sgtx",
@@ -38,6 +59,9 @@
   "area_cleaned_date",
   "cleanliness_checked_by",
   "cleanliness_checked_date",
+  "section_break_rcfh",
+  "check_point_template",
+  "line_clearance_for_primary_packing_area_detail",
   "section_break_ncjt",
   "remark",
   "signature",
@@ -148,11 +172,6 @@
    "search_index": 1
   },
   {
-   "fieldname": "batch_packing_quantity",
-   "fieldtype": "Date",
-   "label": "Batch Packing Quantity"
-  },
-  {
    "fieldname": "column_break_kcdh",
    "fieldtype": "Column Break"
   },
@@ -177,11 +196,6 @@
    "label": "Mfg. Date"
   },
   {
-   "fieldname": "product_code_no",
-   "fieldtype": "Data",
-   "label": "Product Code No."
-  },
-  {
    "fieldname": "shelf_life",
    "fieldtype": "Int",
    "label": "Shelf Life"
@@ -190,11 +204,6 @@
    "fieldname": "storage_condition",
    "fieldtype": "Small Text",
    "label": "Storage Condition"
-  },
-  {
-   "fieldname": "mfg_license_no",
-   "fieldtype": "Int",
-   "label": "Mfg. License No."
   },
   {
    "fieldname": "section_break_aiqr",
@@ -767,13 +776,149 @@
    "fieldname": "verified_by_sign_date_dr",
    "fieldtype": "Data",
    "label": "Verified by Sign & Date"
+  },
+  {
+   "fieldname": "column_break_shbk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ukay",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "product_code",
+   "fieldtype": "Link",
+   "label": "Product Code",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "product_code.item_name",
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "label": "Product Name"
+  },
+  {
+   "fieldname": "master_card_no",
+   "fieldtype": "Data",
+   "label": "Master Card No"
+  },
+  {
+   "fieldname": "batch_no_1",
+   "fieldtype": "Link",
+   "label": "Batch No.",
+   "options": "Batch"
+  },
+  {
+   "fetch_from": "batch_no_1.batch_qty",
+   "fieldname": "batch_size",
+   "fieldtype": "Data",
+   "label": "Batch Size"
+  },
+  {
+   "fieldname": "revision_no",
+   "fieldtype": "Int",
+   "label": "Revision No."
+  },
+  {
+   "fieldname": "shelf_life_1",
+   "fieldtype": "Data",
+   "label": "Shelf Life"
+  },
+  {
+   "fieldname": "mfg_license_no",
+   "fieldtype": "Data",
+   "label": "Mfg. License No."
+  },
+  {
+   "fieldname": "batch_packing_quantity",
+   "fieldtype": "Data",
+   "label": "Batch Packing Quantity"
+  },
+  {
+   "fieldname": "product_code_no",
+   "fieldtype": "Link",
+   "label": "Product Code No.",
+   "options": "Item"
+  },
+  {
+   "fieldname": "section_break_oshb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "qty_received_from_production",
+   "fieldtype": "Float",
+   "label": "Qty. Received from Production"
+  },
+  {
+   "fieldname": "column_break_dqda",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "actual_quantity_packed",
+   "fieldtype": "Float",
+   "label": "Actual Quantity Packed"
+  },
+  {
+   "fieldname": "dispatched_quantity",
+   "fieldtype": "Float",
+   "label": "Dispatched Quantity"
+  },
+  {
+   "fieldname": "control_sample",
+   "fieldtype": "Float",
+   "label": "Control Sample"
+  },
+  {
+   "fieldname": "samples_for_analysis",
+   "fieldtype": "Float",
+   "label": "Samples for Analysis"
+  },
+  {
+   "fieldname": "date_of_packing",
+   "fieldtype": "Date",
+   "label": "Date of Packing"
+  },
+  {
+   "fieldname": "section_break_twmd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "prepared_by_quality_executive",
+   "fieldtype": "Data",
+   "label": "Prepared by Quality Executive"
+  },
+  {
+   "fieldname": "reviewed_by_production_manager",
+   "fieldtype": "Data",
+   "label": "Reviewed by Production Manager"
+  },
+  {
+   "fieldname": "approved_by_quality_manager",
+   "fieldtype": "Data",
+   "label": "Approved by Quality Manager"
+  },
+  {
+   "fieldname": "section_break_rcfh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "line_clearance_for_primary_packing_area_detail",
+   "fieldtype": "Table",
+   "label": "Line Clearance for Primary Packing Area Detail",
+   "options": "Line Clearance for Primary Packing Area Detail"
+  },
+  {
+   "fieldname": "check_point_template",
+   "fieldtype": "Link",
+   "label": "Check Point Template",
+   "options": "Check Point Template"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-08 13:29:02.243240",
+ "modified": "2025-10-09 10:26:08.952190",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
