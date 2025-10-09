@@ -581,11 +581,13 @@ custom_field = [
     "Item-custom_code_to_code_transfer",
     "Item-custom_code_to_code_transfer_item",
     "Item-custom_label_claim",
-    "BOM Item-custom_yield_",
     "Item-custom_fssai",
     "Item-custom_enable_bmr",
     "Item-custom_enable_bpr",
-    "BOM Item-custom_overage_"
+    "BOM Item-custom_overage_",
+    "Warehouse-custom_manufcaturing_fssai_license",
+    "BOM-custom_theoretical_yield_"
+    
 ]
 
 
