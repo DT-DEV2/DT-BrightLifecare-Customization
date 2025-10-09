@@ -5,14 +5,15 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "product_name",
   "product_code",
+  "product_name",
   "master_card_no",
   "shelf_life_letter_head",
   "column_break_iuou",
   "batch_no_letter_head",
   "batch_size",
   "revision_no",
+  "reference_name",
   "section_break_exmm",
   "batch_quantity",
   "batch_uom",
@@ -62,6 +63,8 @@
   "nutritional_information",
   "typical_amino_acid_profile",
   "specific_amino_acids_profile",
+  "master_formula_sheet_tab",
+  "formula_sheet",
   "line_clearance_for_dispensing_area_tab",
   "previous_product_line",
   "area_cleaned_by",
@@ -90,9 +93,9 @@
   "requisition_given_by",
   "area_cleanliness_checked_by",
   "store",
+  "production",
   "previous_product_1",
   "material_required_on",
-  "production",
   "column_break_kbvw",
   "requisition_date",
   "cleanlineschecking_date",
@@ -142,6 +145,7 @@
   "enclosure_checkpoint",
   "batch_reconciliation_data_sheet_tab",
   "theoretical_batch_size",
+  "uom_reconcialiation",
   "theoretical_yield_batch",
   "bulk_weight_found_after_manufacturing",
   "actual_yield_after_manufacturing",
@@ -180,8 +184,9 @@
   },
   {
    "fieldname": "batch_uom",
-   "fieldtype": "Data",
-   "label": "Batch UOM"
+   "fieldtype": "Link",
+   "label": "Batch UOM",
+   "options": "UOM"
   },
   {
    "fieldname": "theoretical_yield",
@@ -300,13 +305,15 @@
   },
   {
    "fieldname": "previous_product",
-   "fieldtype": "Data",
-   "label": "Previous Product"
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
   },
   {
    "fieldname": "batch_no",
-   "fieldtype": "Data",
-   "label": "Batch No."
+   "fieldtype": "Link",
+   "label": "Batch No.",
+   "options": "Batch"
   },
   {
    "fieldname": "checked_by",
@@ -406,17 +413,18 @@
   {
    "fieldname": "theoretical_yield_batch",
    "fieldtype": "Data",
-   "label": "Theoretical Yield"
+   "label": "Theoretical Yield (%)"
   },
   {
    "fieldname": "bulk_weight_found_after_manufacturing",
    "fieldtype": "Float",
-   "label": "Bulk Weight found after manufacturing"
+   "label": "Bulk Weight found after manufacturing (Kg)"
   },
   {
+   "description": "(Limit: 99.00-100.00%)",
    "fieldname": "actual_yield_after_manufacturing",
    "fieldtype": "Data",
-   "label": "Actual Yield after manufacturing"
+   "label": "Actual Yield after manufacturing (%)"
   },
   {
    "fieldname": "quantity_of_qc_sample_gm",
@@ -431,9 +439,10 @@
   {
    "fieldname": "total_bulk_weight_handed_over_for_packing",
    "fieldtype": "Data",
-   "label": "Total Bulk weight handed over for packing"
+   "label": "Total Bulk weight handed over for packing (Kg)"
   },
   {
+   "description": "(Limit: 99.00-100.00%)",
    "fieldname": "actual_yield_for_packing",
    "fieldtype": "Data",
    "label": "Actual Yield for Packing"
@@ -503,8 +512,9 @@
   },
   {
    "fieldname": "previous_product_1",
-   "fieldtype": "Data",
-   "label": "Previous Product"
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
   },
   {
    "fieldname": "material_required_on",
@@ -546,8 +556,9 @@
   },
   {
    "fieldname": "previous_product_line",
-   "fieldtype": "Data",
-   "label": "Previous Product"
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
   },
   {
    "fieldname": "section_break_ubbe",
@@ -559,8 +570,9 @@
   },
   {
    "fieldname": "batch_no_line",
-   "fieldtype": "Date",
-   "label": "Batch No"
+   "fieldtype": "Link",
+   "label": "Batch No",
+   "options": "Batch"
   },
   {
    "fieldname": "area_cleaned_by",
@@ -637,13 +649,15 @@
   },
   {
    "fieldname": "previous_product_powder",
-   "fieldtype": "Data",
-   "label": "Previous Product"
+   "fieldtype": "Link",
+   "label": "Previous Product",
+   "options": "Item"
   },
   {
    "fieldname": "batch_no_powder",
-   "fieldtype": "Data",
-   "label": "Batch No"
+   "fieldtype": "Link",
+   "label": "Batch No",
+   "options": "Batch"
   },
   {
    "fieldname": "check_point_section",
@@ -835,8 +849,9 @@
   },
   {
    "fieldname": "batch_no_letter_head",
-   "fieldtype": "Data",
-   "label": "Batch No."
+   "fieldtype": "Link",
+   "label": "Batch No.",
+   "options": "Batch"
   },
   {
    "fieldname": "batch_size",
@@ -936,13 +951,36 @@
    "fieldtype": "Link",
    "label": "Label Claim",
    "options": "Label Claim"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Link",
+   "label": "Reference Work Order",
+   "options": "Work Order"
+  },
+  {
+   "fieldname": "master_formula_sheet_tab",
+   "fieldtype": "Tab Break",
+   "label": "Master Formula Sheet"
+  },
+  {
+   "fieldname": "formula_sheet",
+   "fieldtype": "Table",
+   "label": "Formula Sheet",
+   "options": "Master Formula Sheet Child"
+  },
+  {
+   "fieldname": "uom_reconcialiation",
+   "fieldtype": "Link",
+   "label": "Batch UOM",
+   "options": "UOM"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-07 11:16:36.620358",
+ "modified": "2025-10-08 17:43:53.871443",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
