@@ -1,44 +1,58 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-10-09 10:20:49.825564",
+ "creation": "2025-10-09 11:37:17.035881",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "check_point",
-  "observation_by_ipqa_in_charge",
-  "observation_by_packing_in_charge"
+  "types_of_defects",
+  "start",
+  "plot_time_1",
+  "plot_time_2",
+  "end"
  ],
  "fields": [
   {
-   "fieldname": "check_point",
+   "fieldname": "types_of_defects",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Check Point",
+   "label": "Types of Defects",
    "read_only": 1
   },
   {
-   "fieldname": "observation_by_ipqa_in_charge",
+   "fieldname": "start",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Observation by IPQA In-Charge"
+   "label": "Start"
   },
   {
-   "fieldname": "observation_by_packing_in_charge",
+   "fieldname": "plot_time_1",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Observation by Packing In-Charge"
+   "label": "Plot Time 1"
+  },
+  {
+   "fieldname": "plot_time_2",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Plot Time 2"
+  },
+  {
+   "fieldname": "end",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "End"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-09 12:35:58.706517",
+ "modified": "2025-10-09 11:38:43.469936",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Line Clearance for Primary Packing Area Detail",
+ "name": "Primary Packing Defects Monitoring Detail",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",

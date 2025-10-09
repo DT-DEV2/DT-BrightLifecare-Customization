@@ -1,33 +1,33 @@
 {
  "actions": [],
- "creation": "2025-10-09 10:25:02.114293",
+ "creation": "2025-10-09 11:39:42.119669",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "is_default",
-  "check_point_template_detail"
+  "types_of_defects_detail"
  ],
  "fields": [
-  {
-   "fieldname": "check_point_template_detail",
-   "fieldtype": "Table",
-   "label": "Check Point Template Detail",
-   "options": "Check Point Template Detail"
-  },
   {
    "default": "0",
    "fieldname": "is_default",
    "fieldtype": "Check",
    "label": "Is Default"
+  },
+  {
+   "fieldname": "types_of_defects_detail",
+   "fieldtype": "Table",
+   "label": "Types of Defects Detail",
+   "options": "Types of Defects Detail"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-09 12:23:51.900622",
+ "modified": "2025-10-09 12:13:39.200847",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Check Point Template",
+ "name": "Types of Defects Template",
  "owner": "Administrator",
  "permissions": [
   {

@@ -1,33 +1,34 @@
 {
  "actions": [],
- "creation": "2025-10-09 10:25:02.114293",
+ "allow_rename": 1,
+ "creation": "2025-10-09 12:36:43.402534",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "is_default",
-  "check_point_template_detail"
+  "lcspa_check_point_detail"
  ],
  "fields": [
-  {
-   "fieldname": "check_point_template_detail",
-   "fieldtype": "Table",
-   "label": "Check Point Template Detail",
-   "options": "Check Point Template Detail"
-  },
   {
    "default": "0",
    "fieldname": "is_default",
    "fieldtype": "Check",
    "label": "Is Default"
+  },
+  {
+   "fieldname": "lcspa_check_point_detail",
+   "fieldtype": "Table",
+   "label": "LCSPA Check Point Detail",
+   "options": "LCSPA Check Point Detail"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-09 12:23:51.900622",
+ "modified": "2025-10-09 12:37:39.208061",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Check Point Template",
+ "name": "LCSPA Check Point Template",
  "owner": "Administrator",
  "permissions": [
   {

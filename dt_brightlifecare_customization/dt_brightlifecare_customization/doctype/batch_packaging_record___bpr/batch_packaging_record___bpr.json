@@ -60,7 +60,6 @@
   "cleanliness_checked_by",
   "cleanliness_checked_date",
   "section_break_rcfh",
-  "check_point_template",
   "line_clearance_for_primary_packing_area_detail",
   "section_break_ncjt",
   "remark",
@@ -83,6 +82,8 @@
   "machine_setting_check_packing_in_charge",
   "primary_packing_defects_monitoring_tab",
   "frequency_ppdm",
+  "primary_packing_defects_monitoring_detail",
+  "ipqa_sign",
   "line_clearance_for_secondary_packing_area_tab",
   "area",
   "batch_no_lcspa",
@@ -96,6 +97,8 @@
   "area_cleaned_date_lcspa",
   "cleanliness_checked_date_lcspa",
   "status_updated_date_lcspa",
+  "section_break_otod",
+  "line_clearance_for_secondary_packing_area_detail",
   "online_inspectionsecondary_packing_tab",
   "frequency_oi",
   "sample_withdrawal_record_tab",
@@ -908,17 +911,32 @@
    "options": "Line Clearance for Primary Packing Area Detail"
   },
   {
-   "fieldname": "check_point_template",
-   "fieldtype": "Link",
-   "label": "Check Point Template",
-   "options": "Check Point Template"
+   "fieldname": "primary_packing_defects_monitoring_detail",
+   "fieldtype": "Table",
+   "label": "Primary Packing Defects Monitoring Detail",
+   "options": "Primary Packing Defects Monitoring Detail"
+  },
+  {
+   "fieldname": "ipqa_sign",
+   "fieldtype": "Data",
+   "label": "IPQA Sign"
+  },
+  {
+   "fieldname": "section_break_otod",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "line_clearance_for_secondary_packing_area_detail",
+   "fieldtype": "Table",
+   "label": "Line Clearance for Secondary Packing Area Detail",
+   "options": "Line Clearance for Secondary Packing Area Detail"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-09 10:26:08.952190",
+ "modified": "2025-10-09 12:33:51.449814",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
