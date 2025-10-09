@@ -1,0 +1,51 @@
+{
+ "actions": [],
+ "creation": "2025-10-09 10:25:02.114293",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "is_default",
+  "check_point_template_detail"
+ ],
+ "fields": [
+  {
+   "fieldname": "check_point_template_detail",
+   "fieldtype": "Table",
+   "label": "Check Point Template Detail",
+   "options": "Check Point Template Detail"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_default",
+   "fieldtype": "Check",
+   "label": "Is Default"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-10-09 12:23:51.900622",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Check Point Template",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
