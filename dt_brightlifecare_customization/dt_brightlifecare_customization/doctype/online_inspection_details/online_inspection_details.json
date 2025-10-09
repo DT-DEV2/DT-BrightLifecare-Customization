@@ -1,0 +1,104 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-09 13:12:42.395083",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "types_of_defectstime",
+  "initial",
+  "after_1_hour",
+  "after_2_hour",
+  "after_3_hour",
+  "after_4_hour",
+  "after_5_hour",
+  "after_6_hour",
+  "after_7_hour",
+  "after_8_hour",
+  "end"
+ ],
+ "fields": [
+  {
+   "fieldname": "types_of_defectstime",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Types of Defects/Time"
+  },
+  {
+   "fieldname": "initial",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Initial"
+  },
+  {
+   "fieldname": "end",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "End"
+  },
+  {
+   "fieldname": "after_1_hour",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "After 1 Hour"
+  },
+  {
+   "fieldname": "after_2_hour",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "After 2 Hour"
+  },
+  {
+   "fieldname": "after_3_hour",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "After 3 Hour"
+  },
+  {
+   "fieldname": "after_4_hour",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "After 4 Hour"
+  },
+  {
+   "fieldname": "after_5_hour",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "After 5 Hour"
+  },
+  {
+   "fieldname": "after_6_hour",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "After 6 Hour"
+  },
+  {
+   "fieldname": "after_7_hour",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "After 7 Hour"
+  },
+  {
+   "fieldname": "after_8_hour",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "After 8 Hour"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-10-09 13:16:33.754993",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Online Inspection Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
