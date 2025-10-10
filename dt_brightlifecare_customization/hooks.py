@@ -672,7 +672,7 @@ doc_events = {
         "on_submit": "dt_brightlifecare_customization.public.py.quality_inspection.on_qi_submit",
     },
     "Work Order": {
-        "on_submit": "dt_brightlifecare_customization.public.py.work_order.on_submit"
+        "on_submit": "dt_brightlifecare_customization.public.py.work_order.submit"
     }
 }
 
