@@ -101,12 +101,73 @@ def bpr_on_wo_submittion(doc, method):
    bpr_checkbox = frappe.db.get_value("Item", doc.production_item, "custom_enable_bpr")
 
    if bpr_checkbox:
-       bpr = frappe.new_doc("Batch Packaging Record - BPR")
+       
+        batch = frappe.db.get_value(
+            "Batch",
+            {"item": doc.production_item, "reference_name": doc.name},
+            ["name", "batch_qty", "stock_uom", "manufacturing_date", "expiry_date"],
+            as_dict=True
+        )
+
+        item = frappe.db.get_value(
+            "Item",
+            {"name": doc.production_item},
+            ["name", "shelf_life_in_days", "custom_storage_condition"],
+            as_dict=True
+        )
+
+        bom = frappe.get_doc("BOM", doc.bom_no)
+        
+        bpr = frappe.new_doc("Batch Packaging Record - BPR")
+        
+        bpr.product_code = doc.production_item
+        bpr.batch_no_1 = batch.name
+        bpr.batch_size = doc.qty
+        bpr.shelf_life_1 = item.shelf_life_in_days
+        bpr.revision_no = doc.bom_no
+        bpr.work_order = doc.name
+
+        bpr.batch_packing_quantity = batch.batch_qty
+        bpr.theoretical_yield = bom.custom_theoretical_yield_
+        bpr.mfg_date = batch.manufacturing_date
+        bpr.expiry_date = batch.expiry_date
+        bpr.product_code_no = doc.production_item
+        bpr.shelf_life = item.shelf_life_in_days
+        bpr.storage_condition = item.custom_storage_condition
+        bpr.manufactured_for = doc.company
 
 
-       bpr.product_code = doc.production_item
-      
-       bpr.work_order = doc.name
+        if doc.bom_no:
+            bom_doc = frappe.get_doc("BOM", doc.bom_no)
+            for bom_item in bom_doc.items:
+                bpr.append("master_packing_sheet_detail", {
+                    "material_code": bom_item.item_code,
+                    "ingredients": bom_item.item_name,
+                    "uom": bom_item.stock_uom,
+                    "actual_required_qty_as_per_batch": bom_item.get("custom_formulation_quantity") or 0,
+                    # "std_qty_per_batch": bom_item.get(),
+                    "overage": bom_item.get("custom_overage_") or 0,
+                    "actual_batch_size_qty": bom_item.get("stock_qty") or 0
+                })
 
-       bpr.insert()
-       frappe.msgprint(f"BPR created in Draft: <b>{bpr.name}</b>")
+
+            bom_names = frappe.get_all(
+                "BOM",
+                filters={"item": doc.production_item},
+                fields=["name", "creation"],
+                order_by="creation desc"
+            )
+
+            for bm in bom_names:
+                bpr.append("revision_history_detail", {
+                    "revision_no": bm.name,
+                    "date": bm.creation
+                })
+
+
+
+            
+        
+
+        bpr.insert()
+        frappe.msgprint(f"BPR created in Draft: <b>{bpr.name}</b>")

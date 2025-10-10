@@ -29,6 +29,7 @@
    "label": "Packing Material"
   },
   {
+   "fetch_from": "code__no.stock_uom",
    "fieldname": "unit",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -62,7 +63,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-08 11:21:02.791145",
+ "modified": "2025-10-10 12:25:17.440211",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Excess Return Detail",

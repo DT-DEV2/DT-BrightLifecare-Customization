@@ -38,6 +38,7 @@
    "label": "Qty"
   },
   {
+   "fetch_from": "item_code.stock_uom",
    "fieldname": "unit",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -79,7 +80,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-03 16:51:32.192029",
+ "modified": "2025-10-10 12:24:43.212355",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Packing Material Receiving Detail",

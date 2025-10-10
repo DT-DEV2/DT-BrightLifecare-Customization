@@ -29,6 +29,7 @@
    "label": "Packing Material"
   },
   {
+   "fetch_from": "code_no.stock_uom",
    "fieldname": "unit",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -62,7 +63,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-08 11:27:08.173232",
+ "modified": "2025-10-10 12:25:31.887718",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Excess Consumption Detail",
