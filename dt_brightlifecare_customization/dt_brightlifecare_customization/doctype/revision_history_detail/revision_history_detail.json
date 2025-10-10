@@ -15,9 +15,10 @@
  "fields": [
   {
    "fieldname": "revision_no",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Revision No."
+   "label": "Revision No.",
+   "options": "BOM"
   },
   {
    "fieldname": "date",
@@ -46,7 +47,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-03 15:15:05.432331",
+ "modified": "2025-10-10 16:13:48.346688",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Revision History Detail",
