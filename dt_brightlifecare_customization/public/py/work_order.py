@@ -37,6 +37,7 @@ def on_submit(doc, method):
     # Create BMR document
     bmr = frappe.new_doc("BMR-Batch Manufacturing Report")
     bom_doc = frappe.get_doc("BOM", doc.bom_no)
+
     # ---- Work Order fields ----
     bmr.product_code = doc.production_item
     bmr.product_name = doc.item_name
@@ -80,13 +81,50 @@ def on_submit(doc, method):
                 "overage": bom_item.get("custom_overage_") or 0,
                 "material_req_as_per_batch": bom_item.get("stock_qty") or 0
             })
-    # ---- Fetch BOM items and populate sieve_integrity ----
+
+    # ---- Fetch BOM operations and populate sieve_integrity ----
     if doc.bom_no:
-        bom_doc = frappe.get_doc("BOM", doc.bom_no)
         for bom_operations in bom_doc.operations:
             bmr.append("sieve_integrity", {
                 "seive_size": bom_operations.operation,
             })
+
+    # ---- Bill of Material and Weighing Record ----
+    if doc.bom_no:
+        for bom_item in bom_doc.items:
+            bmr.append("bill_of_material_and_weighing_record", {
+                "item_code": bom_item.item_code,
+                "item_name": bom_item.item_name,
+                "qtybatch": bom_item.qty,
+                "unit": bom_item.stock_uom,
+            })
+
+    # ---- Raw Material Receiving ----
+    if doc.bom_no:
+        for bom_item in bom_doc.items:
+            bmr.append("raw_material_receiving", {
+                "item_code": bom_item.item_code,
+                "item_name": bom_item.item_name,
+                "standard_qty": bom_item.qty,
+                "unit": bom_item.stock_uom,
+            })
+
+    # ---- Revision History ----
+        # ---- Revision History ----
+    boms = frappe.get_all(
+        "BOM",
+        filters={"item": doc.production_item, "docstatus": 1},  # only submitted BOMs
+        fields=["name", "creation", "modified"],  # removed submission_date
+        order_by="creation asc"
+    )
+
+    for bom in boms:
+        bmr.append("revision_history", {
+            "revision_no": bom["name"],
+            "date": bom.get("modified") or bom.get("creation")
+        })
+
+
     # Save as Draft
     bmr.insert()
     frappe.msgprint(f"BMR created in Draft: <b>{bmr.name}</b>")

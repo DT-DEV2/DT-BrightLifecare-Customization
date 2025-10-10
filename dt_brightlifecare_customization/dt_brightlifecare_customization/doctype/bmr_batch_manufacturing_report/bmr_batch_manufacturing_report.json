@@ -103,6 +103,10 @@
   "storage_date",
   "b_no",
   "issued_on",
+  "section_break_ajtu",
+  "bill_of_material_and_weighing_record",
+  "raw_material_receiving_tab",
+  "raw_material_receiving",
   "line_clearance_of_powder_manufacturing_tab",
   "line_clearance_given_by_as_per_sop",
   "certified_date_time",
@@ -135,6 +139,8 @@
   "date_sieve_ipqa",
   "flow_chart_of_manufacturing_process_tab",
   "flowchart",
+  "manufacturing_process_tab",
+  "manufacturing_process",
   "blend_output_tab",
   "balance_id_no",
   "blend_output",
@@ -992,13 +998,45 @@
    "fieldname": "bom_quantity",
    "fieldtype": "Data",
    "label": "BOM Quantity"
+  },
+  {
+   "fieldname": "section_break_ajtu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "bill_of_material_and_weighing_record",
+   "fieldtype": "Table",
+   "label": "Bill Of Material and Weighing Record",
+   "options": "Bill Of Material and Weighing Record Child"
+  },
+  {
+   "fieldname": "raw_material_receiving_tab",
+   "fieldtype": "Tab Break",
+   "label": "Raw Material Receiving"
+  },
+  {
+   "fieldname": "raw_material_receiving",
+   "fieldtype": "Table",
+   "label": "Raw Material Receiving",
+   "options": "Raw Material Receiving Child"
+  },
+  {
+   "fieldname": "manufacturing_process_tab",
+   "fieldtype": "Tab Break",
+   "label": "Manufacturing Process"
+  },
+  {
+   "fieldname": "manufacturing_process",
+   "fieldtype": "Table",
+   "label": "Manufacturing Process",
+   "options": "Manufacturing Process Child"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-09 16:57:33.604430",
+ "modified": "2025-10-10 15:58:04.811207",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
