@@ -179,6 +179,37 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
                     }
                 }
             });
+
+
+            frappe.call({
+                method: "frappe.client.get_list",
+                args: {
+                    doctype: "Line Clearance for Coding Machine Template",
+                    filters: { is_default: 1 },
+                    fields: ["name"],
+                    limit_page_length: 1
+                },
+                callback: function (r) {
+                    if (r.message && r.message.length > 0) {
+                        const default_template = r.message[0].name;
+                        frappe.call({
+                            method: "frappe.client.get",
+                            args: { doctype: "Line Clearance for Coding Machine Template", name: default_template },
+                            callback: function (res) {
+                                if (res.message) {
+                                    frm.clear_table("machine_setting_check_packing_in_charge");
+                                    (res.message.detail || []).forEach(detail => {
+                                        let row = frm.add_child("machine_setting_check_packing_in_charge");
+                                        row.time = detail.time;
+                                    });
+                                    frm.refresh_field("machine_setting_check_packing_in_charge");
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
         }
     },
 });

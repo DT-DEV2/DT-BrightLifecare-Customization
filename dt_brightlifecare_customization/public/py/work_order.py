@@ -1,6 +1,14 @@
 import frappe
 from frappe.utils import nowdate
 
+
+
+def submit(doc, method):
+   on_submit(doc, method)
+   bpr_on_wo_submittion(doc, method)
+
+
+
 def on_submit(doc, method):
     """
     Automatically create a BMR in Draft when Work Order is submitted,
@@ -82,3 +90,23 @@ def on_submit(doc, method):
     # Save as Draft
     bmr.insert()
     frappe.msgprint(f"BMR created in Draft: <b>{bmr.name}</b>")
+
+
+
+
+
+
+
+def bpr_on_wo_submittion(doc, method):
+   bpr_checkbox = frappe.db.get_value("Item", doc.production_item, "custom_enable_bpr")
+
+   if bpr_checkbox:
+       bpr = frappe.new_doc("Batch Packaging Record - BPR")
+
+
+       bpr.product_code = doc.production_item
+      
+       bpr.work_order = doc.name
+
+       bpr.insert()
+       frappe.msgprint(f"BPR created in Draft: <b>{bpr.name}</b>")
