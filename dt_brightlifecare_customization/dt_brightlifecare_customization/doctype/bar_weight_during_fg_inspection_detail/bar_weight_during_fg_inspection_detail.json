@@ -10,9 +10,9 @@
  ],
  "fields": [
   {
+   "description": "(In gm)",
    "fieldname": "gross_wt",
-   "fieldtype": "Data",
-   "in_list_view": 1,
+   "fieldtype": "Float",
    "label": "Gross Wt."
   }
  ],
@@ -20,7 +20,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-08 13:13:37.442753",
+ "modified": "2025-10-10 12:26:15.142996",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Bar Weight During FG Inspection Detail",

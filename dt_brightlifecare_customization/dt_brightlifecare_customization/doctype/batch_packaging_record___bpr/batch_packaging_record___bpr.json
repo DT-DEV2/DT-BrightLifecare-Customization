@@ -13,6 +13,7 @@
   "batch_no_1",
   "batch_size",
   "revision_no",
+  "work_order",
   "section_break_vfow",
   "batch_packing_quantity",
   "mfg_date",
@@ -24,6 +25,7 @@
   "expiry_date",
   "pack_size",
   "shelf_life",
+  "manufactured_for",
   "amended_from",
   "section_break_aiqr",
   "date_of_commencement",
@@ -844,11 +846,6 @@
    "label": "Batch Size"
   },
   {
-   "fieldname": "revision_no",
-   "fieldtype": "Int",
-   "label": "Revision No."
-  },
-  {
    "fieldname": "shelf_life_1",
    "fieldtype": "Data",
    "label": "Shelf Life"
@@ -1071,13 +1068,30 @@
   {
    "fieldname": "column_break_zpgn",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "work_order",
+   "fieldtype": "Link",
+   "label": "Work Order",
+   "options": "Work Order"
+  },
+  {
+   "fieldname": "manufactured_for",
+   "fieldtype": "Link",
+   "label": "Manufactured For",
+   "options": "Company"
+  },
+  {
+   "fieldname": "revision_no",
+   "fieldtype": "Data",
+   "label": "Revision No."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-09 13:34:53.042394",
+ "modified": "2025-10-10 12:45:28.425954",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",

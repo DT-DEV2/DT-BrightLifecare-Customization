@@ -13,10 +13,10 @@
   "label_claim",
   "lc_uom",
   "section_break_dhmf",
-  "actual_required_qty",
+  "actual_required_qty_as_per_batch",
   "std_qty_per_batch",
   "column_break_yiya",
-  "oa",
+  "overage",
   "actual_batch_size_qty",
   "unit"
  ],
@@ -49,6 +49,7 @@
    "options": "Label Claim"
   },
   {
+   "fetch_from": "material_code.stock_uom",
    "fieldname": "lc_uom",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -65,12 +66,6 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Actual Batch Size Qty"
-  },
-  {
-   "fieldname": "actual_required_qty",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Actual Required Qty"
   },
   {
    "fieldname": "unit",
@@ -92,17 +87,23 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "oa",
+   "fieldname": "actual_required_qty_as_per_batch",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Actual Required Qty as Per Batch"
+  },
+  {
+   "fieldname": "overage",
    "fieldtype": "Percent",
    "in_list_view": 1,
-   "label": "% OA"
+   "label": "% OverAge"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-09 10:16:10.175257",
+ "modified": "2025-10-10 13:37:03.228160",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Master Packing Sheet Detail",
