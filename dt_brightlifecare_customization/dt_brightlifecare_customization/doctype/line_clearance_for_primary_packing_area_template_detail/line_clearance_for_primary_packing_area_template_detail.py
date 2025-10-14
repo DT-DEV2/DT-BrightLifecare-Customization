@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class CheckPointTemplateDetail(Document):
+class LineClearanceforPrimaryPackingAreaTemplateDetail(Document):
 	pass
