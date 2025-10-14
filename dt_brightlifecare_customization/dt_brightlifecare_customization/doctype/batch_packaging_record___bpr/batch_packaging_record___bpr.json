@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:{batch_no_1}-{product_code}",
  "creation": "2025-09-30 13:15:07.343146",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -1091,10 +1092,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-10 12:45:28.425954",
+ "modified": "2025-10-14 12:34:47.450500",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
