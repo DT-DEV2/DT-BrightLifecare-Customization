@@ -1,29 +1,29 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-10-09 11:40:12.344752",
+ "creation": "2025-10-14 14:53:44.889421",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "types_of_defects"
+  "check_point"
  ],
  "fields": [
   {
-   "fieldname": "types_of_defects",
+   "fieldname": "check_point",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Types of Defects"
+   "label": "Check Point"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-09 11:40:51.649903",
+ "modified": "2025-10-14 14:54:38.575326",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Types of Defects Detail",
+ "name": "Line Clearance for Primary Packing Area Template Detail",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",

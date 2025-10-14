@@ -33,7 +33,7 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
             frappe.call({
                 method: "frappe.client.get_list",
                 args: {
-                    doctype: "Check Point Template",
+                    doctype: "Line Clearance for Primary Packing Area Template",
                     filters: { is_default: 1 },
                     fields: ["name"],
                     limit_page_length: 1
@@ -43,11 +43,11 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
                         const default_template = r.message[0].name;
                         frappe.call({
                             method: "frappe.client.get",
-                            args: { doctype: "Check Point Template", name: default_template },
+                            args: { doctype: "Line Clearance for Primary Packing Area Template", name: default_template },
                             callback: function (res) {
                                 if (res.message) {
                                     frm.clear_table("line_clearance_for_primary_packing_area_detail");
-                                    (res.message.check_point_template_detail || []).forEach(detail => {
+                                    (res.message.detail || []).forEach(detail => {
                                         let row = frm.add_child("line_clearance_for_primary_packing_area_detail");
                                         row.check_point = detail.check_point;
                                     });
@@ -63,7 +63,7 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
             frappe.call({
                 method: "frappe.client.get_list",
                 args: {
-                    doctype: "Types of Defects Template",
+                    doctype: "Primary Packing Defects Monitoring Template",
                     filters: { is_default: 1 },
                     fields: ["name"],
                     limit_page_length: 1
@@ -73,11 +73,11 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
                         const default_template = r.message[0].name;
                         frappe.call({
                             method: "frappe.client.get",
-                            args: { doctype: "Types of Defects Template", name: default_template },
+                            args: { doctype: "Primary Packing Defects Monitoring Template", name: default_template },
                             callback: function (res) {
                                 if (res.message) {
                                     frm.clear_table("primary_packing_defects_monitoring_detail");
-                                    (res.message.types_of_defects_detail || []).forEach(detail => {
+                                    (res.message.detail || []).forEach(detail => {
                                         let row = frm.add_child("primary_packing_defects_monitoring_detail");
                                         row.types_of_defects = detail.types_of_defects;
                                     });

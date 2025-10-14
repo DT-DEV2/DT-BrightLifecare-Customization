@@ -1,11 +1,12 @@
 {
  "actions": [],
- "creation": "2025-10-09 11:39:42.119669",
+ "allow_rename": 1,
+ "creation": "2025-10-14 14:58:53.330534",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "is_default",
-  "types_of_defects_detail"
+  "detail"
  ],
  "fields": [
   {
@@ -15,19 +16,19 @@
    "label": "Is Default"
   },
   {
-   "fieldname": "types_of_defects_detail",
+   "fieldname": "detail",
    "fieldtype": "Table",
-   "label": "Types of Defects Detail",
-   "options": "Types of Defects Detail"
+   "label": "Detail",
+   "options": "Line Clearance for Primary Packing Area Template Detail"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-09 12:13:39.200847",
+ "modified": "2025-10-14 14:59:23.888344",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Types of Defects Template",
+ "name": "Line Clearance for Primary Packing Area Template",
  "owner": "Administrator",
  "permissions": [
   {

@@ -1,33 +1,34 @@
 {
  "actions": [],
- "creation": "2025-10-09 10:25:02.114293",
+ "allow_rename": 1,
+ "creation": "2025-10-14 15:35:55.272345",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "is_default",
-  "check_point_template_detail"
+  "detail"
  ],
  "fields": [
-  {
-   "fieldname": "check_point_template_detail",
-   "fieldtype": "Table",
-   "label": "Check Point Template Detail",
-   "options": "Check Point Template Detail"
-  },
   {
    "default": "0",
    "fieldname": "is_default",
    "fieldtype": "Check",
    "label": "Is Default"
+  },
+  {
+   "fieldname": "detail",
+   "fieldtype": "Table",
+   "label": "Detail",
+   "options": "Primary Packing Defects Monitoring Template Detail"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-09 12:23:51.900622",
+ "modified": "2025-10-14 15:36:23.122702",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Check Point Template",
+ "name": "Primary Packing Defects Monitoring Template",
  "owner": "Administrator",
  "permissions": [
   {
