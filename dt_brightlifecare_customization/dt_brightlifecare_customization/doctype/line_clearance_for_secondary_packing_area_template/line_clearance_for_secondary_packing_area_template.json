@@ -1,12 +1,12 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-10-09 13:17:37.212917",
+ "creation": "2025-10-15 10:37:18.629522",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "is_default",
-  "types_of_defectstime_detail"
+  "detail"
  ],
  "fields": [
   {
@@ -16,19 +16,19 @@
    "label": "Is Default"
   },
   {
-   "fieldname": "types_of_defectstime_detail",
+   "fieldname": "detail",
    "fieldtype": "Table",
-   "label": "Types of Defects/Time Detail",
-   "options": "Types of Defects-Time Detail"
+   "label": "Detail",
+   "options": "Line Clearance for Secondary Packing Area Template Detail"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-09 13:18:52.217861",
+ "modified": "2025-10-15 10:37:49.448004",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
- "name": "Types of Defects-Time Template",
+ "name": "Line Clearance for Secondary Packing Area Template",
  "owner": "Administrator",
  "permissions": [
   {

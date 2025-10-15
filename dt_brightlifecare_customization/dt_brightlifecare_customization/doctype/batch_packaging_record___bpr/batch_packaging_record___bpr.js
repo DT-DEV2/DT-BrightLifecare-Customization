@@ -94,7 +94,7 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
             frappe.call({
                 method: "frappe.client.get_list",
                 args: {
-                    doctype: "LCSPA Check Point Template",
+                    doctype: "Line Clearance for Secondary Packing Area Template",
                     filters: { is_default: 1 },
                     fields: ["name"],
                     limit_page_length: 1
@@ -104,11 +104,11 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
                         const default_template = r.message[0].name;
                         frappe.call({
                             method: "frappe.client.get",
-                            args: { doctype: "LCSPA Check Point Template", name: default_template },
+                            args: { doctype: "Line Clearance for Secondary Packing Area Template", name: default_template },
                             callback: function (res) {
                                 if (res.message) {
                                     frm.clear_table("line_clearance_for_secondary_packing_area_detail");
-                                    (res.message.lcspa_check_point_detail || []).forEach(detail => {
+                                    (res.message.detail || []).forEach(detail => {
                                         let row = frm.add_child("line_clearance_for_secondary_packing_area_detail");
                                         row.check_point = detail.check_point;
                                     });
@@ -124,7 +124,7 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
             frappe.call({
                 method: "frappe.client.get_list",
                 args: {
-                    doctype: "Types of Defects-Time Template",
+                    doctype: "Online Inspection Template",
                     filters: { is_default: 1 },
                     fields: ["name"],
                     limit_page_length: 1
@@ -134,11 +134,11 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
                         const default_template = r.message[0].name;
                         frappe.call({
                             method: "frappe.client.get",
-                            args: { doctype: "Types of Defects-Time Template", name: default_template },
+                            args: { doctype: "Online Inspection Template", name: default_template },
                             callback: function (res) {
                                 if (res.message) {
                                     frm.clear_table("online_inspection_details");
-                                    (res.message.types_of_defectstime_detail || []).forEach(detail => {
+                                    (res.message.detail || []).forEach(detail => {
                                         let row = frm.add_child("online_inspection_details");
                                         row.types_of_defectstime = detail.types_of_defectstime;
                                     });

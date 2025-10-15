@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class TypesofDefectsTimeDetail(Document):
+class OnlineInspectionTemplateDetails(Document):
 	pass
