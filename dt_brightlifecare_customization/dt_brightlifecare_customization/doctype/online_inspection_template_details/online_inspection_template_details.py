@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class LCSPACheckPointTemplate(Document):
+class OnlineInspectionTemplateDetails(Document):
 	pass
