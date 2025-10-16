@@ -225,3 +225,21 @@ def make_se_for_code_to_code_transfer(doc, method):
             except Exception as e:
                 frappe.log_error(frappe.get_traceback(), "Error in make_se_for_code_to_code_transfer")
                 frappe.msgprint(f"Error while creating Code to Code Transfer: {str(e)}")
+
+
+import frappe
+
+@frappe.whitelist()
+def print_dispensing_slips_preview(docname):
+   doc = frappe.get_doc("Stock Entry", docname)
+
+   # Just get HTML of your custom print format
+   html = frappe.get_print(
+       doctype="Stock Entry",
+       name=doc.name,
+       print_format="DT Dispensing Slips for RM",
+       doc=doc,
+       as_pdf=False
+   )
+
+   return html
