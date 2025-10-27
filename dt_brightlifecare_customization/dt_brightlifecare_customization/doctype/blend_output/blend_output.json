@@ -6,10 +6,10 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "std_lot_weight",
   "gross_weight_kg",
   "tare_weight_kg",
-  "net_weight_kg",
-  "signature"
+  "net_weight_kg"
  ],
  "fields": [
   {
@@ -34,18 +34,20 @@
    "label": "Net Weight (Kg)"
   },
   {
-   "fieldname": "signature",
-   "fieldtype": "Data",
+   "fieldname": "std_lot_weight",
+   "fieldtype": "Float",
+   "in_filter": 1,
    "in_list_view": 1,
+   "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Signature"
+   "label": "Std. Lot Weight"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-29 15:23:12.825740",
+ "modified": "2025-10-27 16:59:20.838731",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Blend Output",
