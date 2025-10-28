@@ -586,7 +586,8 @@ custom_field = [
     "Item-custom_enable_bpr",
     "BOM Item-custom_overage_",
     "Warehouse-custom_manufcaturing_fssai_license",
-    "BOM-custom_theoretical_yield_"
+    "BOM-custom_theoretical_yield_",
+    "Warehouse-custom_workinprogress_warehouse"
     
 ]
 
