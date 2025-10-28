@@ -587,7 +587,10 @@ custom_field = [
     "BOM Item-custom_overage_",
     "Warehouse-custom_manufcaturing_fssai_license",
     "BOM-custom_theoretical_yield_",
-    "Warehouse-custom_workinprogress_warehouse"
+    "Work Order-custom__item_batch_size",
+    "Work Order-custom_lot_size",
+    "Work Order-custom_lot_count",
+    "Warehouse-custom_workinprogress_warehouse",
     
 ]
 
