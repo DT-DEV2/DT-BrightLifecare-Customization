@@ -9,12 +9,16 @@
   "item_code",
   "item_name",
   "qtybatch",
-  "unit",
-  "ar_no",
   "qty_dispense",
+  "unit",
+  "loose_material_weight",
+  "uom_loose_material_weight",
+  "loose_material_packing_weight",
+  "uom_loose_material_packing_weight",
   "store",
   "prod",
-  "quality"
+  "quality",
+  "unit_no"
  ],
  "fields": [
   {
@@ -51,14 +55,6 @@
    "options": "UOM"
   },
   {
-   "fieldname": "ar_no",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "AR. No."
-  },
-  {
    "fieldname": "qty_dispense",
    "fieldtype": "Float",
    "in_filter": 1,
@@ -86,13 +82,50 @@
    "in_filter": 1,
    "in_standard_filter": 1,
    "label": "Checked by(Quality)"
+  },
+  {
+   "fieldname": "unit_no",
+   "fieldtype": "Int",
+   "label": "Unit No",
+   "length": 8
+  },
+  {
+   "fieldname": "loose_material_weight",
+   "fieldtype": "Float",
+   "in_filter": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Loose Material Weight"
+  },
+  {
+   "fieldname": "uom_loose_material_weight",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "UOM (Loose Material Weight)",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "loose_material_packing_weight",
+   "fieldtype": "Float",
+   "in_filter": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Loose Material Packing Weight"
+  },
+  {
+   "fieldname": "uom_loose_material_packing_weight",
+   "fieldtype": "Link",
+   "label": "UOM ((Loose Material Packing Weight)",
+   "options": "UOM"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-10 15:36:25.919552",
+ "modified": "2025-10-27 16:56:35.907598",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Bill Of Material and Weighing Record Child",

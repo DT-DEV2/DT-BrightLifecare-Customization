@@ -7,9 +7,12 @@
  "engine": "InnoDB",
  "field_order": [
   "seive_size",
-  "intactness_integrity",
   "start_date_time",
-  "end_date_time"
+  "intactness_integrity_start",
+  "remarks_start",
+  "end_date_time",
+  "intactness_integrity_end",
+  "remarks_end"
  ],
  "fields": [
   {
@@ -18,15 +21,6 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Seive Size"
-  },
-  {
-   "default": "Yes/No",
-   "fieldname": "intactness_integrity",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Intactness/Integrity",
-   "options": "Yes/No\nYes\nNo"
   },
   {
    "fieldname": "start_date_time",
@@ -41,13 +35,43 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "End Date/Time"
+  },
+  {
+   "default": "Yes/No",
+   "fieldname": "intactness_integrity_start",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Intactness/Integrity",
+   "options": "Yes/No\nYes\nNo"
+  },
+  {
+   "default": "Yes/No",
+   "fieldname": "intactness_integrity_end",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Intactness/Integrity ",
+   "options": "Yes/No\nYes\nNo"
+  },
+  {
+   "depends_on": "eval:doc.intactness_integrity_start==\"No\"",
+   "fieldname": "remarks_start",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "depends_on": "eval:doc.intactness_integrity_end==\"No\"",
+   "fieldname": "remarks_end",
+   "fieldtype": "Data",
+   "label": "Remarks"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-30 16:59:30.373222",
+ "modified": "2025-10-27 16:53:29.021850",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Sieve Integrity",

@@ -77,14 +77,18 @@
   "cleanliness_checked_by_date",
   "section_break_ubbe",
   "line_clearance_template",
+  "production_dispense",
+  "quality_dispense",
   "line_clearance",
   "remarks",
   "section_break_iyba",
   "signature_production",
   "signature_ipqa",
+  "created_by_line_clearance",
   "column_break_udeq",
   "date_time_production",
   "date_time_ipqa",
+  "checked_by_line_clearance",
   "bill_of_material_weighing_record_tab",
   "issue_raw_material_as_per_sop_no",
   "balance_no",
@@ -105,8 +109,16 @@
   "issued_on",
   "section_break_ajtu",
   "bill_of_material_and_weighing_record",
+  "section_break_ellr",
+  "created_by_bill_of_material",
+  "column_break_uvff",
+  "checked_by_bill_of_material",
   "raw_material_receiving_tab",
   "raw_material_receiving",
+  "section_break_qkuy",
+  "created_by_rm",
+  "column_break_jdfo",
+  "checked_by_rm",
   "line_clearance_of_powder_manufacturing_tab",
   "line_clearance_given_by_as_per_sop",
   "certified_date_time",
@@ -123,6 +135,21 @@
   "check_no_leakage_in_sifter",
   "check_adequate_light_in_area",
   "check_the_waste_bins_are_empty_and_labeled_properly",
+  "column_break_hplo",
+  "remark_1",
+  "remark_2",
+  "remark_3",
+  "remark_4",
+  "remark_5",
+  "remark_6",
+  "remark_7",
+  "remark_8",
+  "remark_9",
+  "remark_10",
+  "section_break_fyhi",
+  "created_by_powder",
+  "column_break_ouma",
+  "checked_by_powder",
   "seive_integrity_tab",
   "seive_id",
   "sieve_integrity",
@@ -134,16 +161,26 @@
   "section_break_xbxy",
   "signature_sieve_pro",
   "signature_sieve_ipqa",
+  "created_by_sieve",
   "column_break_ziun",
   "date_sieve_pro",
   "date_sieve_ipqa",
+  "checked_by_sieve",
   "flow_chart_of_manufacturing_process_tab",
   "flowchart",
   "manufacturing_process_tab",
   "manufacturing_process",
+  "section_break_ldby",
+  "created_by_manufacture",
+  "column_break_qfvv",
+  "checked_by_manufacture",
   "blend_output_tab",
   "balance_id_no",
   "blend_output",
+  "section_break_ylga",
+  "created_by_blend",
+  "column_break_kunf",
+  "checked_by_blend",
   "dispensing_label_record_tab",
   "dispensing_label",
   "no_of_label",
@@ -481,8 +518,9 @@
   },
   {
    "fieldname": "requisition_given_by",
-   "fieldtype": "Data",
-   "label": "Requisition given by"
+   "fieldtype": "Link",
+   "label": "Requisition given by",
+   "options": "User"
   },
   {
    "fieldname": "column_break_kbvw",
@@ -495,8 +533,9 @@
   },
   {
    "fieldname": "area_cleanliness_checked_by",
-   "fieldtype": "Data",
-   "label": "Area Cleanliness Checked by"
+   "fieldtype": "Link",
+   "label": "Area Cleanliness Checked by",
+   "options": "User"
   },
   {
    "fieldname": "cleanlineschecking_date",
@@ -505,8 +544,9 @@
   },
   {
    "fieldname": "store",
-   "fieldtype": "Data",
-   "label": "Store"
+   "fieldtype": "Link",
+   "label": "Store",
+   "options": "User"
   },
   {
    "fieldname": "storage_date",
@@ -526,8 +566,9 @@
   },
   {
    "fieldname": "b_no",
-   "fieldtype": "Data",
-   "label": "B. No."
+   "fieldtype": "Link",
+   "label": "B. No.",
+   "options": "Batch"
   },
   {
    "fieldname": "issued_on",
@@ -536,8 +577,9 @@
   },
   {
    "fieldname": "production",
-   "fieldtype": "Data",
-   "label": "Production"
+   "fieldtype": "Link",
+   "label": "Production",
+   "options": "User"
   },
   {
    "fieldname": "line_clearance_for_dispensing_area_tab",
@@ -579,8 +621,9 @@
   },
   {
    "fieldname": "area_cleaned_by",
-   "fieldtype": "Data",
-   "label": "Area Cleaned By"
+   "fieldtype": "Link",
+   "label": "Area Cleaned By",
+   "options": "User"
   },
   {
    "fieldname": "line_clearance_cleaned_date",
@@ -589,8 +632,9 @@
   },
   {
    "fieldname": "cleanliness_checked_by",
-   "fieldtype": "Data",
-   "label": "Cleanliness Checked By"
+   "fieldtype": "Link",
+   "label": "Cleanliness Checked By",
+   "options": "User"
   },
   {
    "fieldname": "cleanliness_checked_by_date",
@@ -610,6 +654,7 @@
   {
    "fieldname": "signature_production",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Signature (Production)"
   },
   {
@@ -623,16 +668,19 @@
   {
    "fieldname": "date_time_production",
    "fieldtype": "Datetime",
+   "hidden": 1,
    "label": "Date & Time (Production)"
   },
   {
    "fieldname": "signature_ipqa",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Signature (IPQA)"
   },
   {
    "fieldname": "date_time_ipqa",
    "fieldtype": "Datetime",
+   "hidden": 1,
    "label": "Date & Time (IPQA)"
   },
   {
@@ -774,21 +822,25 @@
   {
    "fieldname": "signature_sieve_pro",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Signature (Production)"
   },
   {
    "fieldname": "date_sieve_pro",
    "fieldtype": "Date",
+   "hidden": 1,
    "label": "Date (Production)"
   },
   {
    "fieldname": "signature_sieve_ipqa",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Signature (IPQA)"
   },
   {
    "fieldname": "date_sieve_ipqa",
    "fieldtype": "Date",
+   "hidden": 1,
    "label": "Date (IPQA)"
   },
   {
@@ -1030,13 +1082,213 @@
    "fieldtype": "Table",
    "label": "Manufacturing Process",
    "options": "Manufacturing Process Child"
+  },
+  {
+   "fieldname": "created_by_line_clearance",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "checked_by_line_clearance",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_ellr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "created_by_bill_of_material",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_uvff",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "checked_by_bill_of_material",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_qkuy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "created_by_rm",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_jdfo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "checked_by_rm",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_fyhi",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "created_by_powder",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_ouma",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "checked_by_powder",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_hplo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.check_rinse_test_of_equipment_is_done_qc_report_available==\"Not Satisfactory\"",
+   "fieldname": "remark_1",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "created_by_sieve",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "checked_by_sieve",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_ldby",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "created_by_manufacture",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_qfvv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "checked_by_manufacture",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_ylga",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "created_by_blend",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_kunf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "checked_by_blend",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
+  },
+  {
+   "fieldname": "production_dispense",
+   "fieldtype": "Select",
+   "label": "Production",
+   "options": "\nOK\nNot OK"
+  },
+  {
+   "fieldname": "quality_dispense",
+   "fieldtype": "Select",
+   "label": "Quality",
+   "options": "\nOK\nNot OK"
+  },
+  {
+   "depends_on": "eval:doc.check_general_cleanliness_and_housekeeping_of_the_area==\"Not Satisfactory\"",
+   "fieldname": "remark_2",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "depends_on": "eval:doc.check_any_person_exposed_to_the_product==\"Not Satisfactory\"",
+   "fieldname": "remark_3",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "depends_on": "eval:doc.check_cleaning_of_duct_filter_equipment==\"Not Satisfactory\"",
+   "fieldname": "remark_4",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "depends_on": "eval:doc.check_testing_equipment_such_as_wet_and_dry==\"Not Satisfactory\"",
+   "fieldname": "remark_5",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "depends_on": "eval:doc.check_weighing_balance_verified_recorded==\"Not Satisfactory\"",
+   "fieldname": "remark_6",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "depends_on": "eval:doc.check_all_tools_are_properly_clean_in_good_condition==\"Not Satisfactory\"",
+   "fieldname": "remark_7",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "depends_on": "eval:doc.check_no_leakage_in_sifter==\"Not Satisfactory\"",
+   "fieldname": "remark_8",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "depends_on": "eval:doc.check_adequate_light_in_area==\"Not Satisfactory\"",
+   "fieldname": "remark_9",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "depends_on": "eval:doc.check_the_waste_bins_are_empty_and_labeled_properly==\"Not Satisfactory\"",
+   "fieldname": "remark_10",
+   "fieldtype": "Data",
+   "label": "Remark"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-10 15:58:04.811207",
+ "modified": "2025-10-27 16:47:53.192661",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",

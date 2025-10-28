@@ -11,7 +11,13 @@
   "unit",
   "standard_qty",
   "received_qty",
-  "checked_by"
+  "remarks",
+  "checked_by",
+  "unit_no",
+  "loose_material_weight_rm",
+  "uom_loose_material_weight_rm",
+  "loose_material_packing_weight_rm",
+  "uom_loose_material_packing_weight_rm"
  ],
  "fields": [
   {
@@ -51,11 +57,12 @@
   },
   {
    "fieldname": "received_qty",
-   "fieldtype": "Float",
+   "fieldtype": "Select",
    "in_filter": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Received Qty"
+   "label": "Received Qty",
+   "options": "\nYes\nNo"
   },
   {
    "fieldname": "checked_by",
@@ -63,13 +70,53 @@
    "in_filter": 1,
    "in_standard_filter": 1,
    "label": "Checked By"
+  },
+  {
+   "fieldname": "unit_no",
+   "fieldtype": "Int",
+   "label": "Unit No",
+   "length": 9
+  },
+  {
+   "fieldname": "loose_material_weight_rm",
+   "fieldtype": "Float",
+   "in_filter": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Loose Material Weight "
+  },
+  {
+   "fieldname": "loose_material_packing_weight_rm",
+   "fieldtype": "Float",
+   "label": "Loose Material Packing Weight"
+  },
+  {
+   "fieldname": "uom_loose_material_weight_rm",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "UOM (Loose Material Weight)",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "uom_loose_material_packing_weight_rm",
+   "fieldtype": "Link",
+   "label": "UOM (Loose Material Packing Weight)",
+   "options": "UOM"
+  },
+  {
+   "depends_on": "eval:doc.received_qty==\"No\"",
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-10 15:46:28.587855",
+ "modified": "2025-10-27 16:31:15.307659",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Raw Material Receiving Child",
