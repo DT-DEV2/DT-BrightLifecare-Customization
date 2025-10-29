@@ -589,7 +589,8 @@ custom_field = [
     "BOM-custom_theoretical_yield_",
     "Work Order-custom__item_batch_size",
     "Work Order-custom_lot_size",
-    "Work Order-custom_lot_count"
+    "Work Order-custom_lot_count",
+    "Work Order-custom_assignee_to_bmrbpr"
     
 ]
 
