@@ -591,7 +591,8 @@ custom_field = [
     "Work Order-custom_lot_size",
     "Work Order-custom_lot_count",
     "Work Order-custom_assignee_to_bmrbpr",
-    "Warehouse-custom_workinprogress_warehouse",    
+    "Warehouse-custom_workinprogress_warehouse", 
+    "Quality Inspection Template-custom_stage_of_process"   
 ]
 
 

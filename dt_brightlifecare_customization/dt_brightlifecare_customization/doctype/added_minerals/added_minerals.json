@@ -19,6 +19,7 @@
   {
    "fieldname": "per_serving",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Per Serving"
   }
  ],
@@ -26,7 +27,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-29 13:33:07.178489",
+ "modified": "2025-10-29 17:45:18.992787",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Added Minerals",
