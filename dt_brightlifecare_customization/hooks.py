@@ -590,8 +590,8 @@ custom_field = [
     "Work Order-custom__item_batch_size",
     "Work Order-custom_lot_size",
     "Work Order-custom_lot_count",
-    "Warehouse-custom_workinprogress_warehouse",
-    
+    "Work Order-custom_assignee_to_bmrbpr",
+    "Warehouse-custom_workinprogress_warehouse",    
 ]
 
 

@@ -199,6 +199,7 @@
   "processloss_during_manufacturing",
   "total_bulk_weight_handed_over_for_packing",
   "actual_yield_for_packing",
+  "item_batch_size",
   "deviation_report_tab",
   "any_procedural_deviation",
   "deviation_held_in_production_qa__me",
@@ -949,7 +950,8 @@
    "description": "NOTE: Any Breakdown/Deviation to be mentioned with time & action",
    "fieldname": "any_procedural_deviation",
    "fieldtype": "Small Text",
-   "label": "Any Procedural Deviation "
+   "label": "Any Procedural Deviation ",
+   "read_only_depends_on": "eval:doc.actual_yield_after_manufacturing < doc.theoretical_yield_batch"
   },
   {
    "fieldname": "deviation_held_in_production_qa__me",
@@ -1282,13 +1284,18 @@
    "fieldname": "remark_10",
    "fieldtype": "Data",
    "label": "Remark"
+  },
+  {
+   "fieldname": "item_batch_size",
+   "fieldtype": "Data",
+   "label": "Item Batch Size"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-27 16:47:53.192661",
+ "modified": "2025-10-29 11:01:15.256704",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
