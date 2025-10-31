@@ -11,6 +11,8 @@
   "nutritional_information",
   "typical_amino_acid_profile",
   "specific_amino_acids_profile",
+  "added_vitamins",
+  "added_minerals",
   "amended_from"
  ],
  "fields": [
@@ -57,13 +59,25 @@
    "fieldname": "item_name",
    "fieldtype": "Data",
    "label": "Item Name"
+  },
+  {
+   "fieldname": "added_vitamins",
+   "fieldtype": "Table",
+   "label": "Added Vitamins",
+   "options": "Added Vitamins"
+  },
+  {
+   "fieldname": "added_minerals",
+   "fieldtype": "Table",
+   "label": "Added Minerals",
+   "options": "Added Minerals"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-30 12:41:28.696890",
+ "modified": "2025-10-29 17:45:21.482515",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Label Claim",
