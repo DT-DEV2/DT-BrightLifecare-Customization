@@ -182,7 +182,6 @@
   "column_break_kunf",
   "checked_by_blend",
   "dispensing_label_record_tab",
-  "dispensing_label",
   "no_of_label",
   "production_on",
   "attached_by",
@@ -858,12 +857,6 @@
    "label": "Dispensing Label Record"
   },
   {
-   "description": "Collect all dispensed raw material & attached to BMR",
-   "fieldname": "dispensing_label",
-   "fieldtype": "Attach",
-   "label": "Dispensing Label"
-  },
-  {
    "fieldname": "no_of_label",
    "fieldtype": "Data",
    "label": "No. of Label"
@@ -1295,7 +1288,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-29 11:01:15.256704",
+ "modified": "2025-10-31 13:22:48.391913",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
