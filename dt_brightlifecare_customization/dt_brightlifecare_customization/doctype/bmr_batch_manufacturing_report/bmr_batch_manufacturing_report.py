@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.utils import flt
 
 class BMRBatchManufacturingReport(Document):
     def before_insert(self):
@@ -10,42 +11,227 @@ class BMRBatchManufacturingReport(Document):
         if not self.requisition_given_by:
             self.requisition_given_by = user
 
-        # --- Auto populate blend_output table ---
+        # --- Auto populate blend_output table from Work Order ---
         if self.reference_name:
             work_order = frappe.get_doc("Work Order", self.reference_name)
-            item_batch_size = work_order.custom__item_batch_size
-            lot_size = work_order.custom_lot_size
-            lot_count = work_order.custom_lot_count
+
+            item_batch_size = flt(work_order.custom__item_batch_size)
+            lot_size = flt(work_order.custom_lot_size)
+            lot_count = int(flt(work_order.custom_lot_count))
 
             if item_batch_size and lot_count:
                 self.blend_output = []  # clear existing rows
-                total_batch_size = float(item_batch_size)
-                lot_count = int(lot_count)
-                lot_size = float(lot_size) if lot_size else None
-
+                total_batch_size = item_batch_size
                 remaining = total_batch_size
 
                 for i in range(lot_count):
                     row = self.append("blend_output", {})
 
-                    # Case 1: Lot size is defined
-                    if lot_size:
+                    if lot_size:  # Case 1: custom lot size defined
                         if remaining >= lot_size and i < lot_count - 1:
-                            row.std_lot_weight = round(lot_size, 3)
-                            remaining -= lot_size
+                            std_weight = round(lot_size, 3)
                         else:
-                            # Last or smaller remaining amount
-                            row.std_lot_weight = round(remaining, 3)
-                            remaining = 0
+                            std_weight = round(remaining, 3)
+                        remaining -= std_weight
+                    else:  # Case 2: equal division
+                        std_weight = round(total_batch_size / lot_count, 3)
+                        if i == lot_count - 1:
+                            std_weight = round(remaining, 3)
+                        remaining -= std_weight
 
-                    # Case 2: Lot size not defined → equal division
+                    row.std_lot_weight = std_weight
+
+            # Fetch and set item batch size
+            self.item_batch_size = item_batch_size or 0.00
+
+            # --- Fetch and set Theoretical Yield from BOM ---
+            if work_order.bom_no:
+                theoretical_yield = frappe.db.get_value(
+                    "BOM",
+                    work_order.bom_no,
+                    "custom_theoretical_yield_"
+                )
+                self.theoretical_yield_batch = flt(theoretical_yield or 0.00)
+        # Fetch Previous Product (based on Work Order → BOM → NUT BOM linkage)
+        self.previous_product = None
+        self.previous_product_line = None
+        self.previous_product_1 = None
+        self.previous_product_powder = None
+        if self.reference_name:
+            wo_bom = frappe.db.get_value("Work Order", self.reference_name, "bom_no")
+            if wo_bom:
+                nut_boms = frappe.db.sql("""
+                    SELECT DISTINCT parent
+                    FROM `tabBOM Item`
+                    WHERE bom_no = %s
+                """, wo_bom, as_dict=True)
+
+                if nut_boms:
+                    nut_bom_names = [n["parent"] for n in nut_boms]
+                    bom_details = frappe.db.sql(f"""
+                        SELECT
+                            name,
+                            custom_source_warehouse,
+                            quantity,
+                            custom_priority,
+                            is_default
+                        FROM `tabBOM`
+                        WHERE name IN ({', '.join(['%s'] * len(nut_bom_names))})
+                    """, tuple(nut_bom_names), as_dict=True)
+
+                    selected_bom = None
+                    if len(bom_details) == 1:
+                        selected_bom = bom_details[0]["name"]
                     else:
-                        std_lot_weight = total_batch_size / lot_count
-                        if i < lot_count - 1:
-                            row.std_lot_weight = round(std_lot_weight, 3)
-                            remaining -= std_lot_weight
+                        default_boms = [b for b in bom_details if b.get("is_default")]
+                        if default_boms:
+                            selected_bom = default_boms[0]["name"]
                         else:
-                            row.std_lot_weight = round(remaining, 3)
-                            remaining = 0
-            else:
-                frappe.msgprint("⚠️ Missing Item Batch Size or Lot Count in Work Order.")
+                            sorted_boms = sorted(
+                                bom_details,
+                                key=lambda b: (
+                                    -(b.get("custom_priority") or 0),
+                                    -(b.get("quantity") or 0)
+                                )
+                            )
+                            if sorted_boms:
+                                selected_bom = sorted_boms[0]["name"]
+
+                    if selected_bom:
+                        previous_product_item = frappe.db.get_value(
+                            "BOM",
+                            selected_bom,
+                            "item"
+                        )
+                        if previous_product_item:
+                            self.previous_product = previous_product_item
+                            self.previous_product_line = previous_product_item
+                            self.previous_product_1 = previous_product_item
+                            self.previous_product_powder = previous_product_item
+
+        # Fetch Batch No from latest Work Order for the same BOM as used in previous_product
+        self.batch_no = None
+        self.batch_no_line = None
+        self.b_no = None
+        self.batch_no_powder = None
+        if self.reference_name:
+            # Step 1: Use the same BOM selected for previous_product
+            if selected_bom:
+                # Step 2: Find latest Work Order using this BOM
+                latest_wo = frappe.db.sql("""
+                    SELECT name
+                    FROM `tabWork Order`
+                    WHERE bom_no = %s
+                    ORDER BY creation DESC
+                    LIMIT 1
+                """, selected_bom, as_dict=True)
+
+                if latest_wo:
+                    latest_wo_name = latest_wo[0].get("name")
+
+                    # Step 3: Fetch Batch linked to that Work Order
+                    batch_doc = frappe.db.get_value(
+                        "Batch",
+                        {
+                            "reference_doctype": "Work Order",
+                            "reference_name": latest_wo_name,
+                        },
+                        "name",
+                    )
+
+                    if batch_doc:
+                        self.batch_no = batch_doc
+                        self.batch_no_line = batch_doc
+                        self.b_no = batch_doc
+                        self.batch_no_powder = batch_doc
+
+    def before_save(self):
+        # 1️⃣ Fetch item_batch_size from Work Order
+        if self.reference_name:
+            item_batch_size = frappe.db.get_value(
+                "Work Order",
+                self.reference_name,
+                "custom__item_batch_size"
+            )
+            self.item_batch_size = float(item_batch_size or 0)
+        else:
+            self.item_batch_size = 0
+
+        # 2️⃣ Calculate bulk weight and actual yield after manufacturing
+        total_weight = sum(float(d.net_weight_kg or 0) for d in self.blend_output)
+        self.bulk_weight_found_after_manufacturing = total_weight
+
+        if self.item_batch_size:
+            try:
+                actual_yield = (
+                    float(self.bulk_weight_found_after_manufacturing)
+                    / float(self.item_batch_size)
+                ) * 100
+                self.actual_yield_after_manufacturing = actual_yield
+            except ZeroDivisionError:
+                self.actual_yield_after_manufacturing = 0
+        else:
+            self.actual_yield_after_manufacturing = 0
+
+        # 3️⃣ Fetch QC Sample Quantity (in gm)
+        self.quantity_of_qc_sample_gm = 0
+        if self.reference_name:
+            manufacture_entry = frappe.db.get_value(
+                "Stock Entry",
+                {
+                    "work_order": self.reference_name,
+                    "stock_entry_type": "Manufacture",
+                    "docstatus": ["<", 2],
+                },
+                "name",
+            )
+
+            if manufacture_entry:
+                quality_inspection = frappe.db.get_value(
+                    "Quality Inspection",
+                    {
+                        "reference_type": "Stock Entry",
+                        "reference_name": manufacture_entry,
+                    },
+                    "name",
+                )
+
+                if quality_inspection:
+                    sample_transfer = frappe.db.get_value(
+                        "Stock Entry",
+                        {"stock_entry_type": "Sample Internal Transfer"},
+                        "name",
+                    )
+
+                    if sample_transfer:
+                        qty = frappe.db.get_value(
+                            "Stock Entry Detail",
+                            {"parent": sample_transfer},
+                            "qty",
+                        )
+                        self.quantity_of_qc_sample_gm = float(qty or 0)
+
+        # 4️⃣ Calculate Process Loss
+        self.processloss_during_manufacturing = (
+            float(self.item_batch_size or 0)
+            - float(self.bulk_weight_found_after_manufacturing or 0)
+            - float(self.quantity_of_qc_sample_gm or 0)
+        )
+
+        # 5️⃣ Calculate Actual Yield for Packing
+        try:
+            self.actual_yield_for_packing = (
+                (float(self.bulk_weight_found_after_manufacturing or 0)
+                - float(self.quantity_of_qc_sample_gm or 0))
+                / float(self.item_batch_size or 1)
+            ) * 100
+        except ZeroDivisionError:
+            self.actual_yield_for_packing = 0
+
+        
+        
+
+
+
+
+
