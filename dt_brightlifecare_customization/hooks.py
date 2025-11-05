@@ -592,7 +592,12 @@ custom_field = [
     "Work Order-custom_lot_count",
     "Work Order-custom_assignee_to_bmrbpr",
     "Warehouse-custom_workinprogress_warehouse", 
-    "Quality Inspection Template-custom_stage_of_process"   
+    "Quality Inspection Template-custom_stage_of_process",
+    "Stock Entry Detail-custom_batch_validation",
+    "Stock Entry-custom_validate_batch",
+    "Quality Inspection-custom_template_update_needed",
+    "Stock Entry-custom_parameters",
+    "Stock Entry-custom_qc_parameter"
 ]
 
 
