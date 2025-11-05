@@ -1,4 +1,6 @@
 import frappe
+from frappe.utils import flt
+
 
 # -------------------------------
 # Helpers
@@ -108,7 +110,7 @@ def _create_stock_entry(qi, stock_entry_type, qty, source_wh=None, target_wh=Non
         se.bill_to_address = get_warehouse_address(target_wh)
         se.ship_to_address = se.bill_to_address
 
-    elif stock_entry_type == "External NRGP":
+    elif stock_entry_type == "External QC NRGP":
         se.bill_from_address = frappe.db.get_value("Warehouse", source_wh, "custom_company_address") or ""
         se.ship_from_address = get_warehouse_address(source_wh)
 
@@ -154,7 +156,7 @@ def _sync_sample_status(qi_name):
 
 
 def _get_source_for_external_nrgp(qi):
-    """Determine source warehouse for External NRGP dynamically"""
+    """Determine source warehouse for External QC NRGP dynamically"""
     internal_nrgp_entries = _existing_stock_entry(qi.name, types=["Internal NRGP"])
     if internal_nrgp_entries:
         se_items = frappe.get_all(
@@ -176,13 +178,39 @@ def _get_source_for_external_nrgp(qi):
 # -------------------------------
 
 @frappe.whitelist()
-def make_internal_transfer(qi_name):
+def make_internal_transfer(qi_name, sample_qty=None):
     """Collect Sample → creates a Sample Internal Transfer"""
     if _existing_stock_entry(qi_name, types=["Sample Internal Transfer"]):
         frappe.throw(f"Sample Internal Transfer already exists for this QI: {qi_name}")
 
     qi = frappe.get_doc("Quality Inspection", qi_name)
-    sample_size = qi.sample_size or 1
+
+    # use user-entered qty or fall back to sample_size or 1
+    qty = float(sample_qty) if sample_qty else (qi.sample_size or 1)
+
+    # ✅ Ensure total qty of all Internal NRGP < reference doc qty
+    ref_type = qi.reference_type
+    ref_name = qi.reference_name
+    if not (ref_type and ref_name):
+        frappe.throw("Missing reference document in Quality Inspection.")
+
+    # Get the reference document’s total quantity
+    ref_doc = frappe.get_doc(ref_type, ref_name)
+    ref_qty = 0
+    if hasattr(ref_doc, "items"):
+        ref_qty = sum(flt(i.qty) for i in ref_doc.items if i.item_code == qi.item_code)
+    else:
+        frappe.throw(f"Reference document {ref_type} has no items table to compare quantity.")
+
+
+    if not ref_qty:
+        frappe.throw(f"No 'qty' found in reference document {qi.reference_name}")
+
+    if qty > ref_qty:
+        frappe.throw(
+            f"Sample quantity ({qty}) cannot exceed reference document qty ({ref_qty})."
+        )
+
 
     target_wh = frappe.db.get_value("Warehouse", _get_source_warehouse(qi), "custom_qc_warehouse") \
                  or "FG LUHARI - BL"
@@ -190,7 +218,7 @@ def make_internal_transfer(qi_name):
     se_name = _create_stock_entry(
         qi,
         "Sample Internal Transfer",
-        sample_size,
+        qty,
         source_wh=_get_source_warehouse(qi),
         target_wh=target_wh,
         draft=False
@@ -202,67 +230,223 @@ def make_internal_transfer(qi_name):
     return {"stock_entry": se_name}
 
 
+
+
+
+# @frappe.whitelist()
+# def make_external_nrgp(qi_name, ship_to_address=None, draft=False, custom_test_cost=None):
+#     """Create External NRGP (asks only Ship To Address + Test Cost)"""
+#     draft = frappe.utils.cint(draft) == 1 or str(draft).lower() == "true"
+
+#     if _existing_stock_entry(qi_name, types=["External NRGP"]):
+#         frappe.throw(f"External NRGP already exists for this QI: {qi_name}")
+
+#     qi = frappe.get_doc("Quality Inspection", qi_name)
+#     sample_size = qi.sample_size or 1
+#     half_qty = sample_size / 2
+
+#     source_wh = _get_source_for_external_nrgp(qi)
+#     if not source_wh:
+#         frappe.throw("No source warehouse found. Run 'Collect Sample' or create Internal NRGP first.")
+
+#     se_name = _create_stock_entry(
+#         qi,
+#         "External NRGP",
+#         half_qty,
+#         source_wh=source_wh,
+#         target_wh=None,
+#         draft=draft,
+#         to_address=ship_to_address
+#     )
+
+#     # ✅ Save test cost into Stock Entry
+#     if custom_test_cost:
+#         frappe.db.set_value("Stock Entry", se_name, "custom_test_cost", custom_test_cost)
+
+#     return {"stock_entry": se_name}
+
+
+
 @frappe.whitelist()
-def make_external_nrgp(qi_name, ship_to_address=None, draft=False, custom_test_cost=None):
-    """Create External NRGP (asks only Ship To Address + Test Cost)"""
+def make_external_qc_nrgp(qi_name, ship_to_address=None, draft=False, custom_qty=None):
+    """Create External NRGP (asks for Ship To Address + Test Cost + Quantity)"""
     draft = frappe.utils.cint(draft) == 1 or str(draft).lower() == "true"
 
-    if _existing_stock_entry(qi_name, types=["External NRGP"]):
-        frappe.throw(f"External NRGP already exists for this QI: {qi_name}")
+    # if _existing_stock_entry(qi_name, types=["External NRGP"]):
+    #     frappe.throw(f"External NRGP already exists for this QI: {qi_name}")
 
     qi = frappe.get_doc("Quality Inspection", qi_name)
-    sample_size = qi.sample_size or 1
-    half_qty = sample_size / 2
 
+    # ✅ Determine quantity to use
+    try:
+        qty = flt(custom_qty) if custom_qty else flt((qi.sample_size or 1) / 2)
+    except Exception:
+        frappe.throw("Invalid quantity value provided for External QC NRGP.")
+
+    # ✅ Get source warehouse
     source_wh = _get_source_for_external_nrgp(qi)
     if not source_wh:
         frappe.throw("No source warehouse found. Run 'Collect Sample' or create Internal NRGP first.")
 
+
+    # ✅ Ensure total qty of all Internal NRGP < reference doc qty
+    ref_type = qi.reference_type
+    ref_name = qi.reference_name
+    if not (ref_type and ref_name):
+        frappe.throw("Missing reference document in Quality Inspection.")
+
+
+    # Get the reference document’s total quantity
+    ref_doc = frappe.get_doc(ref_type, ref_name)
+    ref_qty = 0
+    if hasattr(ref_doc, "items"):
+        ref_qty = sum(flt(i.qty) for i in ref_doc.items if i.item_code == qi.item_code)
+    else:
+        frappe.throw(f"Reference document {ref_type} has no items table to compare quantity.")
+
+
+    existing_qty = frappe.db.sql(
+        """
+        SELECT SUM(sei.qty)
+        FROM `tabStock Entry Detail` sei
+        JOIN `tabStock Entry` se ON se.name = sei.parent
+        WHERE se.stock_entry_type = 'External QC NRGP'
+          AND sei.quality_inspection = %s
+          AND se.docstatus < 2
+        """,
+        qi_name
+    )[0][0] or 0
+
+    total_after_new = existing_qty + qty
+
+    if total_after_new > ref_qty:
+        frappe.throw(
+            f"Cannot create External QC NRGP of qty {qty}. "
+            f"Total NRGP qty ({total_after_new}) exceeds reference qty ({ref_qty})."
+        )
+
+
+    # ✅ Create Stock Entry
     se_name = _create_stock_entry(
         qi,
-        "External NRGP",
-        half_qty,
+        "External QC NRGP",
+        qty,  # use manually entered qty
         source_wh=source_wh,
         target_wh=None,
         draft=draft,
         to_address=ship_to_address
     )
 
-    # ✅ Save test cost into Stock Entry
-    if custom_test_cost:
-        frappe.db.set_value("Stock Entry", se_name, "custom_test_cost", custom_test_cost)
-
+  
     return {"stock_entry": se_name}
 
 
+# @frappe.whitelist()
+# def make_internal_nrgp(qi_name, target_warehouse=None, draft=False):
+#     draft = frappe.utils.cint(draft) == 1 or str(draft).lower() == "true"
+#     """Create an Internal NRGP (full qty)"""
+#     if _existing_stock_entry(qi_name, types=["Internal NRGP"]):
+#         frappe.throw(f"Internal NRGP already exists for this QI: {qi_name}")
+
+#     if not target_warehouse:
+#         frappe.throw("Please select a Target Warehouse for Internal NRGP")
+
+#     qi = frappe.get_doc("Quality Inspection", qi_name)
+#     sample_size = qi.sample_size or 1
+
+#     # Source warehouse = Sample Internal Transfer target
+#     source_wh = qi.get("custom_mt_target_warehouse")
+#     if not source_wh:
+#         frappe.throw("No MT Target Warehouse found. Run 'Collect Sample' first.")
+
+#     se_name = _create_stock_entry(
+#         qi,
+#         "Internal NRGP",
+#         sample_size,
+#         source_wh=source_wh,
+#         target_wh=target_warehouse,
+#         draft=draft
+#     )
+
+#     return {"stock_entry": se_name}
+
+
+
 @frappe.whitelist()
-def make_internal_nrgp(qi_name, target_warehouse=None, draft=False):
+def make_internal_nrgp(qi_name, target_warehouse=None, draft=False, custom_qty=None):
+    """Create an Internal NRGP (uses entered Quantity or full sample size)"""
     draft = frappe.utils.cint(draft) == 1 or str(draft).lower() == "true"
-    """Create an Internal NRGP (full qty)"""
-    if _existing_stock_entry(qi_name, types=["Internal NRGP"]):
-        frappe.throw(f"Internal NRGP already exists for this QI: {qi_name}")
+
+    # if _existing_stock_entry(qi_name, types=["Internal NRGP"]):
+    #     frappe.throw(f"Internal NRGP already exists for this QI: {qi_name}")
 
     if not target_warehouse:
         frappe.throw("Please select a Target Warehouse for Internal NRGP")
 
     qi = frappe.get_doc("Quality Inspection", qi_name)
-    sample_size = qi.sample_size or 1
 
-    # Source warehouse = Sample Internal Transfer target
+    # ✅ Determine which quantity to use
+    try:
+        qty = float(custom_qty) if custom_qty else float(qi.sample_size or 1)
+    except Exception:
+        frappe.throw("Invalid quantity value provided for Internal NRGP.")
+
+
+    # ✅ Source warehouse = Sample Internal Transfer target
     source_wh = qi.get("custom_mt_target_warehouse")
     if not source_wh:
         frappe.throw("No MT Target Warehouse found. Run 'Collect Sample' first.")
 
+    
+    # ✅ Ensure total qty of all Internal NRGP < reference doc qty
+    ref_type = qi.reference_type
+    ref_name = qi.reference_name
+    if not (ref_type and ref_name):
+        frappe.throw("Missing reference document in Quality Inspection.")
+
+
+    # Get the reference document’s total quantity
+    ref_doc = frappe.get_doc(ref_type, ref_name)
+    ref_qty = 0
+    if hasattr(ref_doc, "items"):
+        ref_qty = sum(flt(i.qty) for i in ref_doc.items if i.item_code == qi.item_code)
+    else:
+        frappe.throw(f"Reference document {ref_type} has no items table to compare quantity.")
+
+
+    existing_qty = frappe.db.sql(
+        """
+        SELECT SUM(sei.qty)
+        FROM `tabStock Entry Detail` sei
+        JOIN `tabStock Entry` se ON se.name = sei.parent
+        WHERE se.stock_entry_type = 'Internal NRGP'
+          AND sei.quality_inspection = %s
+          AND se.docstatus < 2
+        """,
+        qi_name
+    )[0][0] or 0
+
+    total_after_new = existing_qty + qty
+
+    if total_after_new > ref_qty:
+        frappe.throw(
+            f"Cannot create Internal NRGP of qty {qty}. "
+            f"Total NRGP qty ({total_after_new}) exceeds reference qty ({ref_qty})."
+        )
+
+
+    # ✅ Create the Stock Entry
     se_name = _create_stock_entry(
         qi,
         "Internal NRGP",
-        sample_size,
+        qty,
         source_wh=source_wh,
         target_wh=target_warehouse,
         draft=draft
     )
 
     return {"stock_entry": se_name}
+
 
 
 @frappe.whitelist()
@@ -353,7 +537,7 @@ def check_stock_entries(qi_name):
 
     external_exists = frappe.db.exists("Stock Entry", {
         "name": ["in", parents],
-        "stock_entry_type": "External NRGP",
+        "stock_entry_type": "External QC NRGP",
     })
 
     return {
