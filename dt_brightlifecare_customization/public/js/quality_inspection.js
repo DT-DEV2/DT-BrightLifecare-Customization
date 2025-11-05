@@ -14,27 +14,47 @@ frappe.ui.form.on("Quality Inspection", {
 
                         if (!r.message.active) {
                             frm.add_custom_button("Collect Sample", function () {
-                                frappe.call({
-                                    method: "dt_brightlifecare_customization.public.py.quality_inspection.make_internal_transfer",
-                                    args: { qi_name: frm.doc.name },
-                                    callback: function (r) {
-                                        frm.reload_doc();
-                                        if (r.message && r.message.stock_entry) {
-                                            frappe.msgprint({
-                                                message: __('Sample Stock Entry created: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
-                                                indicator: 'green'
-                                            });
+                                frappe.prompt(
+                                    [
+                                        {
+                                            label: "Enter Sample Quantity",
+                                            fieldname: "sample_qty",
+                                            fieldtype: "Float",
+                                            reqd: 1,
+                                            description: "Enter how many samples you want to collect",
+                                            default: frm.doc.sample_size || 1
                                         }
-                                    }
-                                });
+                                    ],
+                                    function (data) {
+                                        frappe.call({
+                                            method: "dt_brightlifecare_customization.public.py.quality_inspection.make_internal_transfer",
+                                            args: {
+                                                qi_name: frm.doc.name,
+                                                sample_qty: data.sample_qty
+                                            },
+                                            callback: function (r) {
+                                                frm.reload_doc();
+                                                if (r.message && r.message.stock_entry) {
+                                                    frappe.msgprint({
+                                                        message: __('Sample Stock Entry created: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
+                                                        indicator: 'green'
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    },
+                                    __("Enter Sample Quantity"),
+                                    __("Create")
+                                );
                             });
+
                         }
                     }
                 }
             });
         }
 
-      if (frm.doc.docstatus === 0 && frm.doc.custom_sample_status === "Sample Collected") {
+        if (frm.doc.docstatus === 0 && frm.doc.custom_sample_status === "Sample Collected") {
             frm.add_custom_button(__("NRGP"), () => {
 
                 // Step 1 → Choose NRGP Type
@@ -56,7 +76,7 @@ frappe.ui.form.on("Quality Inspection", {
                         // ------------------- External NRGP -------------------
                         if (values.nrgp_type === "External") {
                             let address_dialog = new frappe.ui.Dialog({
-                                title: __("External NRGP Details"),
+                                title: __("External QC NRGP Details"),
                                 fields: [
                                     { 
                                         fieldtype: "Link", 
@@ -72,11 +92,11 @@ frappe.ui.form.on("Quality Inspection", {
                                             };
                                         }
                                     },
-                                    { 
-                                        fieldtype: "Float", 
-                                        label: "Test Cost", 
-                                        fieldname: "custom_test_cost", 
-                                        reqd: 1 
+                                    {
+                                        fieldtype: "Float",
+                                        label: "Quantity",
+                                        fieldname: "custom_qty",
+                                        reqd: 1
                                     }
                                 ],
                                 primary_action_label: __("Add Tranporter Details"),
@@ -86,14 +106,14 @@ frappe.ui.form.on("Quality Inspection", {
                                         args: {
                                             qi_name: frm.doc.name,
                                             ship_to_address: values.ship_to_address,
-                                            custom_test_cost: values.custom_test_cost,
+                                            custom_qty: values.custom_qty,
                                             draft: true
                                         },
                                         callback(r) {
                                             frm.reload_doc();
                                             if (r.message && r.message.stock_entry) {
                                                 frappe.msgprint({
-                                                    message: __('External NRGP created in Draft: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
+                                                    message: __('External QC NRGP created in Draft: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
                                                     indicator: 'green'
                                                 });
                                             }
@@ -109,14 +129,14 @@ frappe.ui.form.on("Quality Inspection", {
                                         args: {
                                             qi_name: frm.doc.name,
                                             ship_to_address: vals.ship_to_address,
-                                            custom_test_cost: vals.custom_test_cost,
+                                            custom_qty: vals.custom_qty,
                                             draft: false
                                         },
                                         callback(r) {
                                             frm.reload_doc();
                                             if (r.message && r.message.stock_entry) {
                                                 frappe.msgprint({
-                                                    message: __('External NRGP created & Submitted: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
+                                                    message: __('External QC NRGP created & Submitted: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
                                                     indicator: 'green'
                                                 });
                                             }
@@ -154,13 +174,24 @@ frappe.ui.form.on("Quality Inspection", {
                                                 }
                                             };
                                         }
+                                    },
+                                    {
+                                        fieldtype: "Float",
+                                        label: "Quantity",
+                                        fieldname: "custom_qty",
+                                        reqd: 1
                                     }
                                 ],
                                 primary_action_label: __("Add Transporter Details"),
                                 primary_action(values) {
                                     frappe.call({
                                         method: "dt_brightlifecare_customization.public.py.quality_inspection.make_internal_nrgp",
-                                        args: { qi_name: frm.doc.name, target_warehouse: values.target_warehouse, draft: true },
+                                        args: { 
+                                            qi_name: frm.doc.name, 
+                                            target_warehouse: values.target_warehouse, 
+                                            custom_qty: values.custom_qty,
+                                            draft: true 
+                                        },
                                         callback(r){
                                             frm.reload_doc();
                                             if (r.message && r.message.stock_entry) {
@@ -175,10 +206,15 @@ frappe.ui.form.on("Quality Inspection", {
                                 },
                                 secondary_action_label: __("Submit"),
                                 secondary_action() {
-                                    let target_wh = step2.get_values().target_warehouse;
+                                    let vals = step2.get_values();
                                     frappe.call({
                                         method: "dt_brightlifecare_customization.public.py.quality_inspection.make_internal_nrgp",
-                                        args: { qi_name: frm.doc.name, target_warehouse: target_wh, draft: false },
+                                        args: { 
+                                            qi_name: frm.doc.name, 
+                                            target_warehouse: vals.target_warehouse, 
+                                            custom_qty: vals.custom_qty,
+                                            draft: false 
+                                        },
                                         callback(r){
                                             frm.reload_doc();
                                             if (r.message && r.message.stock_entry) {
