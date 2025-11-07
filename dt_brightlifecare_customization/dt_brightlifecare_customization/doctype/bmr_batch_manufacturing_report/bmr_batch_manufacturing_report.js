@@ -52,3 +52,54 @@ frappe.ui.form.on("BMR-Batch Manufacturing Report", {
         frm.refresh_field("line_clearance");
     }
 });
+
+frappe.ui.form.on("BMR-Batch Manufacturing Report", {
+    actual_yield_after_manufacturing(frm) {
+        frm.trigger("check_deviation_condition");
+    },
+    theoretical_yield_reconcile(frm) {
+        frm.trigger("check_deviation_condition");
+    },
+    refresh(frm) {
+        frm.trigger("check_deviation_condition");
+    },
+    check_deviation_condition(frm) {
+        const actual = frm.doc.actual_yield_after_manufacturing || 0;
+        const theoretical = frm.doc.theoretical_yield_reconcile || 0;
+
+        const fields = [
+            'any_procedural_deviation',
+            'deviation_held_in_production_qa__me',
+            'action_done__planned',
+            'done_by',
+            'approval',
+            'reference_report_no',
+            'deviation_remarks'
+        ];
+
+        if (actual < theoretical) {
+            frm.set_value('deviation_remarks', 'No Deviation');
+
+            // Make all target fields read-only
+            fields.forEach(f => {
+                if (frm.fields_dict[f]) {
+                    frm.fields_dict[f].df.read_only = 1;
+                    frm.refresh_field(f);
+                } else {
+                    console.warn(`Field not found: ${f}`);
+                }
+            });
+        } else {
+            // Make them editable again
+            fields.forEach(f => {
+                if (frm.fields_dict[f]) {
+                    frm.fields_dict[f].df.read_only = 0;
+                    frm.refresh_field(f);
+                }
+            });
+            frm.set_value('deviation_remarks', '');
+        }
+    }
+});
+
+

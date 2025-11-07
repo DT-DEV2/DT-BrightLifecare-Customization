@@ -8,8 +8,10 @@
  "field_order": [
   "check_point",
   "production",
+  "production_attachment",
   "remarks_production",
   "quality",
+  "quality_attachment",
   "remarks_quality"
  ],
  "fields": [
@@ -47,13 +49,23 @@
    "fieldname": "remarks_quality",
    "fieldtype": "Data",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "production_attachment",
+   "fieldtype": "Attach",
+   "label": "Production Attachment"
+  },
+  {
+   "fieldname": "quality_attachment",
+   "fieldtype": "Attach",
+   "label": "Quality Attachment"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-29 10:43:55.740206",
+ "modified": "2025-11-06 14:42:24.888164",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Line Clearance Template",
