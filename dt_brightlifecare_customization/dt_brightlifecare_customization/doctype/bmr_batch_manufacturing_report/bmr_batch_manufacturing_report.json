@@ -185,20 +185,31 @@
   "no_of_label",
   "production_on",
   "attached_by",
+  "section_break_iczg",
+  "created_by_label",
+  "column_break_bluk",
+  "checked_by_label",
   "enclosures_tab",
   "enclosure_template",
   "enclosure_checkpoint",
+  "section_break_gpgn",
+  "created_by_enclosure",
+  "column_break_kqkh",
+  "checked_by_enclosure",
   "batch_reconciliation_data_sheet_tab",
-  "theoretical_batch_size",
+  "item_batch_size",
   "uom_reconcialiation",
-  "theoretical_yield_batch",
+  "theoretical_yield_reconcile",
   "bulk_weight_found_after_manufacturing",
   "actual_yield_after_manufacturing",
   "quantity_of_qc_sample_gm",
   "processloss_during_manufacturing",
   "total_bulk_weight_handed_over_for_packing",
   "actual_yield_for_packing",
-  "item_batch_size",
+  "section_break_hmeg",
+  "created_by_reconcile",
+  "column_break_gfed",
+  "checked_by_reconcile",
   "deviation_report_tab",
   "any_procedural_deviation",
   "deviation_held_in_production_qa__me",
@@ -354,7 +365,7 @@
   {
    "fieldname": "batch_no",
    "fieldtype": "Link",
-   "label": "Batch No.",
+   "label": "Previous Batch No.",
    "options": "Batch"
   },
   {
@@ -446,16 +457,6 @@
    "fieldname": "batch_reconciliation_data_sheet_tab",
    "fieldtype": "Tab Break",
    "label": "Batch Reconciliation Data Sheet"
-  },
-  {
-   "fieldname": "theoretical_batch_size",
-   "fieldtype": "Data",
-   "label": "Theoretical Batch Size"
-  },
-  {
-   "fieldname": "theoretical_yield_batch",
-   "fieldtype": "Data",
-   "label": "Theoretical Yield (%)"
   },
   {
    "fieldname": "bulk_weight_found_after_manufacturing",
@@ -567,7 +568,7 @@
   {
    "fieldname": "b_no",
    "fieldtype": "Link",
-   "label": "B. No.",
+   "label": "Previous B. No.",
    "options": "Batch"
   },
   {
@@ -616,7 +617,7 @@
   {
    "fieldname": "batch_no_line",
    "fieldtype": "Link",
-   "label": "Batch No",
+   "label": "Previous Batch No",
    "options": "Batch"
   },
   {
@@ -707,7 +708,7 @@
   {
    "fieldname": "batch_no_powder",
    "fieldtype": "Link",
-   "label": "Batch No",
+   "label": "Previous Batch No",
    "options": "Batch"
   },
   {
@@ -944,33 +945,38 @@
    "fieldname": "any_procedural_deviation",
    "fieldtype": "Small Text",
    "label": "Any Procedural Deviation ",
-   "read_only_depends_on": "eval:doc.actual_yield_after_manufacturing < doc.theoretical_yield_batch"
+   "read_only_depends_on": "eval:doc.actual_yield_after_manufacturing < doc.theoretical_yield_reconcile"
   },
   {
    "fieldname": "deviation_held_in_production_qa__me",
    "fieldtype": "Small Text",
-   "label": "Deviation held in (Production/ QA / ME)"
+   "label": "Deviation held in (Production/ QA / ME)",
+   "read_only_depends_on": "eval:doc.actual_yield_after_manufacturing < doc.theoretical_yield_reconcile"
   },
   {
    "fieldname": "action_done__planned",
    "fieldtype": "Date",
-   "label": "Action Done / Planned"
+   "label": "Action Done / Planned",
+   "read_only_depends_on": "eval:doc.actual_yield_after_manufacturing < doc.theoretical_yield_reconcile"
   },
   {
    "fieldname": "done_by",
    "fieldtype": "Data",
-   "label": "Done by:"
+   "label": "Done by:",
+   "read_only_depends_on": "eval:doc.actual_yield_after_manufacturing < doc.theoretical_yield_reconcile"
   },
   {
    "description": "(Production)(Q.A.)",
    "fieldname": "approval",
    "fieldtype": "Data",
-   "label": "Approval:"
+   "label": "Approval:",
+   "read_only_depends_on": "eval:doc.actual_yield_after_manufacturing < doc.theoretical_yield_reconcile"
   },
   {
    "fieldname": "reference_report_no",
    "fieldtype": "Data",
-   "label": "Reference Report No."
+   "label": "Reference Report No.",
+   "read_only_depends_on": "eval:doc.actual_yield_after_manufacturing < doc.theoretical_yield_reconcile"
   },
   {
    "fieldname": "deviation_remarks",
@@ -1281,14 +1287,79 @@
   {
    "fieldname": "item_batch_size",
    "fieldtype": "Data",
-   "label": "Item Batch Size"
+   "label": "Theoretical Batch Size"
+  },
+  {
+   "fieldname": "theoretical_yield_reconcile",
+   "fieldtype": "Data",
+   "label": "Theoretical Yield (%)"
+  },
+  {
+   "fieldname": "section_break_iczg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "created_by_label",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_bluk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "checked_by_label",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_gpgn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "created_by_enclosure",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_kqkh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "checked_by_enclosure",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_hmeg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "created_by_reconcile",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_gfed",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "checked_by_reconcile",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-31 13:22:48.391913",
+ "modified": "2025-11-06 14:51:38.077808",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",

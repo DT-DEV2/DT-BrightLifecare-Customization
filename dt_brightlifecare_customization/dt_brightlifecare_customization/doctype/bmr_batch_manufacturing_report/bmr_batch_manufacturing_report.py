@@ -52,11 +52,14 @@ class BMRBatchManufacturingReport(Document):
                     "custom_theoretical_yield_"
                 )
                 self.theoretical_yield_batch = flt(theoretical_yield or 0.00)
-        # Fetch Previous Product (based on Work Order → BOM → NUT BOM linkage)
+
+        # Initialize previous product + selected_bom to safe defaults
         self.previous_product = None
         self.previous_product_line = None
         self.previous_product_1 = None
         self.previous_product_powder = None
+        selected_bom = None  # <---- ensure this is always defined
+
         if self.reference_name:
             wo_bom = frappe.db.get_value("Work Order", self.reference_name, "bom_no")
             if wo_bom:
@@ -64,7 +67,7 @@ class BMRBatchManufacturingReport(Document):
                     SELECT DISTINCT parent
                     FROM `tabBOM Item`
                     WHERE bom_no = %s
-                """, wo_bom, as_dict=True)
+                """, (wo_bom,), as_dict=True)
 
                 if nut_boms:
                     nut_bom_names = [n["parent"] for n in nut_boms]
@@ -79,7 +82,7 @@ class BMRBatchManufacturingReport(Document):
                         WHERE name IN ({', '.join(['%s'] * len(nut_bom_names))})
                     """, tuple(nut_bom_names), as_dict=True)
 
-                    selected_bom = None
+                    # decide selected_bom robustly
                     if len(bom_details) == 1:
                         selected_bom = bom_details[0]["name"]
                     else:
@@ -124,7 +127,7 @@ class BMRBatchManufacturingReport(Document):
                     WHERE bom_no = %s
                     ORDER BY creation DESC
                     LIMIT 1
-                """, selected_bom, as_dict=True)
+                """, (selected_bom,), as_dict=True)
 
                 if latest_wo:
                     latest_wo_name = latest_wo[0].get("name")
@@ -227,11 +230,3 @@ class BMRBatchManufacturingReport(Document):
             ) * 100
         except ZeroDivisionError:
             self.actual_yield_for_packing = 0
-
-        
-        
-
-
-
-
-
