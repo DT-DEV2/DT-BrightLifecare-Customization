@@ -64,6 +64,8 @@
   "nutritional_information",
   "typical_amino_acid_profile",
   "specific_amino_acids_profile",
+  "added_vitamins",
+  "added_minerals",
   "master_formula_sheet_tab",
   "formula_sheet",
   "line_clearance_for_dispensing_area_tab",
@@ -1353,13 +1355,25 @@
    "fieldtype": "Link",
    "label": "Checked By",
    "options": "User"
+  },
+  {
+   "fieldname": "added_vitamins",
+   "fieldtype": "Table",
+   "label": "Added Vitamins",
+   "options": "Added Vitamins"
+  },
+  {
+   "fieldname": "added_minerals",
+   "fieldtype": "Table",
+   "label": "Added Minerals",
+   "options": "Added Minerals"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-06 14:51:38.077808",
+ "modified": "2025-11-10 15:31:38.104841",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
