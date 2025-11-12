@@ -562,3 +562,18 @@ def check_stock_entries(qi_name):
         "internal_exists": bool(internal_exists),
         "external_exists": bool(external_exists)
     }
+
+@frappe.whitelist()
+def get_external_qc_stock_entries(qi_name):
+    """
+    Fetch all Stock Entries of type "External QC NRGP" linked to this Quality Inspection.
+    Returns: list of dicts with stock_entry name and stock_entry_type
+    """
+    return frappe.db.get_all(
+        "Stock Entry",
+        filters={
+            "stock_entry_type": "External QC NRGP",
+            "quality_inspection": qi_name  # replace with your actual link field
+        },
+        fields=["name", "stock_entry_type"]
+    )
