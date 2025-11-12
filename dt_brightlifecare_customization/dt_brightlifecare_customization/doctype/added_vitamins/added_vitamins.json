@@ -20,14 +20,14 @@
    "fieldname": "per_serving",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Per Serving"
+   "label": "Per Serving (g)"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-29 13:30:55.226299",
+ "modified": "2025-11-10 15:02:51.265638",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Added Vitamins",

@@ -27,14 +27,14 @@
    "fieldname": "per_serving",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Per Serving"
+   "label": "Per Serving (g)"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-30 12:39:12.662658",
+ "modified": "2025-11-10 14:54:28.992633",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Typical Amino Acid Profile",

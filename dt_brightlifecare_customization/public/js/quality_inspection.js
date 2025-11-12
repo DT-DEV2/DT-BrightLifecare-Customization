@@ -366,7 +366,7 @@ frappe.ui.form.on("Quality Inspection", {
 frappe.ui.form.on("Quality Inspection", {
     refresh: function(frm) {
         // Always visible & grey by default
-        ["custom_internal_report", "custom_external_report", "custom_coa"].forEach(f => {
+        ["custom_internal_report", "custom_coa"].forEach(f => {
             frm.set_df_property(f, "hidden", 0);
             frm.fields_dict[f].df.read_only = 1;
             frm.refresh_field(f);
@@ -389,13 +389,8 @@ frappe.ui.form.on("Quality Inspection", {
                     unlock_attach(frm, "custom_internal_report");
                 }
 
-                // External COA → editable if External NRGP exists
-                if (external_exists) {
-                    unlock_attach(frm, "custom_external_report");
-                }
-
                 // Batch COA rules
-                apply_batch_coa_rule(frm, internal_exists, external_exists);
+                apply_batch_coa_rule(frm, internal_exists);
 
                 // Show external billed received only if custom_coa is attached
                 toggle_external_billed_received(frm);
@@ -434,11 +429,7 @@ function apply_batch_coa_rule(frm, internal_exists, external_exists) {
     } else if (!internal_exists && external_exists) {
         // Only external
         if (frm.doc.custom_external_report) unlock_attach(frm, "custom_coa");
-    } else if (internal_exists && external_exists) {
-        // Both internal + external
-        if (frm.doc.custom_internal_report && frm.doc.custom_external_report) {
-            unlock_attach(frm, "custom_coa");
-        }
+        
     }
 }
 function recheck_batch_coa(frm) {
@@ -459,3 +450,37 @@ function toggle_external_billed_received(frm) {
         frm.set_df_property("custom_coa_externalbilledreceived", "hidden", 1);
     }
 }
+frappe.ui.form.on("Quality Inspection", {
+    onload: function(frm) {
+        // Disable Add Row button for the child table
+        frm.fields_dict["custom_external_nrgp_test_results"].grid.cannot_add_rows = true;
+    },
+    refresh: function(frm) {
+        // Only fetch once per form open
+        if (!frm.__stock_entries_fetched && !frm.doc.__islocal) {
+            frm.__stock_entries_fetched = true;
+
+            frappe.call({
+                method: "dt_brightlifecare_customization.public.py.quality_inspection.get_external_qc_stock_entries",
+                args: { qi_name: frm.doc.name },
+                callback: function(r) {
+                    if (r.message && r.message.length) {
+                        frm.clear_table("custom_external_nrgp_test_results");
+
+                        r.message.forEach(function(se) {
+                            let row = frm.add_child("custom_external_nrgp_test_results");
+                            row.stock_entry = se.name;
+                            row.stock_entry_type = se.stock_entry_type;
+                        });
+
+                        frm.refresh_field("custom_external_nrgp_test_results");
+
+                    }
+                }
+            });
+        }
+    }
+});
+
+
+
