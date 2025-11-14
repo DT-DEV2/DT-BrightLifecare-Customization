@@ -298,7 +298,7 @@ def make_internal_transfer(qi_name, sample_qty=None):
         frappe.msgprint(f"Created new sample batch: <b>{new_batch_name}</b>")
 
     # --- Create Stock Entry using new batch ---
-    target_wh = frappe.db.get_value("Warehouse", source_wh, "custom_qc_warehouse") or "FG LUHARI - BL"
+    target_wh = frappe.db.get_value("Warehouse", source_wh, "custom_qc_warehouse")
 
     se_name = _create_stock_entry(
         qi,
@@ -384,7 +384,7 @@ def split_batch_custom(batch_no: str, item_code: str, warehouse: str, qty: float
     })
 
     # 👇 Do NOT call set_stock_entry_type() — it will override your custom type
-    stock_entry.insert(ignore_permissions=True)
+    stock_entry.insert()
     stock_entry.submit()
 
     return batch.name
