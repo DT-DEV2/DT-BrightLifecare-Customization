@@ -68,7 +68,7 @@ def get_warehouse_address(warehouse):
     ) or ""
 
 
-def _create_stock_entry(qi, stock_entry_type, qty, source_wh=None, target_wh=None, draft=False, to_address=None, parameters=None):
+def _create_stock_entry(qi, stock_entry_type, qty, source_wh=None, target_wh=None, draft=False, to_address=None, parameters=None, batch_no=None):
     """Create a Stock Entry document linked to QI and set addresses + GST"""
     if not source_wh:
         source_wh = _get_source_warehouse(qi)
@@ -86,7 +86,7 @@ def _create_stock_entry(qi, stock_entry_type, qty, source_wh=None, target_wh=Non
     item_row.s_warehouse = source_wh
     item_row.t_warehouse = target_wh
     item_row.quality_inspection = qi.name
-    item_row.batch_no = qi.batch_no
+    item_row.batch_no = batch_no or qi.batch_no
     item_row.use_serial_batch_fields = 1
 
     # -----------------------
@@ -144,6 +144,9 @@ def _create_stock_entry(qi, stock_entry_type, qty, source_wh=None, target_wh=Non
 
     return se.name
 
+
+
+
 def _sync_sample_status(qi_name):
     """Update custom_sample_status field depending on whether a Sample Internal Transfer exists"""
     entries = _existing_stock_entry(
@@ -186,57 +189,208 @@ def _get_source_for_external_nrgp(qi):
 # Whitelisted Methods
 # -------------------------------
 
+# @frappe.whitelist()
+# def make_internal_transfer(qi_name, sample_qty=None):
+#     """Collect Sample → creates a Sample Internal Transfer"""
+#     if _existing_stock_entry(qi_name, types=["Sample Internal Transfer"]):
+#         frappe.throw(f"Sample Internal Transfer already exists for this QI: {qi_name}")
+
+#     qi = frappe.get_doc("Quality Inspection", qi_name)
+
+#     # use user-entered qty or fall back to sample_size or 1
+#     qty = float(sample_qty) if sample_qty else (qi.sample_size or 1)
+
+#     # ✅ Ensure total qty of all Internal NRGP < reference doc qty
+#     ref_type = qi.reference_type
+#     ref_name = qi.reference_name
+#     if not (ref_type and ref_name):
+#         frappe.throw("Missing reference document in Quality Inspection.")
+
+#     # Get the reference document’s total quantity
+#     ref_doc = frappe.get_doc(ref_type, ref_name)
+#     ref_qty = 0
+#     if hasattr(ref_doc, "items"):
+#         ref_qty = sum(flt(i.qty) for i in ref_doc.items if i.item_code == qi.item_code)
+#     else:
+#         frappe.throw(f"Reference document {ref_type} has no items table to compare quantity.")
+
+
+#     if not ref_qty:
+#         frappe.throw(f"No 'qty' found in reference document {qi.reference_name}")
+
+#     if qty > ref_qty:
+#         frappe.throw(
+#             f"Sample quantity ({qty}) cannot exceed reference document qty ({ref_qty})."
+#         )
+
+
+#     target_wh = frappe.db.get_value("Warehouse", _get_source_warehouse(qi), "custom_qc_warehouse") \
+#                  or "FG LUHARI - BL"
+
+#     se_name = _create_stock_entry(
+#         qi,
+#         "Sample Internal Transfer",
+#         qty,
+#         source_wh=_get_source_warehouse(qi),
+#         target_wh=target_wh,
+#         draft=False
+#     )
+
+#     qi.db_set("custom_mt_target_warehouse", target_wh)
+#     _sync_sample_status(qi.name)
+
+#     return {"stock_entry": se_name}
+
+
+
+
+
 @frappe.whitelist()
 def make_internal_transfer(qi_name, sample_qty=None):
-    """Collect Sample → creates a Sample Internal Transfer"""
+    """Collect Sample → Split batch → Create Sample Internal Transfer."""
+    
+
     if _existing_stock_entry(qi_name, types=["Sample Internal Transfer"]):
         frappe.throw(f"Sample Internal Transfer already exists for this QI: {qi_name}")
 
     qi = frappe.get_doc("Quality Inspection", qi_name)
-
-    # use user-entered qty or fall back to sample_size or 1
     qty = float(sample_qty) if sample_qty else (qi.sample_size or 1)
 
-    # ✅ Ensure total qty of all Internal NRGP < reference doc qty
-    ref_type = qi.reference_type
-    ref_name = qi.reference_name
+    # --- Validate reference document ---
+    ref_type, ref_name = qi.reference_type, qi.reference_name
     if not (ref_type and ref_name):
         frappe.throw("Missing reference document in Quality Inspection.")
 
-    # Get the reference document’s total quantity
     ref_doc = frappe.get_doc(ref_type, ref_name)
-    ref_qty = 0
-    if hasattr(ref_doc, "items"):
-        ref_qty = sum(flt(i.qty) for i in ref_doc.items if i.item_code == qi.item_code)
-    else:
-        frappe.throw(f"Reference document {ref_type} has no items table to compare quantity.")
-
+    ref_qty = sum(flt(i.qty) for i in getattr(ref_doc, "items", []) if i.item_code == qi.item_code)
 
     if not ref_qty:
         frappe.throw(f"No 'qty' found in reference document {qi.reference_name}")
 
     if qty > ref_qty:
-        frappe.throw(
-            f"Sample quantity ({qty}) cannot exceed reference document qty ({ref_qty})."
+        frappe.throw(f"Sample quantity ({qty}) cannot exceed reference document qty ({ref_qty}).")
+
+    # --- Batch split logic ---
+    if not qi.batch_no:
+        frappe.throw("No batch number found in Quality Inspection.")
+
+    source_wh = _get_source_warehouse(qi)
+    if not source_wh:
+        frappe.throw("No source warehouse found for this Quality Inspection.")
+
+    # Generate new batch ID
+    new_batch_id = f"Sample{qi.batch_no}"
+
+    # Check if a sample batch already exists
+    existing_sample_batch = frappe.db.exists("Batch", {"batch_id": new_batch_id, "item": qi.item_code})
+    if existing_sample_batch:
+        frappe.msgprint(f"Reusing existing sample batch: <b>{new_batch_id}</b>")
+        new_batch_name = existing_sample_batch
+    else:
+        # ✅ Use ERPNext’s built-in batch split function
+        new_batch_name = split_batch_custom(
+            batch_no=qi.batch_no,
+            item_code=qi.item_code,
+            warehouse=source_wh,
+            qty=qty,
+            new_batch_id=new_batch_id
         )
+        frappe.msgprint(f"Created new sample batch: <b>{new_batch_name}</b>")
 
-
-    target_wh = frappe.db.get_value("Warehouse", _get_source_warehouse(qi), "custom_qc_warehouse") \
-                 or "FG LUHARI - BL"
+    # --- Create Stock Entry using new batch ---
+    target_wh = frappe.db.get_value("Warehouse", source_wh, "custom_qc_warehouse") or "FG LUHARI - BL"
 
     se_name = _create_stock_entry(
         qi,
         "Sample Internal Transfer",
         qty,
-        source_wh=_get_source_warehouse(qi),
+        source_wh=source_wh,
         target_wh=target_wh,
-        draft=False
+        draft=False,
+        batch_no=new_batch_name,  # 👈 assign the split batch
     )
 
     qi.db_set("custom_mt_target_warehouse", target_wh)
     _sync_sample_status(qi.name)
 
     return {"stock_entry": se_name}
+
+
+
+
+
+from erpnext.stock.doctype.batch.batch import make_batch_bundle
+
+@frappe.whitelist()
+def split_batch_custom(batch_no: str, item_code: str, warehouse: str, qty: float, new_batch_id: str | None = None):
+    """Custom Batch Split that creates a Stock Entry with stock_entry_type='Batch Split'"""
+
+    qty = flt(qty)
+    if not all([batch_no, item_code, warehouse, qty]):
+        frappe.throw("Missing required parameters for batch split")
+
+    # --- Create new batch ---
+    batch = frappe.get_doc({
+        "doctype": "Batch",
+        "item": item_code,
+        "batch_id": new_batch_id
+    }).insert()
+
+    # --- Get company ---
+    company = frappe.db.get_value("Warehouse", warehouse, "company")
+    if not company:
+        frappe.throw(f"Company not found for warehouse {warehouse}")
+
+    # --- Create Outward bundle from old batch ---
+    from_bundle_id = make_batch_bundle(
+        item_code=item_code,
+        warehouse=warehouse,
+        batches=frappe._dict({batch_no: qty}),
+        company=company,
+        type_of_transaction="Outward",
+        qty=qty,
+    )
+
+    # --- Create Inward bundle for new batch ---
+    to_bundle_id = make_batch_bundle(
+        item_code=item_code,
+        warehouse=warehouse,
+        batches=frappe._dict({batch.name: qty}),
+        company=company,
+        type_of_transaction="Inward",
+        qty=qty,
+    )
+
+    # --- Create Stock Entry of type 'Batch Split' ---
+    stock_entry = frappe.get_doc({
+        "doctype": "Stock Entry",
+        "stock_entry_type": "Batch Split",  # 👈 Custom type
+        "purpose": "Repack",
+        "company": company,
+        "items": [
+            {
+                "item_code": item_code,
+                "qty": qty,
+                "s_warehouse": warehouse,
+                "serial_and_batch_bundle": from_bundle_id,
+            },
+            {
+                "item_code": item_code,
+                "qty": qty,
+                "t_warehouse": warehouse,
+                "serial_and_batch_bundle": to_bundle_id,
+            },
+        ],
+    })
+
+    # 👇 Do NOT call set_stock_entry_type() — it will override your custom type
+    stock_entry.insert(ignore_permissions=True)
+    stock_entry.submit()
+
+    return batch.name
+
+
+
 
 
 
