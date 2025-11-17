@@ -111,10 +111,8 @@
    "fieldtype": "Section Break"
   },
   {
-   "description": "This will explode the above BOMs to retrieve raw material and packing material details for both finished goods and semi-finished goods.",
    "fieldname": "explode_bom",
    "fieldtype": "Button",
-   "hidden": 1,
    "label": "Explode BOM"
   },
   {
@@ -194,7 +192,7 @@
    "link_fieldname": "custom_mrp"
   }
  ],
- "modified": "2025-09-26 15:14:30.986481",
+ "modified": "2025-11-17 14:13:46.061057",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",
