@@ -683,6 +683,9 @@ doc_events = {
     },
     "Work Order": {
         "on_submit": "dt_brightlifecare_customization.public.py.work_order.submit"
+    },
+    "Pick List": {
+        "before_insert": "dt_brightlifecare_customization.public.py.pick_list.execute"
     }
 }
 
