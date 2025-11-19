@@ -297,6 +297,10 @@ def make_internal_transfer(qi_name, sample_qty=None):
         )
         frappe.msgprint(f"Created new sample batch: <b>{new_batch_name}</b>")
 
+    # --- Persist sample batch reference on the QI (so NRGPs can use it) ---
+    # Minimal, non-invasive change: store created/reused sample batch on QI
+    qi.db_set("custom_sample_batch", new_batch_name)
+
     # --- Create Stock Entry using new batch ---
     target_wh = frappe.db.get_value("Warehouse", source_wh, "custom_qc_warehouse")
 
@@ -451,6 +455,12 @@ def make_external_nrgp(qi_name, ship_to_address=None, draft=False, custom_qty=No
     if not source_wh:
         frappe.throw("No source warehouse found. Run 'Collect Sample' or create Internal NRGP first.")
 
+    # --- Ensure sample batch exists on the QI and use it ---
+    sample_batch = qi.get("custom_sample_batch")
+    if not sample_batch:
+        # minimal behavior change: insist on running Collect Sample first
+        frappe.throw("Sample batch not found for this Quality Inspection. Please run 'Collect Sample' first.")
+
     # ✅ Validate against reference document qty
     ref_type = qi.reference_type
     ref_name = qi.reference_name
@@ -483,7 +493,7 @@ def make_external_nrgp(qi_name, ship_to_address=None, draft=False, custom_qty=No
             f"Total NRGP qty ({total_after_new}) exceeds reference qty ({ref_qty})."
         )
 
-    # ✅ Create Stock Entry
+    # ✅ Create Stock Entry and assign the sample batch
     se_name = _create_stock_entry(
         qi,
         "External QC NRGP",
@@ -492,7 +502,8 @@ def make_external_nrgp(qi_name, ship_to_address=None, draft=False, custom_qty=No
         target_wh=None,
         draft=draft,
         to_address=ship_to_address,
-        parameters=parameters
+        parameters=parameters,
+        batch_no=sample_batch,  # <- assign created sample batch
     )
 
     # ✅ Add selected parameters
@@ -563,6 +574,11 @@ def make_internal_nrgp(qi_name, target_warehouse=None, draft=False, custom_qty=N
     if not source_wh:
         frappe.throw("No MT Target Warehouse found. Run 'Collect Sample' first.")
 
+    # --- Ensure sample batch exists on the QI and use it ---
+    sample_batch = qi.get("custom_sample_batch")
+    if not sample_batch:
+        frappe.throw("Sample batch not found for this Quality Inspection. Please run 'Collect Sample' first.")
+
     ref_type = qi.reference_type
     ref_name = qi.reference_name
     if not (ref_type and ref_name):
@@ -594,7 +610,7 @@ def make_internal_nrgp(qi_name, target_warehouse=None, draft=False, custom_qty=N
             f"Total NRGP qty ({total_after_new}) exceeds reference qty ({ref_qty})."
         )
 
-    # ✅ Create the Stock Entry
+    # ✅ Create the Stock Entry and assign the sample batch
     se_name = _create_stock_entry(
         qi,
         "Internal NRGP",
@@ -602,7 +618,8 @@ def make_internal_nrgp(qi_name, target_warehouse=None, draft=False, custom_qty=N
         source_wh=source_wh,
         target_wh=target_warehouse,
         draft=draft,
-        parameters=parameters
+        parameters=parameters,
+        batch_no=sample_batch,  # <- assign created sample batch
     )
 
     # ✅ Add selected parameters into SE.custom_parameters
@@ -647,7 +664,6 @@ def has_sample_stock_entry(qi_name):
 # -------------------------------
 # Batch Status Updates
 # -------------------------------
-
 def update_batch_status(batch_no, new_status):
     if not batch_no:
         return
@@ -656,18 +672,34 @@ def update_batch_status(batch_no, new_status):
         frappe.db.commit()
 
 
+# -------------------------------
+# QI VALIDATE
+# -------------------------------
+
 def on_qi_validate(doc, method=None):
+
+    # Main Batch → Testing
     if doc.docstatus == 0:
         update_batch_status(doc.batch_no, "Testing")
 
+    # NEW Sample Batch → Testing
+    sample_batch = doc.custom_sample_batch
+    if doc.docstatus == 0 and sample_batch:
+        update_batch_status(sample_batch, "Testing")
+
+
+# -------------------------------
+# QI SUBMIT
+# -------------------------------
 
 def on_qi_submit(doc, method=None):
+
     # 🔒 Block submission if any linked Stock Entries are not submitted
     pending_entries = frappe.get_all(
         "Stock Entry",
         filters={
             "quality_inspection": doc.name,
-            "docstatus": ["!=", 1]  # anything not submitted
+            "docstatus": ["!=", 1]
         },
         pluck="name"
     )
@@ -682,12 +714,29 @@ def on_qi_submit(doc, method=None):
         for row in batch.custom_quality_check_schedule:
             row.ar_number = doc.name
         batch.save()
-
+    # Determine status
     if doc.status == "Accepted":
-        update_batch_status(doc.batch_no, "Approved")
+        new_status = "Approved"
     elif doc.status == "Rejected":
-        update_batch_status(doc.batch_no, "Rejected")
+        new_status = "Rejected"
+    else:
+        new_status = None
 
+    # No status? Stop here
+    if not new_status:
+        return
+
+    # -------------------------------
+    # Update Main Batch Status
+    # -------------------------------
+    update_batch_status(doc.batch_no, new_status)
+
+    # -------------------------------
+    # Update Sample Batch Status
+    # -------------------------------
+    sample_batch = doc.custom_sample_batch
+    if sample_batch:
+        update_batch_status(sample_batch, new_status)
 
 
 @frappe.whitelist()
