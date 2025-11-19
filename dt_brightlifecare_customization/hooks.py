@@ -597,7 +597,8 @@ custom_field = [
     "Quality Inspection-custom_template_update_needed",
     "Stock Entry-custom_parameters",
     "Stock Entry-custom_qc_parameter",
-    "Quality Inspection-custom_external_nrgp_test_results"
+    "Quality Inspection-custom_external_nrgp_test_results",
+    "Quality Inspection-custom_sample_batch"
 ]
 
 
@@ -683,6 +684,9 @@ doc_events = {
     },
     "Work Order": {
         "on_submit": "dt_brightlifecare_customization.public.py.work_order.submit"
+    },
+    "Pick List": {
+        "before_insert": "dt_brightlifecare_customization.public.py.pick_list.execute"
     }
 }
 
