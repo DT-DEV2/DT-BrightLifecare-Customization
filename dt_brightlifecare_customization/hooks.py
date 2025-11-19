@@ -597,7 +597,8 @@ custom_field = [
     "Quality Inspection-custom_template_update_needed",
     "Stock Entry-custom_parameters",
     "Stock Entry-custom_qc_parameter",
-    "Quality Inspection-custom_external_nrgp_test_results"
+    "Quality Inspection-custom_external_nrgp_test_results",
+    "Quality Inspection-custom_sample_batch"
 ]
 
 
