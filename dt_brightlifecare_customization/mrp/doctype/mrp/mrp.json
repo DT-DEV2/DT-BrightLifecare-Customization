@@ -167,7 +167,6 @@
   {
    "fieldname": "get_sub_assembly_items",
    "fieldtype": "Button",
-   "hidden": 1,
    "label": "Get Sub Assembly Items"
   }
  ],
@@ -192,7 +191,7 @@
    "link_fieldname": "custom_mrp"
   }
  ],
- "modified": "2025-11-17 14:13:46.061057",
+ "modified": "2025-11-27 00:50:33.539006",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP",
