@@ -310,7 +310,7 @@
   },
   {
    "fieldname": "fssai_mfg_license_no",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "label": "FSSAI Mfg. License No."
   },
   {
@@ -1373,7 +1373,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-10 15:31:38.104841",
+ "modified": "2025-11-20 17:46:21.347407",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "BMR-Batch Manufacturing Report",
