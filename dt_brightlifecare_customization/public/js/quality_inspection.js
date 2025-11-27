@@ -1,5 +1,17 @@
 frappe.ui.form.on("Quality Inspection", {
     refresh: function (frm) {
+
+
+        $(document).on("click", ".actions-btn-group button", function () {
+            setTimeout(() => {
+                // Remove item with data-label="Collect Sample"
+                $('span.menu-item-label[data-label="Collect%20Sample"]')
+                    .closest("li")
+                    .remove();
+            }); // timeout so dropdown is fully rendered
+        });
+
+
         if (
             frm.doc.docstatus === 0 &&
             ["Purchase Receipt", "Delivery Note", "Stock Entry"].includes(frm.doc.reference_type)
@@ -39,6 +51,24 @@ frappe.ui.form.on("Quality Inspection", {
                                                         message: __('Sample Stock Entry created: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
                                                         indicator: 'green'
                                                     });
+
+                                                    // Trigger workflow action after successful stock entry creation
+                                                    frappe.call({
+                                                        method: "frappe.model.workflow.apply_workflow",
+                                                        args: {
+                                                            doc: frm.doc,
+                                                            action: "Collect Sample"
+                                                        },
+                                                        callback: function (workflow_r) {
+                                                            if (!workflow_r.exc) {
+                                                                frm.reload_doc();
+                                                                frappe.show_alert({
+                                                                    message: __("Workflow action 'Collect Sample' triggered successfully"),
+                                                                    indicator: 'green'
+                                                                });
+                                                            }
+                                                        }
+                                                    });
                                                 }
                                             }
                                         });
@@ -47,7 +77,6 @@ frappe.ui.form.on("Quality Inspection", {
                                     __("Create")
                                 );
                             });
-
                         }
                     }
                 }
