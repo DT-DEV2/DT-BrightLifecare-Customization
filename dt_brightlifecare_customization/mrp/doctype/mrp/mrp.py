@@ -711,7 +711,7 @@ def make_work_orders(mrp_name):
 
     created = []
     work_orders_created = []
-    stock_entries_created = []
+    # stock_entries_created = []
     for row in mrp.get("material_request_items", []):
         if not row.get("bom_no") or flt(row.get("material_requested_qty") or 0) <= 0:
             continue
@@ -739,13 +739,13 @@ def make_work_orders(mrp_name):
         if frappe.get_meta("Work Order").get_field("custom_mrp"):
             wo.set("custom_mrp", mrp.name)
         wo.insert()
-        wo.submit()
+        # wo.submit()
         work_orders_created.append({"doctype": "Work Order", "name": wo.name})
 
-        stock_entry_data = make_stock_entry(wo.name, "Material Transfer for Manufacture")
-        stock_entry_doc = frappe.get_doc(stock_entry_data)
-        stock_entry_doc.insert()
-        stock_entries_created.append({"doctype": "Stock Entry", "name": stock_entry_doc.name})
+        # stock_entry_data = make_stock_entry(wo.name, "Material Transfer for Manufacture")
+        # stock_entry_doc = frappe.get_doc(stock_entry_data)
+        # stock_entry_doc.insert()
+        # stock_entries_created.append({"doctype": "Stock Entry", "name": stock_entry_doc.name})
 
     # Also create Work Orders for Sub Assembly Items where manufacturing type is In House
     for srow in mrp.get("sub_assembly_items", []):
@@ -774,23 +774,23 @@ def make_work_orders(mrp_name):
         if frappe.get_meta("Work Order").get_field("custom_mrp"):
             wo.set("custom_mrp", mrp.name)
         wo.insert()
-        wo.submit()
+        # wo.submit()
         work_orders_created.append({"doctype": "Work Order", "name": wo.name})
 
-        stock_entry_data = make_stock_entry(wo.name, "Material Transfer for Manufacture")
-        stock_entry_doc = frappe.get_doc(stock_entry_data)
-        stock_entry_doc.insert()
-        stock_entries_created.append({"doctype": "Stock Entry", "name": stock_entry_doc.name})
+        # stock_entry_data = make_stock_entry(wo.name, "Material Transfer for Manufacture")
+        # stock_entry_doc = frappe.get_doc(stock_entry_data)
+        # stock_entry_doc.insert()
+        # stock_entries_created.append({"doctype": "Stock Entry", "name": stock_entry_doc.name})
 
     created.extend(work_orders_created)
-    created.extend(stock_entries_created)
+    # created.extend(stock_entries_created)
 
-    if work_orders_created or stock_entries_created:
+    if work_orders_created:
         summary_parts = []
         if work_orders_created:
             summary_parts.append(_("{0} Work Order(s)").format(len(work_orders_created)))
-        if stock_entries_created:
-            summary_parts.append(_("{0} Stock Entry(s)").format(len(stock_entries_created)))
+        # if stock_entries_created:
+        #     summary_parts.append(_("{0} Stock Entry(s)").format(len(stock_entries_created)))
         frappe.msgprint(_("Created {0}.").format(" and ".join(summary_parts)))
     else:
         frappe.msgprint(_("No Work Orders created."))
