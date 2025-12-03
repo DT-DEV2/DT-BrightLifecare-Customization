@@ -300,7 +300,7 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 			warehouses = []
 
 	mrp = frappe.get_doc("MRP", mrp_name)
-	mrp.validate()
+	explode_bom(mrp)
 
 	# Precompute submitted MRP batch consumption so we don't double-allocate the same batch
 	mrp_batch_consumed_qty = frappe.db.sql(
