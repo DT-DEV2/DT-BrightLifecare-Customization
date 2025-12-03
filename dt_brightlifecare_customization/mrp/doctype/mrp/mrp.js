@@ -52,24 +52,24 @@ frappe.ui.form.on("MRP", {
 		}
 	},
 
-	explode_bom: function (frm) {
-		// frm.dirty();
+	// explode_bom: function (frm) {
+	// 	// frm.dirty();
 
-		if (frm.doc.name) {
+	// 	if (frm.doc.name) {
 
-			frappe.call({
-				method: "dt_brightlifecare_customization.mrp.doctype.mrp.mrp.explode_bom",
-				args: {
-					mrp_name: frm.doc.name
-				},
-				callback: function(r) {
-					if (!r.exc) {
-						frm.reload_doc();
-					}
-				}
-			});
-		}
-	},
+	// 		frappe.call({
+	// 			method: "dt_brightlifecare_customization.mrp.doctype.mrp.mrp.explode_bom",
+	// 			args: {
+	// 				mrp_name: frm.doc.name
+	// 			},
+	// 			callback: function(r) {
+	// 				if (!r.exc) {
+	// 					frm.reload_doc();
+	// 				}
+	// 			}
+	// 		});
+	// 	}
+	// },
 
 	// get_raw_materials_for_transfer: function (frm) {
 	// 	// frm.dirty();

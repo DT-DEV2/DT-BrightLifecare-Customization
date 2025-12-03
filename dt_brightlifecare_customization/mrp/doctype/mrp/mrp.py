@@ -26,6 +26,9 @@ def _get_wip_warehouse(fg_warehouse):
 class MRP(Document):
     def on_submit(self):
         create_mrp_reservation_entries(self)
+    
+    def validate(self):
+        explode_bom(self)
 
 
 def create_mrp_reservation_entries(mrp_doc):
@@ -83,13 +86,14 @@ def _get_reserved_lookup(item_wh_pairs):
 
 
 @frappe.whitelist()
-def explode_bom(mrp_name):
+def explode_bom(doc):
 	from erpnext.stock.doctype.batch.batch import get_batch_qty
 
-	mrp_doc = frappe.get_doc("MRP", mrp_name)
+	mrp_doc = doc
 
 	# Step 1: Clear previously rows
 	mrp_doc.set("raw_materials", [])
+	# new_raw_materials = []
 
 	rm_aggregate = {}
 	missing_bom_rows = []
@@ -276,7 +280,7 @@ def explode_bom(mrp_name):
 			})
 
 	# Step 6: Save and confirm
-	mrp_doc.save()
+	# mrp_doc.save()
 	frappe.msgprint(_("BOM Exploded Successfully"))
 
 
@@ -288,7 +292,6 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 	from frappe.utils import getdate, nowdate
 	import json
 	
-	explode_bom(mrp_name)
 
 	if isinstance(warehouses, str):
 		try:
@@ -297,6 +300,7 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 			warehouses = []
 
 	mrp = frappe.get_doc("MRP", mrp_name)
+	explode_bom(mrp)
 
 	# Precompute submitted MRP batch consumption so we don't double-allocate the same batch
 	mrp_batch_consumed_qty = frappe.db.sql(
