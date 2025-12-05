@@ -56,9 +56,7 @@
   "revision_history_tab",
   "revision_history_detail",
   "machinery_setup_dispensing_request_tab",
-  "item_code",
-  "item_name",
-  "quantity",
+  "machinery_setup_dispensing_request_detail",
   "line_clearance_for_primary_packing_area_tab",
   "section_break_ukay",
   "previous_product_lcppa",
@@ -1093,24 +1091,6 @@
    "label": "Machinery Setup Dispensing Request"
   },
   {
-   "fetch_from": "revision_no.item",
-   "fieldname": "item_code",
-   "fieldtype": "Link",
-   "label": "Item Code",
-   "options": "Item"
-  },
-  {
-   "fetch_from": "item_code.item_name",
-   "fieldname": "item_name",
-   "fieldtype": "Data",
-   "label": "Item Name"
-  },
-  {
-   "fieldname": "quantity",
-   "fieldtype": "Data",
-   "label": "Quantity"
-  },
-  {
    "fieldname": "revision_no",
    "fieldtype": "Link",
    "label": "Revision No.",
@@ -1120,13 +1100,19 @@
    "fieldname": "packing_material",
    "fieldtype": "Table",
    "options": "Packing Material Receiving Child"
+  },
+  {
+   "fieldname": "machinery_setup_dispensing_request_detail",
+   "fieldtype": "Table",
+   "label": "Machinery Setup Dispensing Request Detail",
+   "options": "Machinery Setup Dispensing Request Detail"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-05 14:30:15.937611",
+ "modified": "2025-12-05 17:31:09.859851",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
