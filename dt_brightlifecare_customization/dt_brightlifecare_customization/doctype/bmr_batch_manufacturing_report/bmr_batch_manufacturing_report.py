@@ -148,6 +148,22 @@ class BMRBatchManufacturingReport(Document):
                         self.b_no = batch_doc
                         self.batch_no_powder = batch_doc
 
+        # -------------------------------------------------------------------
+        # ADDITION 1: Theoretical Yield → Theoretical Yield Reconcile
+        # -------------------------------------------------------------------
+        self.theoretical_yield_reconcile = self.theoretical_yield or 0.00
+
+        # -------------------------------------------------------------------
+        # ADDITION 2: Fetch area_used from Work Order
+        # -------------------------------------------------------------------
+        if self.reference_name:
+            area_used = frappe.db.get_value(
+                "Work Order",
+                self.reference_name,
+                "custom_area_used"
+            )
+            self.area_used = area_used or 0.00
+
     def before_save(self):
         # 1️⃣ Fetch item_batch_size from Work Order
         if self.reference_name:
