@@ -55,6 +55,10 @@
   "master_packing_sheet_detail",
   "revision_history_tab",
   "revision_history_detail",
+  "machinery_setup_dispensing_request_tab",
+  "item_code",
+  "item_name",
+  "quantity",
   "line_clearance_for_primary_packing_area_tab",
   "section_break_ukay",
   "previous_product_lcppa",
@@ -1083,16 +1087,40 @@
    "options": "Company"
   },
   {
-   "fieldname": "revision_no",
+   "fieldname": "machinery_setup_dispensing_request_tab",
+   "fieldtype": "Tab Break",
+   "label": "Machinery Setup Dispensing Request"
+  },
+  {
+   "fetch_from": "revision_no.item",
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Item Code",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "item_code.item_name",
+   "fieldname": "item_name",
    "fieldtype": "Data",
-   "label": "Revision No."
+   "label": "Item Name"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Data",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "revision_no",
+   "fieldtype": "Link",
+   "label": "Revision No.",
+   "options": "BOM"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-14 12:34:47.450500",
+ "modified": "2025-12-05 09:55:16.562517",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
