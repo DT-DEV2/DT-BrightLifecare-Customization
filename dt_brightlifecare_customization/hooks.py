@@ -259,7 +259,8 @@ doctype_js = {
     "Contract": "public/js/contract.js",
     "Material Request": "public/js/material_request.js",
     "Item": "public/js/item.js",
-    "Quality Inspection" : "public/js/quality_inspection.js"
+    "Quality Inspection" : "public/js/quality_inspection.js",
+    "Work Order": "public/js/work_order.js",
 }
 
 
@@ -634,6 +635,7 @@ doc_events = {
     },
     "Stock Entry": {
         "on_submit" : "dt_brightlifecare_customization.public.py.stock_entry.on_submit",
+        "before_save" : "dt_brightlifecare_customization.public.py.stock_entry.before_save",
     },
     "Purchase Order": {
         "before_save": "dt_brightlifecare_customization.public.py.purchase_order.before_save"
