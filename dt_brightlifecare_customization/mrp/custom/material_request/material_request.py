@@ -156,7 +156,7 @@ def create_mrp(material_request, use_defaults=False):
 
     new_mrp_doc.insert()
     # Populate sub-assemblies and raw materials automatically for the new MRP
-    # get_sub_assembly_items(new_mrp_doc.name)
+    get_sub_assembly_items(new_mrp_doc.name)
     # explode_bom(new_mrp_doc.name)
 
     return new_mrp_doc.as_dict()
