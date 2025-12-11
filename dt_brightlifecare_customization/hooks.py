@@ -603,7 +603,9 @@ custom_field = [
     "Stock Entry-custom_qc_parameter",
     "Quality Inspection-custom_external_nrgp_test_results",
     "Quality Inspection-custom_sample_batch",
-    "Work Order-custom_area_used"
+    "Work Order-custom_area_used",
+    "Quality Inspection-custom_sensory_results",
+    "Quality Inspection-custom_sensory_results_attachments"
 ]
 
 
