@@ -11,7 +11,7 @@ frappe.ui.form.on("Work Order", {
 
                 if (r && r.item_group === "Finished Goods") {
 
-                    frm.add_custom_button("Create Machine Setup SE", () => {
+                    frm.add_custom_button("Machine Setup SE", () => {
 
                         // Open new Stock Entry
                         frappe.new_doc('Stock Entry', {
@@ -279,7 +279,7 @@ frappe.ui.form.on("Work Order", {
 
 
 
-                    frm.add_custom_button("Create Machine Setup Consumption SE", async () => {
+                    frm.add_custom_button("Machine Setup Consumption SE", async () => {
 
                         // 1️⃣ Create new Stock Entry draft
                         let new_se = await frappe.new_doc('Stock Entry', {
