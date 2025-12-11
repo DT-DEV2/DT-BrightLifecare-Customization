@@ -259,7 +259,8 @@ doctype_js = {
     "Contract": "public/js/contract.js",
     "Material Request": "public/js/material_request.js",
     "Item": "public/js/item.js",
-    "Quality Inspection" : "public/js/quality_inspection.js"
+    "Quality Inspection" : "public/js/quality_inspection.js",
+    "Work Order": "public/js/work_order.js",
 }
 
 
@@ -603,7 +604,9 @@ custom_field = [
     "Stock Entry-custom_qc_parameter",
     "Quality Inspection-custom_external_nrgp_test_results",
     "Quality Inspection-custom_sample_batch",
-    "Work Order-custom_area_used"
+    "Work Order-custom_area_used",
+    "Quality Inspection-custom_sensory_results",
+    "Quality Inspection-custom_sensory_results_attachments"
 ]
 
 
@@ -634,6 +637,7 @@ doc_events = {
     },
     "Stock Entry": {
         "on_submit" : "dt_brightlifecare_customization.public.py.stock_entry.on_submit",
+        "before_save" : "dt_brightlifecare_customization.public.py.stock_entry.before_save",
     },
     "Purchase Order": {
         "before_save": "dt_brightlifecare_customization.public.py.purchase_order.before_save"

@@ -243,3 +243,27 @@ def print_dispensing_slips_preview(docname):
    )
 
    return html
+
+
+
+
+
+
+
+
+def before_save(doc, method):
+    for item in doc.items:
+        if item.ste_detail:
+            se_doc = frappe.get_doc("Stock Entry Detail", item.ste_detail)
+
+            if se_doc.qty and item.qty > se_doc.qty:
+                frappe.throw("Quanity must be less than or equals to linked Stock Entry quanity")
+
+
+
+
+
+# @frappe.whitelist()
+# def remove_unwanted_rows(row_name):
+#     source = frappe.get_doc("Stock Entry Detail", row_name)
+#     source.delete()
