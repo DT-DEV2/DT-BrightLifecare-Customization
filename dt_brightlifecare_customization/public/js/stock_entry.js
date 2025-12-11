@@ -9,6 +9,63 @@ frappe.ui.form.on('Stock Entry', {
                 }
             };
         };
+
+
+        if (frm.doc.docstatus === 1 && frm.doc.stock_entry_type == "Transfer to Manufacturing Machine Setup") {
+
+            frm.add_custom_button('Create Reversal SE', function () {
+                let new_se = frappe.model.get_new_doc('Stock Entry');
+
+                new_se.stock_entry_type = "Machine Setup Return";
+                new_se.work_order = frm.doc.work_order;
+                new_se.from_bom = 0;
+                new_se.against_stock_entry = frm.doc.name;
+
+                // Map items from current SE
+                let reversed_items = frm.doc.items.map(item => {
+                    return {
+                        item_code: item.item_code,
+                        item_name: item.item_name,
+                        qty: 0,
+                        uom: item.uom,
+                        conversion_factor: item.conversion_factor,
+                        basic_rate: item.basic_rate,
+                        s_warehouse: item.t_warehouse,
+                        t_warehouse: item.s_warehouse,
+                        against_stock_entry: frm.doc.name,
+                        ste_detail: item.name,
+                        batch_no: item.batch_no,
+                    };
+                });
+
+                frappe.set_route('Form', 'Stock Entry', new_se.name).then(() => {
+                    let target_frm = cur_frm;
+
+                    if (target_frm && target_frm.doctype === 'Stock Entry') {
+
+                        // Clear items table first
+                        target_frm.clear_table('items');
+
+                        reversed_items.forEach(d => {
+                            let row = target_frm.add_child('items');
+
+                            // Suppress batch/serial popup by setting __run_batch_popup = false
+                            row.__run_batch_popup = false;
+
+                            // Set values programmatically
+                            Object.keys(d).forEach(field => {
+                                row[field] = d[field];
+                            });
+                        });
+
+                        target_frm.refresh_field('items');
+                        target_frm.set_value('from_bom', 0);
+                    }
+                });
+            });
+
+        }
+
     }
 });
 
