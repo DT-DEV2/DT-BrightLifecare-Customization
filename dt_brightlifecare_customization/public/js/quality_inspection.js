@@ -26,57 +26,74 @@ frappe.ui.form.on("Quality Inspection", {
 
                         if (!r.message.active) {
                             frm.add_custom_button("Collect Sample", function () {
-                                frappe.prompt(
-                                    [
-                                        {
-                                            label: "Enter Sample Quantity",
-                                            fieldname: "sample_qty",
-                                            fieldtype: "Float",
-                                            reqd: 1,
-                                            description: "Enter how many samples you want to collect",
-                                            default: frm.doc.sample_size || 1
-                                        }
-                                    ],
-                                    function (data) {
-                                        frappe.call({
-                                            method: "dt_brightlifecare_customization.public.py.quality_inspection.make_internal_transfer",
-                                            args: {
-                                                qi_name: frm.doc.name,
-                                                sample_qty: data.sample_qty
-                                            },
-                                            callback: function (r) {
-                                                frm.reload_doc();
-                                                if (r.message && r.message.stock_entry) {
-                                                    frappe.msgprint({
-                                                        message: __('Sample Stock Entry created: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
-                                                        indicator: 'green'
-                                                    });
 
-                                                    // Trigger workflow action after successful stock entry creation
-                                                    frappe.call({
-                                                        method: "frappe.model.workflow.apply_workflow",
-                                                        args: {
-                                                            doc: frm.doc,
-                                                            action: "Collect Sample"
-                                                        },
-                                                        callback: function (workflow_r) {
-                                                            if (!workflow_r.exc) {
-                                                                frm.reload_doc();
-                                                                frappe.show_alert({
-                                                                    message: __("Workflow action 'Collect Sample' triggered successfully"),
-                                                                    indicator: 'green'
-                                                                });
-                                                            }
+                            // Default fields for all reference types
+                            let fields = [
+                                {
+                                    label: "Enter Sample Quantity",
+                                    fieldname: "sample_qty",
+                                    fieldtype: "Float",
+                                    reqd: 1,
+                                    description: "Enter how many samples you want to collect",
+                                    default: frm.doc.sample_size || 1
+                                }
+                            ];
+
+                            // Add Type of Sample ONLY when reference_type is Stock Entry
+                            if (frm.doc.reference_type === "Stock Entry") {
+                                fields.push({
+                                    label: "Type of Sample",
+                                    fieldname: "type_of_sample",
+                                    fieldtype: "Select",
+                                    options: ["","Sample", "Reference"].join("\n"),
+                                    reqd: 1,
+                                    default: ""
+                                });
+                            }
+
+                            frappe.prompt(
+                                fields,
+                                function (data) {
+                                    frappe.call({
+                                        method: "dt_brightlifecare_customization.public.py.quality_inspection.make_internal_transfer",
+                                        args: {
+                                            qi_name: frm.doc.name,
+                                            sample_qty: data.sample_qty,
+                                            type_of_sample: data.type_of_sample || null   // send only if available
+                                        },
+                                        callback: function (r) {
+                                            frm.reload_doc();
+
+                                            if (r.message && r.message.stock_entry) {
+                                                frappe.msgprint({
+                                                    message: __('Sample Stock Entry created: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
+                                                    indicator: 'green'
+                                                });
+
+                                                frappe.call({
+                                                    method: "frappe.model.workflow.apply_workflow",
+                                                    args: {
+                                                        doc: frm.doc,
+                                                        action: "Collect Sample"
+                                                    },
+                                                    callback: function (workflow_r) {
+                                                        if (!workflow_r.exc) {
+                                                            frm.reload_doc();
+                                                            frappe.show_alert({
+                                                                message: __("Workflow action 'Collect Sample' triggered successfully"),
+                                                                indicator: 'green'
+                                                            });
                                                         }
-                                                    });
-                                                }
+                                                    }
+                                                });
                                             }
-                                        });
-                                    },
-                                    __("Enter Sample Quantity"),
-                                    __("Create")
-                                );
-                            });
+                                        }
+                                    });
+                                },
+                                __("Enter Sample Quantity"),
+                                __("Create")
+                            );
+                        });
                         }
                     }
                 }
