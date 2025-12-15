@@ -277,8 +277,6 @@ def before_save(doc, method):
 
 
 
-import frappe
-
 def issued_qty_calculation_in_wo(doc, method):
     if doc.stock_entry_type != "Transfer to Manufacturing Machine Setup":
         return
@@ -286,23 +284,35 @@ def issued_qty_calculation_in_wo(doc, method):
     if not doc.work_order:
         return
 
-    # Fetch submitted Work Order
     wo = frappe.get_doc("Work Order", doc.work_order)
 
     if wo.docstatus != 1:
-        return  # Safety check
+        return
+
+    # Build item_code → row map
+    wo_items_map = {
+        d.item_code: d
+        for d in wo.custom_machine_setup_inventory_detail
+        if d.item_code
+    }
 
     for se_item in doc.items:
         if not se_item.item_code or not se_item.qty:
             continue
 
-        wo.append("custom_machine_setup_inventory_detail", {
-            "item_code": se_item.item_code,
-            "issued_qty": se_item.qty
-        })
+        if se_item.item_code in wo_items_map:
+            # 🔁 Update existing row
+            row = wo_items_map[se_item.item_code]
+            row.issued_qty = (row.issued_qty or 0) + se_item.qty
+        else:
+            # ➕ Add only if not present
+            wo.append("custom_machine_setup_inventory_detail", {
+                "item_code": se_item.item_code,
+                "issued_qty": se_item.qty
+            })
 
-    # Save submitted document safely
     wo.save()
+
 
 
 
@@ -317,13 +327,11 @@ def returned_qty_calculation_in_wo(doc, method):
     if not doc.work_order:
         return
 
-    # Fetch submitted Work Order
     wo = frappe.get_doc("Work Order", doc.work_order)
 
     if wo.docstatus != 1:
         return
 
-    # Build item_code → row map for quick lookup
     wo_items_map = {
         d.item_code: d
         for d in wo.custom_machine_setup_inventory_detail
@@ -335,18 +343,16 @@ def returned_qty_calculation_in_wo(doc, method):
             continue
 
         if se_item.item_code in wo_items_map:
-            # 🔁 Item exists → add qty
             row = wo_items_map[se_item.item_code]
             row.returned_qty = (row.returned_qty or 0) + se_item.qty
         else:
-            # ➕ Item not present → add new row
             wo.append("custom_machine_setup_inventory_detail", {
                 "item_code": se_item.item_code,
                 "returned_qty": se_item.qty
             })
 
-    # Save submitted document safely
     wo.save()
+
 
 
 
@@ -362,36 +368,28 @@ def consumed_qty_calculation_in_wo(doc, method):
     if not doc.work_order:
         return
 
-    # Fetch submitted Work Order
     wo = frappe.get_doc("Work Order", doc.work_order)
 
     if wo.docstatus != 1:
         return
 
-    # Build item_code → row map for quick lookup
     wo_items_map = {
         d.item_code: d
         for d in wo.custom_machine_setup_inventory_detail
         if d.item_code
     }
 
-    print("\n\n\n",wo_items_map,"\n\n\n")
-
     for se_item in doc.items:
         if not se_item.item_code or not se_item.qty:
             continue
 
         if se_item.item_code in wo_items_map:
-            # 🔁 Item exists → add qty
             row = wo_items_map[se_item.item_code]
             row.consumed_qty = (row.consumed_qty or 0) + se_item.qty
-            print("\n\n\n",se_item.item_code, row.consumed_qty,"\n\n\n")
         else:
-            # ➕ Item not present → add new row
             wo.append("custom_machine_setup_inventory_detail", {
                 "item_code": se_item.item_code,
                 "consumed_qty": se_item.qty
             })
 
-    # Save submitted document safely
     wo.save()
