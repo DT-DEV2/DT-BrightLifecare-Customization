@@ -9,6 +9,9 @@ def on_submit(doc, method):
     make_serial_and_barcode_for_fg_item(doc, method)
     
     submit_stock_entry_with_qi(doc, method=None)
+    issued_qty_calculation_in_wo(doc, method)
+    returned_qty_calculation_in_wo(doc, method)
+    consumed_qty_calculation_in_wo(doc, method)
 
 
 
@@ -278,3 +281,150 @@ def print_dispensing_slips_preview(docname):
    )
 
    return html
+
+
+
+
+
+
+
+
+def before_save(doc, method):
+    for item in doc.items:
+        if item.ste_detail:
+            se_doc = frappe.get_doc("Stock Entry Detail", item.ste_detail)
+
+            if se_doc.qty and item.qty > se_doc.qty:
+                frappe.throw("Quanity must be less than or equals to linked Stock Entry quanity")
+
+
+
+
+
+# @frappe.whitelist()
+# def remove_unwanted_rows(row_name):
+#     source = frappe.get_doc("Stock Entry Detail", row_name)
+#     source.delete()
+
+
+
+
+
+
+
+def issued_qty_calculation_in_wo(doc, method):
+    if doc.stock_entry_type != "Transfer to Manufacturing Machine Setup":
+        return
+
+    if not doc.work_order:
+        return
+
+    wo = frappe.get_doc("Work Order", doc.work_order)
+
+    if wo.docstatus != 1:
+        return
+
+    # Build item_code → row map
+    wo_items_map = {
+        d.item_code: d
+        for d in wo.custom_machine_setup_inventory_detail
+        if d.item_code
+    }
+
+    for se_item in doc.items:
+        if not se_item.item_code or not se_item.qty:
+            continue
+
+        if se_item.item_code in wo_items_map:
+            # 🔁 Update existing row
+            row = wo_items_map[se_item.item_code]
+            row.issued_qty = (row.issued_qty or 0) + se_item.qty
+        else:
+            # ➕ Add only if not present
+            wo.append("custom_machine_setup_inventory_detail", {
+                "item_code": se_item.item_code,
+                "issued_qty": se_item.qty
+            })
+
+    wo.save()
+
+
+
+
+
+
+
+
+def returned_qty_calculation_in_wo(doc, method):
+    if doc.stock_entry_type != "Machine Setup Return":
+        return
+
+    if not doc.work_order:
+        return
+
+    wo = frappe.get_doc("Work Order", doc.work_order)
+
+    if wo.docstatus != 1:
+        return
+
+    wo_items_map = {
+        d.item_code: d
+        for d in wo.custom_machine_setup_inventory_detail
+        if d.item_code
+    }
+
+    for se_item in doc.items:
+        if not se_item.item_code or not se_item.qty:
+            continue
+
+        if se_item.item_code in wo_items_map:
+            row = wo_items_map[se_item.item_code]
+            row.returned_qty = (row.returned_qty or 0) + se_item.qty
+        else:
+            wo.append("custom_machine_setup_inventory_detail", {
+                "item_code": se_item.item_code,
+                "returned_qty": se_item.qty
+            })
+
+    wo.save()
+
+
+
+
+
+
+
+
+
+def consumed_qty_calculation_in_wo(doc, method):
+    if doc.stock_entry_type != "Machine Setup Consumption Entry":
+        return
+
+    if not doc.work_order:
+        return
+
+    wo = frappe.get_doc("Work Order", doc.work_order)
+
+    if wo.docstatus != 1:
+        return
+
+    wo_items_map = {
+        d.item_code: d
+        for d in wo.custom_machine_setup_inventory_detail
+        if d.item_code
+    }
+
+    for se_item in doc.items:
+        if not se_item.item_code or not se_item.qty:
+            continue
+
+        if se_item.item_code in wo_items_map:
+            row = wo_items_map[se_item.item_code]
+            row.consumed_qty = (row.consumed_qty or 0) + se_item.qty
+        else:
+            wo.append("custom_machine_setup_inventory_detail", {
+                "item_code": se_item.item_code,
+                "consumed_qty": se_item.qty
+            })
+
+    wo.save()
