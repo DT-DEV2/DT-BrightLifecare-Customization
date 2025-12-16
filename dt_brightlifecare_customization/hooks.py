@@ -606,7 +606,9 @@ custom_field = [
     "Quality Inspection-custom_sample_batch",
     "Work Order-custom_area_used",
     "Quality Inspection-custom_sensory_results",
-    "Quality Inspection-custom_sensory_results_attachments"
+    "Quality Inspection-custom_sensory_results_attachments",
+    "Work Order-custom_machine_setup_inventory_detail",
+    "Work Order-custom_machine_setup_inventory"
 ]
 
 
