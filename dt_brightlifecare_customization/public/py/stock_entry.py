@@ -17,11 +17,15 @@ def on_submit(doc, method):
 
 
 
+import frappe
+import time
+
 def submit_stock_entry_with_qi(doc, method=None):
     """
     After Stock Entry submission, wait for Serial & Batch Bundle creation
-    then create QI for finished items if BOM requires quality inspection.
+    then create multiple QIs for finished items based on Item templates.
     """
+
     # Only for Manufacture entries
     if doc.stock_entry_type != "Manufacture":
         return
@@ -35,38 +39,63 @@ def submit_stock_entry_with_qi(doc, method=None):
     if not bom_flag:
         return
 
-    # Wait 10 seconds (to ensure bundles created)
+    # Wait to ensure Serial & Batch Bundle is created
     time.sleep(10)
 
     se = frappe.get_doc("Stock Entry", doc.name)
     inspected_by = frappe.session.user
 
     for item in se.items:
+
         # Only finished items
         if not item.is_finished_item:
             continue
 
-        frappe.log_error(f"Processing finished item {item.item_code}, bundle: {item.serial_and_batch_bundle}", "QI Debug")
+        item_doc = frappe.get_doc("Item", item.item_code)
 
-        # Avoid duplicate QI
-        if not frappe.db.exists({
-            "doctype": "Quality Inspection",
-            "reference_type": "Stock Entry",
-            "reference_name": se.name,
-            "item_code": item.item_code
-        }):
-            sample_size = frappe.db.get_value("Item", item.item_code, "sample_quantity") or 0
+        # Skip if no templates on Item
+        if not item_doc.custom_quality_inspection_template_list:
+            continue
 
-            batch_no = None
-            if item.serial_and_batch_bundle:
-                try:
-                    bundle = frappe.get_doc("Serial and Batch Bundle", item.serial_and_batch_bundle)
-                    if bundle.entries:
-                        batch_no = bundle.entries[0].batch_no
-                except Exception as e:
-                    frappe.log_error(f"Error fetching batch for item {item.item_code}: {e}", "QI Debug")
+        frappe.log_error(
+            f"Processing item {item.item_code} with templates",
+            "QI Debug"
+        )
 
-            # Create QI in Draft
+        sample_size = frappe.db.get_value("Item", item.item_code, "sample_quantity") or 0
+
+        # Fetch Batch No from Bundle
+        batch_no = None
+        if item.serial_and_batch_bundle:
+            try:
+                bundle = frappe.get_doc(
+                    "Serial and Batch Bundle",
+                    item.serial_and_batch_bundle
+                )
+                if bundle.entries:
+                    batch_no = bundle.entries[0].batch_no
+            except Exception as e:
+                frappe.log_error(
+                    f"Error fetching batch for {item.item_code}: {e}",
+                    "QI Debug"
+                )
+
+        # 🔁 CREATE QI FOR EACH TEMPLATE
+        for tpl in item_doc.custom_quality_inspection_template_list:
+
+            if getattr(tpl, "is_disabled", 0):
+                continue
+
+            # Avoid duplicate QI PER TEMPLATE
+            if frappe.db.exists({
+                "doctype": "Quality Inspection",
+                "reference_type": "Stock Entry",
+                "reference_name": se.name,
+                "item_code": item.item_code,
+                "quality_inspection_template": tpl.quality_inspection_template
+            }):
+                continue
+
             qi = frappe.get_doc({
                 "doctype": "Quality Inspection",
                 "inspection_type": "Incoming",
@@ -74,15 +103,21 @@ def submit_stock_entry_with_qi(doc, method=None):
                 "reference_name": se.name,
                 "item_code": item.item_code,
                 "company": se.company,
-                "status": "Accepted",   # keep in draft state
+                "status": "Accepted",   # keep in draft
                 "sample_size": sample_size,
                 "inspected_by": inspected_by,
                 "inspection_date": se.posting_date,
                 "batch_no": batch_no,
-                "serial_and_batch_bundle": item.serial_and_batch_bundle
+                "serial_and_batch_bundle": item.serial_and_batch_bundle,
+                "quality_inspection_template": tpl.quality_inspection_template
             })
+
             qi.insert()
-            frappe.log_error(f"QI created for item {item.item_code} with batch {batch_no}", "QI Debug")
+
+            frappe.log_error(
+                f"QI created for {item.item_code} | Template: {tpl.quality_inspection_template}",
+                "QI Debug"
+            )
 
 
 
