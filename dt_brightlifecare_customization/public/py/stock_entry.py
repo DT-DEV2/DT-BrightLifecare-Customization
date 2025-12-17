@@ -400,10 +400,10 @@ def consumed_qty_calculation_in_wo(doc, method):
     if doc.stock_entry_type != "Machine Setup Consumption Entry":
         return
 
-    if not doc.work_order:
+    if not doc.custom_machine_setup_consumption_work_order:
         return
 
-    wo = frappe.get_doc("Work Order", doc.work_order)
+    wo = frappe.get_doc("Work Order", doc.custom_machine_setup_consumption_work_order)
 
     if wo.docstatus != 1:
         return

@@ -608,7 +608,8 @@ custom_field = [
     "Quality Inspection-custom_sensory_results",
     "Quality Inspection-custom_sensory_results_attachments",
     "Work Order-custom_machine_setup_inventory_detail",
-    "Work Order-custom_machine_setup_inventory"
+    "Work Order-custom_machine_setup_inventory",
+    "Stock Entry-custom_machine_setup_consumption_work_order"
 ]
 
 
