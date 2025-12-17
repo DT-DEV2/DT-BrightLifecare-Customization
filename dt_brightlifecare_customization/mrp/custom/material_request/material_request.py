@@ -109,7 +109,7 @@ def create_mrp(material_request, use_defaults=False):
         already_created = frappe.db.sql("""
             SELECT COALESCE(SUM(material_requested_qty), 0) AS s
             FROM `tabMRP Material Request Item`
-            WHERE material_request=%s AND material_request_item_detail=%s
+            WHERE material_request=%s AND material_request_item_detail=%s and docstatus < 2
         """, (material_request_doc.name, item.name), as_dict=True)
         already_created_qty = flt(already_created[0].s) if already_created else 0.0
 

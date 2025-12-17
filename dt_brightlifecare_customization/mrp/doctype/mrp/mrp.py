@@ -28,7 +28,81 @@ class MRP(Document):
         create_mrp_reservation_entries(self)
     
     def validate(self):
+        validate_qty(self)
+        get_sub_assembly_items(self)
         explode_bom(self)
+
+
+
+def validate_qty(mrp_doc):
+
+	if not mrp_doc.material_request_items:
+		return
+
+	errors = []
+
+	for item in mrp_doc.material_request_items:
+		# skip rows without proper MR linkage
+		if not item.material_request or not item.material_request_item_detail:
+			continue
+
+		# get original qty from Material Request Item
+		mr_item = frappe.db.get_value(
+			"Material Request Item",
+			item.material_request_item_detail,
+			["qty", "name", "idx"],
+			as_dict=True
+		)
+
+		if not mr_item:
+			errors.append(f"Material Request Item {item.material_request_item_detail} not found for MR {item.material_request}")
+			continue
+
+		mr_item_qty = flt(mr_item.qty)
+
+		# sum material_requested_qty from OTHER MRPs (docstatus < 2), exclude current MRP
+		already_created = frappe.db.sql("""
+			SELECT COALESCE(SUM(material_requested_qty), 0) AS s
+			FROM `tabMRP Material Request Item`
+			WHERE material_request = %s
+				AND material_request_item_detail = %s
+				AND parent != %s
+				AND docstatus < 2
+		""", (item.material_request, item.material_request_item_detail, mrp_doc.name), as_dict=True)
+
+		already_created_qty = flt(already_created[0].s) if already_created else 0.0
+
+		this_row_qty = flt(item.material_requested_qty or 0.0)
+		total_after_this_mrp = already_created_qty + this_row_qty
+
+		if total_after_this_mrp > mr_item_qty:
+			errors.append(
+				_(
+					"Material Request <b>{mr}</b>, Item <b>{mr_item}</b>: "
+					"Allowed Qty = <b>{mr_q}</b>, "
+					"Already Requested = <b>{already}</b>, "
+					"This MRP Qty = <b>{this}</b>, "
+					"Total = <b>{total}</b>"
+				).format(
+					mr=item.material_request,
+					mr_item=item.material_request_item_detail,
+					mr_q=mr_item_qty,
+					already=already_created_qty,
+					this=this_row_qty,
+					total=total_after_this_mrp,
+				)
+			)
+
+
+	if errors:
+		frappe.throw("Some MRP rows would exceed their Material Request item quantities:\n\n" + "\n".join(errors))
+
+
+	if mrp_doc.material_request_items:
+		for i in mrp_doc.material_request_items:
+			if flt(i.material_requested_qty) and i.uom_conversion_factor:
+				qty_in_stock_uom = flt(i.material_requested_qty) * flt(i.uom_conversion_factor)
+				i.qty_in_stock_uom = qty_in_stock_uom
 
 
 def create_mrp_reservation_entries(mrp_doc):
@@ -42,6 +116,7 @@ def create_mrp_reservation_entries(mrp_doc):
             reservation.voucher_type = "MRP"
             reservation.voucher_no = mrp_doc.name
             reservation.voucher_detail_no = row.name
+            reservation.batch_no = row.batch_no
 
             reservation.stock_uom = row.stock_uom
             reservation.available_qty_to_reserve = row.get("available_for_use") or 0
@@ -269,9 +344,9 @@ def explode_bom(doc):
 				"warehouse": None,  # purchase has no from-warehouse
 				"for_warehouse": for_warehouse,
 				"required_qty_in_stock_uom": required_qty,
-				"stock_in_hand": 0,
-				"reserved_stock_for_mrp": 0,
-				"available_for_use": 0,
+				"stock_in_hand": stock_in_hand,
+				"reserved_stock_for_mrp": reserved_qty,
+				"available_for_use": available_for_use,
 				"plan_to_reserve": 0,
 				"plan_to_purchase": remaining_qty,
 				"batch_allocation": "[]",
@@ -523,7 +598,7 @@ def get_raw_materials_for_transfer(mrp_name, warehouses=None):
 
 
 @frappe.whitelist()
-def get_sub_assembly_items(mrp_name):
+def get_sub_assembly_items(doc):
     """Populate `sub_assembly_items` from BOMs of Material Request Items.
     Logic:
     - For each Material Request Item with a BOM, find BOM Item rows that reference a sub-BOM (bom_no set).
@@ -531,7 +606,7 @@ def get_sub_assembly_items(mrp_name):
       required_stock_qty = fg_qty_in_stock_uom * (child.stock_qty / parent_bom.quantity)
     - Append rows into `sub_assembly_items` with key fields (item, parent FG, qty, BOM, warehouses, UOMs).
     """
-    mrp = frappe.get_doc("MRP", mrp_name)
+    mrp = doc
 
     # Clear existing sub-assembly rows
     mrp.set("sub_assembly_items", [])
@@ -596,11 +671,12 @@ def get_sub_assembly_items(mrp_name):
                 "uom": bi.get("uom") or stock_uom,
                 "stock_uom": stock_uom,
                 "mrp_item": mr_item.get("name"),
+                "type_of_manufacturing": "In House",
             })
 
-    mrp.save()
+    # mrp.save()
     frappe.msgprint(_("Sub-assembly items updated from BOMs"))
-    return True
+    # return True
 
 @frappe.whitelist()
 def make_material_request(mrp_name):

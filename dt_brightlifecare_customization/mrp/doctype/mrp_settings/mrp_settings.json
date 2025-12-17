@@ -5,37 +5,60 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "workstation_time_detail_section",
-  "default_workstation_start_time",
-  "column_break_udqn",
-  "default_workstation_end_time"
+  "purchasing_section",
+  "reserve_stock_against_purchase_receipt",
+  "sales_section",
+  "validate_reserve_stock_against_delivery_note",
+  "validate_reserve_stock_against_sales_invoice",
+  "stock_section",
+  "validate_reserve_stock_against_stock_entry"
  ],
  "fields": [
   {
-   "fieldname": "workstation_time_detail_section",
+   "default": "0",
+   "fieldname": "reserve_stock_against_purchase_receipt",
+   "fieldtype": "Check",
+   "label": "Reserve Stock against Purchase Receipt"
+  },
+  {
+   "default": "0",
+   "fieldname": "validate_reserve_stock_against_delivery_note",
+   "fieldtype": "Check",
+   "label": "Validate Reserve Stock against Delivery Note"
+  },
+  {
+   "default": "0",
+   "fieldname": "validate_reserve_stock_against_sales_invoice",
+   "fieldtype": "Check",
+   "label": "Validate Reserve Stock against Sales Invoice"
+  },
+  {
+   "fieldname": "purchasing_section",
    "fieldtype": "Section Break",
-   "label": "Workstation Time Detail"
+   "label": "Purchasing"
   },
   {
-   "fieldname": "column_break_udqn",
-   "fieldtype": "Column Break"
+   "fieldname": "sales_section",
+   "fieldtype": "Section Break",
+   "label": "Sales"
   },
   {
-   "fieldname": "default_workstation_start_time",
-   "fieldtype": "Time",
-   "label": "Default Workstation Start Time"
+   "fieldname": "stock_section",
+   "fieldtype": "Section Break",
+   "label": "Stock"
   },
   {
-   "fieldname": "default_workstation_end_time",
-   "fieldtype": "Time",
-   "label": "Default Workstation End Time"
+   "default": "0",
+   "fieldname": "validate_reserve_stock_against_stock_entry",
+   "fieldtype": "Check",
+   "label": "Validate Reserve Stock against Stock Entry"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-11 20:35:30.374158",
+ "modified": "2025-12-16 14:55:13.268126",
  "modified_by": "Administrator",
  "module": "MRP",
  "name": "MRP Settings",
