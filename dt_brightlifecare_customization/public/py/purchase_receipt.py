@@ -76,6 +76,13 @@ def validate_supplier_delivery_note(doc, method):
 import frappe
 import time
 
+
+def on_submit(doc, method):
+    submit_purchase_receipt_with_qi(doc, method)
+    reserve_on_purchase_receipt(doc, method)
+    
+
+
 def submit_purchase_receipt_with_qi(doc, method=None):
    """
    Wait a few seconds to ensure Serial & Batch Bundle is generated,
@@ -128,5 +135,73 @@ def submit_purchase_receipt_with_qi(doc, method=None):
            frappe.log_error(f"QI created for item {item.item_code} with batch {batch_no}", "QI Debug")
 
 
+
+
+def reserve_on_purchase_receipt(doc, method):
+
+    mrp_settings = frappe.get_single("MRP Settings")
+    if mrp_settings.reserve_stock_against_purchase_receipt == 0:
+        return
+
+    for item in doc.items:
+
+        if not item.material_request or not item.material_request_item:
+            continue
+
+        mr_item = frappe.db.get_value(
+            "Material Request Item",
+            item.material_request_item,
+            [
+                "custom_mrp",
+                "custom_mrp_raw_material_item"
+            ],
+            as_dict=True
+        )
+
+        if not mr_item:
+            continue
+
+        if not mr_item.custom_mrp or not mr_item.custom_mrp_raw_material_item:
+            continue
+
+        reserve_qty = item.qty
+        if reserve_qty <= 0:
+            continue
+        
+        batch_no = None
+        
+        if item.batch_no:
+            batch_no = item.batch_no
+        elif item.serial_and_batch_bundle:
+            bundle_doc = frappe.get_doc("Serial and Batch Bundle", item.serial_and_batch_bundle)
+            if bundle_doc.entries:
+                first_entry = bundle_doc.entries[0]
+                batch_no = first_entry.batch_no
+
+
+        reservation = frappe.new_doc("MRP Reservation Entry")
+        reservation.item_code = item.item_code
+        reservation.warehouse = item.warehouse
+        reservation.voucher_type = "MRP"
+        reservation.voucher_no = mr_item.custom_mrp
+        reservation.voucher_detail_no = mr_item.custom_mrp_raw_material_item
+        reservation.batch_no = batch_no
+        
+        reservation.from_voucher_type = doc.doctype
+        reservation.from_voucher_no = doc.name
+        reservation.from_voucher_detail_no = item.name
+
+        reservation.stock_uom = item.stock_uom
+        reservation.available_qty_to_reserve = reserve_qty
+        reservation.voucher_qty = reserve_qty
+        reservation.reserved_qty = reserve_qty
+        reservation.issued_qty = 0
+        reservation.transferred_qty = 0
+        reservation.balance_reserved_qty = reserve_qty
+        reservation.company = doc.company
+        reservation.status = "Reserved"
+
+        reservation.save()
+        reservation.submit()
 
 

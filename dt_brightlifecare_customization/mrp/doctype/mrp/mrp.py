@@ -344,9 +344,9 @@ def explode_bom(doc):
 				"warehouse": None,  # purchase has no from-warehouse
 				"for_warehouse": for_warehouse,
 				"required_qty_in_stock_uom": required_qty,
-				"stock_in_hand": 0,
-				"reserved_stock_for_mrp": 0,
-				"available_for_use": 0,
+				"stock_in_hand": stock_in_hand,
+				"reserved_stock_for_mrp": reserved_qty,
+				"available_for_use": available_for_use,
 				"plan_to_reserve": 0,
 				"plan_to_purchase": remaining_qty,
 				"batch_allocation": "[]",
@@ -671,6 +671,7 @@ def get_sub_assembly_items(doc):
                 "uom": bi.get("uom") or stock_uom,
                 "stock_uom": stock_uom,
                 "mrp_item": mr_item.get("name"),
+                "type_of_manufacturing": "In House",
             })
 
     # mrp.save()
