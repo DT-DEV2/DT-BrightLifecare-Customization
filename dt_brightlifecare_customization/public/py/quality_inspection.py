@@ -246,31 +246,45 @@ def _get_source_for_external_nrgp(qi):
 
 
 @frappe.whitelist()
-def make_internal_transfer(qi_name, sample_qty=None):
-    """Collect Sample → Split batch → Create Sample Internal Transfer."""
-    
+def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
+    """
+    Collect Sample → Split batch → Create Sample / Reference Internal Transfer
+    """
 
-    if _existing_stock_entry(qi_name, types=["Sample Internal Transfer"]):
-        frappe.throw(f"Sample Internal Transfer already exists for this QI: {qi_name}")
+    # if _existing_stock_entry(
+    #     qi_name,
+    #     types=["Sample Internal Transfer", "Internal Transfer"]
+    # ):
+    #     frappe.throw(f"Internal Transfer already exists for this QI: {qi_name}")
 
     qi = frappe.get_doc("Quality Inspection", qi_name)
     qty = float(sample_qty) if sample_qty else (qi.sample_size or 1)
 
-    # --- Validate reference document ---
+    # ---------------------------------------------------------
+    # Validate reference document
+    # ---------------------------------------------------------
     ref_type, ref_name = qi.reference_type, qi.reference_name
     if not (ref_type and ref_name):
         frappe.throw("Missing reference document in Quality Inspection.")
 
     ref_doc = frappe.get_doc(ref_type, ref_name)
-    ref_qty = sum(flt(i.qty) for i in getattr(ref_doc, "items", []) if i.item_code == qi.item_code)
+    ref_qty = sum(
+        flt(i.qty)
+        for i in getattr(ref_doc, "items", [])
+        if i.item_code == qi.item_code
+    )
 
     if not ref_qty:
-        frappe.throw(f"No 'qty' found in reference document {qi.reference_name}")
+        frappe.throw(f"No qty found in reference document {qi.reference_name}")
 
     if qty > ref_qty:
-        frappe.throw(f"Sample quantity ({qty}) cannot exceed reference document qty ({ref_qty}).")
+        frappe.throw(
+            f"Sample quantity ({qty}) cannot exceed reference document qty ({ref_qty})."
+        )
 
-    # --- Batch split logic ---
+    # ---------------------------------------------------------
+    # Batch & warehouse validation
+    # ---------------------------------------------------------
     if not qi.batch_no:
         frappe.throw("No batch number found in Quality Inspection.")
 
@@ -278,47 +292,84 @@ def make_internal_transfer(qi_name, sample_qty=None):
     if not source_wh:
         frappe.throw("No source warehouse found for this Quality Inspection.")
 
-    # Generate new batch ID
-    new_batch_id = f"Sample{qi.batch_no}"
+    # ---------------------------------------------------------
+    # Handle Sample vs Reference
+    # ---------------------------------------------------------
+    if type_of_sample == "Reference":
+        # -------------------------------------------------
+        # Reference → SAME batch, NO split
+        # -------------------------------------------------
+        new_batch_name = qi.batch_no
 
-    # Check if a sample batch already exists
-    existing_sample_batch = frappe.db.exists("Batch", {"batch_id": new_batch_id, "item": qi.item_code})
-    if existing_sample_batch:
-        frappe.msgprint(f"Reusing existing sample batch: <b>{new_batch_id}</b>")
-        new_batch_name = existing_sample_batch
-    else:
-        # ✅ Use ERPNext’s built-in batch split function
-        new_batch_name = split_batch_custom(
-            batch_no=qi.batch_no,
-            item_code=qi.item_code,
-            warehouse=source_wh,
-            qty=qty,
-            new_batch_id=new_batch_id
+        target_wh = frappe.db.get_value(
+            "Warehouse",
+            source_wh,
+            "custom_reference_warehouse"
         )
-        frappe.msgprint(f"Created new sample batch: <b>{new_batch_name}</b>")
 
-    # --- Persist sample batch reference on the QI (so NRGPs can use it) ---
-    # Minimal, non-invasive change: store created/reused sample batch on QI
-    qi.db_set("custom_sample_batch", new_batch_name)
+        if not target_wh:
+            frappe.throw(
+                f"No Reference Warehouse (custom_reference_warehouse) set for {source_wh}"
+            )
 
-    # --- Create Stock Entry using new batch ---
-    target_wh = frappe.db.get_value("Warehouse", source_wh, "custom_qc_warehouse")
+        stock_entry_type = "Internal Transfer for Reference"
 
+    else:
+        # -------------------------------------------------
+        # Sample → Split batch
+        # -------------------------------------------------
+        new_batch_id = f"Sample{qi.batch_no}"
+
+        existing_sample_batch = frappe.db.exists(
+            "Batch",
+            {"batch_id": new_batch_id, "item": qi.item_code}
+        )
+
+        if existing_sample_batch:
+            frappe.msgprint(
+                f"Reusing existing sample batch: <b>{new_batch_id}</b>"
+            )
+            new_batch_name = existing_sample_batch
+        else:
+            new_batch_name = split_batch_custom(
+                batch_no=qi.batch_no,
+                item_code=qi.item_code,
+                warehouse=source_wh,
+                qty=qty,
+                new_batch_id=new_batch_id
+            )
+            frappe.msgprint(
+                f"Created new sample batch: <b>{new_batch_name}</b>"
+            )
+
+        # Save sample batch in QI
+        qi.db_set("custom_sample_batch", new_batch_name)
+
+        target_wh = frappe.db.get_value(
+            "Warehouse",
+            source_wh,
+            "custom_qc_warehouse"
+        )
+
+        stock_entry_type = "Sample Internal Transfer"
+
+    # ---------------------------------------------------------
+    # Create Stock Entry
+    # ---------------------------------------------------------
     se_name = _create_stock_entry(
         qi,
-        "Sample Internal Transfer",
+        stock_entry_type,
         qty,
         source_wh=source_wh,
         target_wh=target_wh,
         draft=False,
-        batch_no=new_batch_name,  # 👈 assign the split batch
+        batch_no=new_batch_name,
     )
 
     qi.db_set("custom_mt_target_warehouse", target_wh)
     _sync_sample_status(qi.name)
 
     return {"stock_entry": se_name}
-
 
 
 
