@@ -251,11 +251,11 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
     Collect Sample → Split batch → Create Sample / Reference Internal Transfer
     """
 
-    if _existing_stock_entry(
-        qi_name,
-        types=["Sample Internal Transfer", "Internal Transfer"]
-    ):
-        frappe.throw(f"Internal Transfer already exists for this QI: {qi_name}")
+    # if _existing_stock_entry(
+    #     qi_name,
+    #     types=["Sample Internal Transfer", "Internal Transfer"]
+    # ):
+    #     frappe.throw(f"Internal Transfer already exists for this QI: {qi_name}")
 
     qi = frappe.get_doc("Quality Inspection", qi_name)
     qty = float(sample_qty) if sample_qty else (qi.sample_size or 1)
