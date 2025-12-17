@@ -635,7 +635,13 @@ doc_events = {
     },
     "Purchase Receipt": {
         "validate": "dt_brightlifecare_customization.public.py.purchase_receipt.validate_supplier_delivery_note",
-        "on_submit" : "dt_brightlifecare_customization.public.py.purchase_receipt.submit_purchase_receipt_with_qi",
+        "on_submit" : "dt_brightlifecare_customization.public.py.purchase_receipt.on_submit",
+    },
+    "Delivery Note": {
+        "before_submit" : "dt_brightlifecare_customization.public.py.delivery_note.before_submit",
+    },
+    "Sales Invoice": {
+        "before_submit" : "dt_brightlifecare_customization.public.py.sales_invoice.before_submit",
     },
     "Stock Entry": {
         "on_submit" : "dt_brightlifecare_customization.public.py.stock_entry.on_submit",
