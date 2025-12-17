@@ -284,7 +284,7 @@ frappe.ui.form.on("Work Order", {
                         // 1️⃣ Create new Stock Entry draft
                         let new_se = await frappe.new_doc('Stock Entry', {
                             stock_entry_type: "Machine Setup Consumption Entry",
-                            work_order: frm.doc.name,
+                            custom_machine_setup_consumption_work_order: frm.doc.name,
                         });
 
                         // Set from_bom and bom_no after form loads
