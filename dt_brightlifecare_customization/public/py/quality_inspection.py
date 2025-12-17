@@ -248,14 +248,8 @@ def _get_source_for_external_nrgp(qi):
 @frappe.whitelist()
 def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
     """
-    Collect Sample → Split batch → Create Sample / Reference Internal Transfer
+    Collect Sample → Split batch → Create Sample / Reference / HO Internal Transfer
     """
-
-    # if _existing_stock_entry(
-    #     qi_name,
-    #     types=["Sample Internal Transfer", "Internal Transfer"]
-    # ):
-    #     frappe.throw(f"Internal Transfer already exists for this QI: {qi_name}")
 
     qi = frappe.get_doc("Quality Inspection", qi_name)
     qty = float(sample_qty) if sample_qty else (qi.sample_size or 1)
@@ -293,11 +287,54 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
         frappe.throw("No source warehouse found for this Quality Inspection.")
 
     # ---------------------------------------------------------
-    # Handle Sample vs Reference
+    # Handle Sample Types
     # ---------------------------------------------------------
-    if type_of_sample == "Reference":
+    if type_of_sample == "Quality Testing Sample":
         # -------------------------------------------------
-        # Reference → SAME batch, NO split
+        # Quality Testing Sample → Split batch
+        # -------------------------------------------------
+        new_batch_id = f"Sample{qi.batch_no}"
+
+        existing_sample_batch = frappe.db.exists(
+            "Batch",
+            {"batch_id": new_batch_id, "item": qi.item_code}
+        )
+
+        if existing_sample_batch:
+            new_batch_name = existing_sample_batch
+            frappe.msgprint(
+                f"Reusing existing sample batch: <b>{new_batch_id}</b>"
+            )
+        else:
+            new_batch_name = split_batch_custom(
+                batch_no=qi.batch_no,
+                item_code=qi.item_code,
+                warehouse=source_wh,
+                qty=qty,
+                new_batch_id=new_batch_id
+            )
+            frappe.msgprint(
+                f"Created new sample batch: <b>{new_batch_name}</b>"
+            )
+
+        qi.db_set("custom_sample_batch", new_batch_name)
+
+        target_wh = frappe.db.get_value(
+            "Warehouse",
+            source_wh,
+            "custom_qc_warehouse"
+        )
+
+        if not target_wh:
+            frappe.throw(
+                f"No QC Warehouse (custom_qc_warehouse) set for {source_wh}"
+            )
+
+        stock_entry_type = "Sample Internal Transfer"
+
+    elif type_of_sample == "Reference Sample":
+        # -------------------------------------------------
+        # Reference Sample → Same batch, no split
         # -------------------------------------------------
         new_batch_name = qi.batch_no
 
@@ -314,44 +351,27 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
 
         stock_entry_type = "Internal Transfer for Reference"
 
-    else:
+    elif type_of_sample == "Sample Transfer to HO":
         # -------------------------------------------------
-        # Sample → Split batch
+        # Sample Transfer to HO → Same batch, no split
         # -------------------------------------------------
-        new_batch_id = f"Sample{qi.batch_no}"
-
-        existing_sample_batch = frappe.db.exists(
-            "Batch",
-            {"batch_id": new_batch_id, "item": qi.item_code}
-        )
-
-        if existing_sample_batch:
-            frappe.msgprint(
-                f"Reusing existing sample batch: <b>{new_batch_id}</b>"
-            )
-            new_batch_name = existing_sample_batch
-        else:
-            new_batch_name = split_batch_custom(
-                batch_no=qi.batch_no,
-                item_code=qi.item_code,
-                warehouse=source_wh,
-                qty=qty,
-                new_batch_id=new_batch_id
-            )
-            frappe.msgprint(
-                f"Created new sample batch: <b>{new_batch_name}</b>"
-            )
-
-        # Save sample batch in QI
-        qi.db_set("custom_sample_batch", new_batch_name)
+        new_batch_name = qi.batch_no
 
         target_wh = frappe.db.get_value(
             "Warehouse",
             source_wh,
-            "custom_qc_warehouse"
+            "custom_sample_tranfer_to_ho_warehouse"
         )
 
-        stock_entry_type = "Sample Internal Transfer"
+        if not target_wh:
+            frappe.throw(
+                f"No HO Warehouse (custom_sample_tranfer_to_ho_warehouse) set for {source_wh}"
+            )
+
+        stock_entry_type = "Sample Transfer to HO"
+
+    else:
+        frappe.throw("Invalid Type of Sample selected.")
 
     # ---------------------------------------------------------
     # Create Stock Entry

@@ -57,7 +57,7 @@ frappe.ui.form.on("Quality Inspection", {
                             label: __("Type of Sample"),
                             fieldname: "type_of_sample",
                             fieldtype: "Select",
-                            options: ["", "Sample", "Reference"].join("\n"),
+                            options: ["", "Quality Testing Sample", "Reference Sample", "Sample Transfer to HO"].join("\n"),
                             reqd: 1
                         });
                     }
@@ -150,6 +150,11 @@ frappe.ui.form.on("Quality Inspection", {
                                     let address_dialog = new frappe.ui.Dialog({
                                         title: __("External QC NRGP Details"),
                                         fields: [
+                                            {
+                                                fieldtype: "Check",
+                                                label: "FOSCOS",
+                                                fieldname: "foscos",
+                                            },
                                             {
                                                 fieldtype: "Link",
                                                 label: "Ship To Address",
