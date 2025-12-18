@@ -120,6 +120,134 @@ frappe.ui.form.on('Stock Entry', {
 
 
 
+// function open_camera_dialog(frm) {
+//     // Load jsQR (lightweight QR decoder)
+//     frappe.require("https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js", function () {
+
+//         let d = new frappe.ui.Dialog({
+//             title: "Scan QR Code",
+//             fields: [
+//                 { fieldtype: "HTML", fieldname: "camera_area" }
+//             ],
+//             primary_action_label: "Close",
+//             primary_action: function () {
+//                 stopCamera();
+//                 d.hide();
+//             }
+//         });
+
+//         d.show();
+
+//         const wrapper = d.get_field("camera_area").$wrapper;
+//         const vidId = "se-camera-" + frappe.utils.get_random(6);
+//         const canvasId = "se-canvas-" + frappe.utils.get_random(6);
+
+//         wrapper.html(`
+//             <div style="text-align:center;">
+//                 <video id="${vidId}" autoplay playsinline style="max-width:100%; height:auto; border:1px solid #ccc; border-radius:6px;"></video>
+//                 <canvas id="${canvasId}" style="display:none;"></canvas>
+//             </div>
+//             <div style="text-align:center; margin-top:8px;">
+//                 <small>Show a QR code in front of the camera to check.</small>
+//             </div>
+//         `);
+
+//         const video = wrapper.find(`#${vidId}`)[0];
+//         const canvas = wrapper.find(`#${canvasId}`)[0];
+//         const ctx = canvas.getContext("2d");
+
+//         let currentStream = null;
+//         let scanning = true;
+
+//         function stopCamera() {
+//             scanning = false;
+//             if (currentStream) {
+//                 currentStream.getTracks().forEach(t => t.stop());
+//                 currentStream = null;
+//             }
+//         }
+
+//         const modal = d.$wrapper.find('.modal');
+//         modal.on('hidden.bs.modal', () => {
+//             stopCamera();
+//         });
+
+//         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+//             frappe.msgprint("Camera API not supported in this browser.");
+//             return;
+//         }
+
+//         navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+//             .then(stream => {
+//                 currentStream = stream;
+//                 video.srcObject = stream;
+//                 video.play();
+
+//                 const tick = () => {
+//                     if (!scanning) return;
+//                     if (video.readyState === video.HAVE_ENOUGH_DATA) {
+//                         canvas.height = video.videoHeight;
+//                         canvas.width = video.videoWidth;
+//                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+//                         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+//                         const code = jsQR(imageData.data, imageData.width, imageData.height);
+//                         if (code) {
+//                             stopCamera();
+//                             d.hide();
+
+//                             // Extract batch number (handles both plain and full URLs)
+//                             let scanned_value = code.data.trim();
+//                             let batch_no = scanned_value.split("/").pop();
+
+//                             let matched = false;
+//                             let changed = false;
+
+//                             // Iterate through Stock Entry items table
+//                             (frm.doc.items || []).forEach(row => {
+//                                 if (row.batch_no && row.batch_no === batch_no) {
+//                                     if (row.custom_batch_validation !== "Matched") {
+//                                         frappe.model.set_value(row.doctype, row.name, "custom_batch_validation", "Matched");
+//                                         changed = true;
+//                                     }
+//                                     matched = true;
+//                                 }
+//                             });
+
+//                             frm.refresh_field("items");
+
+//                             if (!matched) {
+//                                 frappe.msgprint(`❌ No matching batch found for: ${batch_no}`);
+//                             } else {
+//                                 frappe.show_alert({ message: `✅ Batch ${batch_no} matched and updated!`, indicator: "green" });
+
+//                                 // Auto-save only if something changed
+//                                 if (changed) {
+//                                     frm.save()
+//                                         .then(() => {
+//                                             frappe.show_alert({ message: "💾 Stock Entry saved successfully!", indicator: "blue" });
+//                                         })
+//                                         .catch(() => {
+//                                             frappe.msgprint("⚠️ Failed to auto-save the Stock Entry.");
+//                                         });
+//                                 }
+//                             }
+//                             return;
+//                         }
+//                     }
+//                     requestAnimationFrame(tick);
+//                 };
+//                 requestAnimationFrame(tick);
+//             })
+//             .catch(err => {
+//                 frappe.msgprint("Unable to access camera: " + err.message);
+//             });
+//     });
+// }
+
+
+
+
+
 function open_camera_dialog(frm) {
     // Load jsQR (lightweight QR decoder)
     frappe.require("https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js", function () {
@@ -144,7 +272,9 @@ function open_camera_dialog(frm) {
 
         wrapper.html(`
             <div style="text-align:center;">
-                <video id="${vidId}" autoplay playsinline style="max-width:100%; height:auto; border:1px solid #ccc; border-radius:6px;"></video>
+                <video id="${vidId}" autoplay playsinline
+                    style="max-width:100%; height:auto; border:1px solid #ccc; border-radius:6px;">
+                </video>
                 <canvas id="${canvasId}" style="display:none;"></canvas>
             </div>
             <div style="text-align:center; margin-top:8px;">
@@ -185,57 +315,103 @@ function open_camera_dialog(frm) {
 
                 const tick = () => {
                     if (!scanning) return;
+
                     if (video.readyState === video.HAVE_ENOUGH_DATA) {
                         canvas.height = video.videoHeight;
                         canvas.width = video.videoWidth;
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
                         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+                        const code = jsQR(
+                            imageData.data,
+                            imageData.width,
+                            imageData.height
+                        );
+
                         if (code) {
                             stopCamera();
                             d.hide();
 
-                            // Extract batch number (handles both plain and full URLs)
+                            // ✅ Extract batch number from QR
                             let scanned_value = code.data.trim();
                             let batch_no = scanned_value.split("/").pop();
 
                             let matched = false;
                             let changed = false;
+                            let pending = 0;
 
-                            // Iterate through Stock Entry items table
                             (frm.doc.items || []).forEach(row => {
-                                if (row.batch_no && row.batch_no === batch_no) {
-                                    if (row.custom_batch_validation !== "Matched") {
-                                        frappe.model.set_value(row.doctype, row.name, "custom_batch_validation", "Matched");
-                                        changed = true;
+                                if (!row.serial_and_batch_bundle) return;
+
+                                pending++;
+
+                                frappe.model.with_doc(
+                                    "Serial and Batch Bundle",
+                                    row.serial_and_batch_bundle,
+                                    function () {
+                                        let bundle = frappe.model.get_doc(
+                                            "Serial and Batch Bundle",
+                                            row.serial_and_batch_bundle
+                                        );
+
+                                        if (bundle && bundle.entries) {
+                                            bundle.entries.forEach(entry => {
+                                                if (entry.batch_no === batch_no) {
+                                                    matched = true;
+
+                                                    if (row.custom_batch_validation !== "Matched") {
+                                                        frappe.model.set_value(
+                                                            row.doctype,
+                                                            row.name,
+                                                            "custom_batch_validation",
+                                                            "Matched"
+                                                        );
+                                                        changed = true;
+                                                    }
+                                                }
+                                            });
+                                        }
+
+                                        pending--;
+
+                                        // ✅ Decide result ONLY after all bundles checked
+                                        if (pending === 0) {
+                                            frm.refresh_field("items");
+
+                                            if (!matched) {
+                                                frappe.msgprint(
+                                                    `❌ No matching batch found for: ${batch_no}`
+                                                );
+                                            } else {
+                                                frappe.show_alert({
+                                                    message: `✅ Batch ${batch_no} matched and updated!`,
+                                                    indicator: "green"
+                                                });
+
+                                                if (changed) {
+                                                    if (frm.doc.docstatus === 0) {
+                                                        // Draft → normal save
+                                                        frm.save();
+                                                    } else if (frm.doc.docstatus === 1) {
+                                                        // Submitted → Update After Submit
+                                                        frm.save('Update');
+                                                    }
+                                                }
+
+
+                                            }
+                                        }
                                     }
-                                    matched = true;
-                                }
+                                );
                             });
 
-                            frm.refresh_field("items");
-
-                            if (!matched) {
-                                frappe.msgprint(`❌ No matching batch found for: ${batch_no}`);
-                            } else {
-                                frappe.show_alert({ message: `✅ Batch ${batch_no} matched and updated!`, indicator: "green" });
-
-                                // Auto-save only if something changed
-                                if (changed) {
-                                    frm.save()
-                                        .then(() => {
-                                            frappe.show_alert({ message: "💾 Stock Entry saved successfully!", indicator: "blue" });
-                                        })
-                                        .catch(() => {
-                                            frappe.msgprint("⚠️ Failed to auto-save the Stock Entry.");
-                                        });
-                                }
-                            }
                             return;
                         }
                     }
+
                     requestAnimationFrame(tick);
                 };
+
                 requestAnimationFrame(tick);
             })
             .catch(err => {
@@ -243,7 +419,6 @@ function open_camera_dialog(frm) {
             });
     });
 }
-
 
 
 
