@@ -57,6 +57,10 @@
   "revision_history_detail",
   "machinery_setup_dispensing_request_tab",
   "machinery_setup_dispensing_request_detail",
+  "section_break_wmwy",
+  "performed_by_setup",
+  "column_break_zsfz",
+  "select_qa",
   "line_clearance_for_primary_packing_area_tab",
   "section_break_ukay",
   "previous_product_lcppa",
@@ -71,16 +75,32 @@
   "section_break_ncjt",
   "remark",
   "signature",
-  "signature_with_date_and_time",
+  "date_and_time",
+  "section_break_vgkm",
+  "performed_by_line",
+  "column_break_jktp",
+  "select_qa_line",
   "packing_material_receiving_tab",
   "packing_material_receiving_detail",
   "packing_material",
+  "section_break_klhk",
+  "performed_by_packing",
+  "column_break_cddf",
+  "select_qa_packing",
   "rh_temp_tab",
   "frequency_rht",
   "rh_temp_detail",
+  "section_break_usnk",
+  "performed_by_rh",
+  "column_break_eezr",
+  "select_qa_rh",
   "primary_packaging_sealing_integrity_tab",
   "frequency_ppsi",
   "primary_packaging_sealing_integrity_detail",
+  "section_break_lpsa",
+  "performed_by_primary",
+  "column_break_wgma",
+  "select_qa_primary",
   "line_clearance_for_coding_machine_tab",
   "machine_id",
   "product_previous_lccm",
@@ -88,10 +108,18 @@
   "machine_cleaning_setting_done_by",
   "section_break_mitp",
   "machine_setting_check_packing_in_charge",
+  "section_break_guqt",
+  "performed_by_coding",
+  "column_break_wzgv",
+  "select_qa_coding",
   "primary_packing_defects_monitoring_tab",
   "frequency_ppdm",
   "primary_packing_defects_monitoring_detail",
   "ipqa_sign",
+  "section_break_wdbb",
+  "performed_by_defects",
+  "column_break_bgtd",
+  "select_qa_defects",
   "line_clearance_for_secondary_packing_area_tab",
   "area",
   "batch_no_lcspa",
@@ -112,11 +140,23 @@
   "signature_with_date_and_time_lcspa",
   "section_break_zwfj",
   "remarks_lcspa",
+  "section_break_ptnn",
+  "performed_by_secondary",
+  "column_break_hhqc",
+  "select_qa_secondary",
   "online_inspectionsecondary_packing_tab",
   "frequency_oi",
   "online_inspection_details",
+  "section_break_iqzu",
+  "performed_by_online",
+  "column_break_piul",
+  "select_qa_online",
   "sample_withdrawal_record_tab",
   "sample_withdrawal_record_detail",
+  "section_break_fray",
+  "performed_by_sample",
+  "column_break_yyac",
+  "select_qa_sample",
   "reconcilation_of_packing_material_tab",
   "reconcilation_of_packing_material_detail",
   "section_break_sjhf",
@@ -129,6 +169,10 @@
   "checked_by_sign_date_rpm",
   "column_break_jdch",
   "approved_by_sign_date_rpm",
+  "section_break_qrlv",
+  "performed_by_reconcile",
+  "column_break_mylw",
+  "select_qa_reconcile",
   "excess_material_returnconsumption_memo_tab",
   "excess_return_section",
   "excess_return_detail",
@@ -145,6 +189,10 @@
   "quality_in_charge",
   "column_break_itqd",
   "quality_manager",
+  "section_break_ycsb",
+  "performed_by_excess",
+  "column_break_viiu",
+  "select_qa_excess",
   "shipper_weighing_tab",
   "balance_id_no",
   "column_break_abha",
@@ -158,6 +206,10 @@
   "checked_by_sign_date",
   "column_break_ycoj",
   "verified_by_sign_date",
+  "section_break_mjuf",
+  "performed_by_shipper",
+  "column_break_wcph",
+  "select_qa_shipper",
   "finished_goods_check_list_for_shipper_record_tab",
   "finished_goods_check_list_for_shipper_record_detail",
   "remarks",
@@ -167,12 +219,20 @@
   "checked_by_sign_date_fgclsr",
   "column_break_mwis",
   "verified_by_sign_date_fgclsr",
+  "section_break_rgzn",
+  "performed_by_finished",
+  "column_break_nuea",
+  "select_qa_finished",
   "bar_weight_during_fg_inspection_tab",
   "balance_id_no_bwfgi",
   "column_break_ykkr",
   "std_weight_bwfgi",
   "section_break_vdsi",
   "bar_weight_during_fg_inspection_detail",
+  "section_break_rphu",
+  "performed_by_bar",
+  "column_break_zoef",
+  "select_qa_bar",
   "deviation_report_tab",
   "any_procedural_deviation",
   "section_break_spfe",
@@ -180,7 +240,7 @@
   "action_doneplanned",
   "done_by",
   "approval",
-  "production_qa",
+  "approval_qa",
   "section_break_rkmj",
   "reference_report_no",
   "remarks_dr",
@@ -189,7 +249,11 @@
   "column_break_vfwm",
   "checked_by_sign_date_dr",
   "column_break_ywab",
-  "verified_by_sign_date_dr"
+  "verified_by_sign_date_dr",
+  "section_break_oltb",
+  "performed_by_deviation",
+  "column_break_npsi",
+  "select_qa_deviation"
  ],
  "fields": [
   {
@@ -355,11 +419,6 @@
    "label": "Signature"
   },
   {
-   "fieldname": "signature_with_date_and_time",
-   "fieldtype": "Datetime",
-   "label": "Signature with Date and Time"
-  },
-  {
    "fieldname": "packing_material_receiving_detail",
    "fieldtype": "Table",
    "label": "Packing Material Receiving Detail",
@@ -373,8 +432,9 @@
   },
   {
    "fieldname": "frequency_rht",
-   "fieldtype": "Data",
-   "label": "Frequency"
+   "fieldtype": "Select",
+   "label": "Frequency",
+   "options": "\n1 HR\n2 HR\n3 HR\n4 HR"
   },
   {
    "fieldname": "frequency_ppsi",
@@ -771,12 +831,7 @@
   {
    "fieldname": "approval",
    "fieldtype": "Data",
-   "label": "Approval"
-  },
-  {
-   "fieldname": "production_qa",
-   "fieldtype": "Data",
-   "label": "(Production) (Q.A.)"
+   "label": "Approval (Production)"
   },
   {
    "fieldname": "section_break_rkmj",
@@ -1106,13 +1161,343 @@
    "fieldtype": "Table",
    "label": "Machinery Setup Dispensing Request Detail",
    "options": "Machinery Setup Dispensing Request Detail"
+  },
+  {
+   "fieldname": "date_and_time",
+   "fieldtype": "Datetime",
+   "label": "Date and Time"
+  },
+  {
+   "fieldname": "section_break_wmwy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_setup",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_zsfz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_vgkm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_line",
+   "fieldtype": "Link",
+   "label": "Performed by",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_jktp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_line",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_klhk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_packing",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_cddf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_packing",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_usnk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_rh",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_eezr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_rh",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_lpsa",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_primary",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_wgma",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_primary",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_guqt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_coding",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_wzgv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_coding",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_wdbb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_defects",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_bgtd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_defects",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_ptnn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_secondary",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_hhqc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_secondary",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_iqzu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_online",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_piul",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_online",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_fray",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_sample",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_yyac",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_sample",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_qrlv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_reconcile",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_mylw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_reconcile",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_ycsb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_excess",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_viiu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_excess",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_mjuf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_shipper",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_wcph",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_shipper",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_rgzn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_finished",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_nuea",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_finished",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "section_break_rphu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_bar",
+   "fieldtype": "Link",
+   "label": "Performed BY",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_zoef",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_bar",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
+  },
+  {
+   "fieldname": "approval_qa",
+   "fieldtype": "Data",
+   "label": "Approval (Q.A.)"
+  },
+  {
+   "fieldname": "section_break_oltb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "performed_by_deviation",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_npsi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "select_qa_deviation",
+   "fieldtype": "Link",
+   "label": "Select QA",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-05 17:31:09.859851",
+ "modified": "2025-12-18 12:07:19.786224",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
