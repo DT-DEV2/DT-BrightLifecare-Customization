@@ -7,25 +7,9 @@
  "engine": "InnoDB",
  "field_order": [
   "std_lot_weight",
-  "gross_weight_kg",
-  "tare_weight_kg",
   "net_weight_kg"
  ],
  "fields": [
-  {
-   "fieldname": "gross_weight_kg",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Gross Weight (Kg)"
-  },
-  {
-   "fieldname": "tare_weight_kg",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Tare Weight (Kg)"
-  },
   {
    "fieldname": "net_weight_kg",
    "fieldtype": "Float",
@@ -47,7 +31,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-27 16:59:20.838731",
+ "modified": "2025-12-18 10:44:52.607666",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Blend Output",

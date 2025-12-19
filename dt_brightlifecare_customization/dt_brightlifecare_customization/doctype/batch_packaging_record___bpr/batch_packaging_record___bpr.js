@@ -5,8 +5,8 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
     
     onload: function (frm) {
         // Disable add/delete for first table
-        frm.fields_dict["line_clearance_for_primary_packing_area_detail"].grid.cannot_add_rows = true;
-        frm.fields_dict["line_clearance_for_primary_packing_area_detail"].grid.cannot_delete_rows = true;
+        frm.fields_dict["line_clearance_for_primary_packing_area_detail"].grid.cannot_add_rows = false;
+        frm.fields_dict["line_clearance_for_primary_packing_area_detail"].grid.cannot_delete_rows = false;
         
         // Disable add/delete for second table
         frm.fields_dict["primary_packing_defects_monitoring_detail"].grid.cannot_add_rows = true;
@@ -212,4 +212,11 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
 
         }
     },
+});
+frappe.ui.form.on('Batch Packaging Record - BPR', {
+    signature(frm) {
+        if (frm.doc.signature) {
+            frm.set_value('date_and_time', frappe.datetime.now_datetime());
+        }
+    }
 });

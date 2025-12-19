@@ -249,7 +249,13 @@ def _get_source_for_external_nrgp(qi):
 def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
     """
     Collect Sample → Split batch → Create Sample / Reference / HO Internal Transfer
+
+    Rule:
+    - If reference is Stock Entry → use type_of_sample
+    - Else → always behave like Quality Testing Sample
     """
+
+    from frappe.utils import flt
 
     qi = frappe.get_doc("Quality Inspection", qi_name)
     qty = float(sample_qty) if sample_qty else (qi.sample_size or 1)
@@ -262,6 +268,8 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
         frappe.throw("Missing reference document in Quality Inspection.")
 
     ref_doc = frappe.get_doc(ref_type, ref_name)
+
+    # Qty validation (same for all refs)
     ref_qty = sum(
         flt(i.qty)
         for i in getattr(ref_doc, "items", [])
@@ -269,7 +277,9 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
     )
 
     if not ref_qty:
-        frappe.throw(f"No qty found in reference document {qi.reference_name}")
+        frappe.throw(
+            f"No qty found for item {qi.item_code} in reference document {ref_name}"
+        )
 
     if qty > ref_qty:
         frappe.throw(
@@ -277,7 +287,7 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
         )
 
     # ---------------------------------------------------------
-    # Batch & warehouse validation
+    # Batch & Source Warehouse
     # ---------------------------------------------------------
     if not qi.batch_no:
         frappe.throw("No batch number found in Quality Inspection.")
@@ -287,11 +297,18 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
         frappe.throw("No source warehouse found for this Quality Inspection.")
 
     # ---------------------------------------------------------
+    # FORCE LOGIC FOR NON–STOCK ENTRY REFERENCES
+    # ---------------------------------------------------------
+    if ref_type != "Stock Entry":
+        # Always behave like Quality Testing Sample
+        type_of_sample = "Quality Testing Sample"
+
+    # ---------------------------------------------------------
     # Handle Sample Types
     # ---------------------------------------------------------
     if type_of_sample == "Quality Testing Sample":
         # -------------------------------------------------
-        # Quality Testing Sample → Split batch
+        # Split batch
         # -------------------------------------------------
         new_batch_id = f"Sample{qi.batch_no}"
 
@@ -334,7 +351,7 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
 
     elif type_of_sample == "Reference Sample":
         # -------------------------------------------------
-        # Reference Sample → Same batch, no split
+        # Same batch, Reference Warehouse
         # -------------------------------------------------
         new_batch_name = qi.batch_no
 
@@ -346,14 +363,14 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
 
         if not target_wh:
             frappe.throw(
-                f"No Reference Warehouse (custom_reference_warehouse) set for {source_wh}"
+                f"No Reference Warehouse set for {source_wh}"
             )
 
         stock_entry_type = "Internal Transfer for Reference"
 
     elif type_of_sample == "Sample Transfer to HO":
         # -------------------------------------------------
-        # Sample Transfer to HO → Same batch, no split
+        # Same batch, HO Warehouse
         # -------------------------------------------------
         new_batch_name = qi.batch_no
 
@@ -365,13 +382,13 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
 
         if not target_wh:
             frappe.throw(
-                f"No HO Warehouse (custom_sample_tranfer_to_ho_warehouse) set for {source_wh}"
+                f"No HO Warehouse set for {source_wh}"
             )
 
         stock_entry_type = "Sample Transfer to HO"
 
     else:
-        frappe.throw("Invalid Type of Sample selected.")
+        frappe.throw("Invalid sample flow configuration.")
 
     # ---------------------------------------------------------
     # Create Stock Entry
@@ -390,6 +407,7 @@ def make_internal_transfer(qi_name, sample_qty=None, type_of_sample=None):
     _sync_sample_status(qi.name)
 
     return {"stock_entry": se_name}
+
 
 
 
