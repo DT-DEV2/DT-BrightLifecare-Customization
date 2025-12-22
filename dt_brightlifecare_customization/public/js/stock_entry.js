@@ -332,81 +332,40 @@ function open_camera_dialog(frm) {
                             stopCamera();
                             d.hide();
 
-                            // ✅ Extract batch number from QR
                             let scanned_value = code.data.trim();
                             let batch_no = scanned_value.split("/").pop();
 
-                            let matched = false;
-                            let changed = false;
-                            let pending = 0;
+                            frappe.call({
+                                method: "dt_brightlifecare_customization.public.py.stock_entry.validate_scanned_batch_submitted",
+                                args: {
+                                    doctype: frm.doctype,
+                                    docname: frm.doc.name,
+                                    batch_no: batch_no
+                                },
+                                callback: function (r) {
+                                    if (!r.message) return;
 
-                            (frm.doc.items || []).forEach(row => {
-                                if (!row.serial_and_batch_bundle) return;
+                                    frm.refresh_field("items");
 
-                                pending++;
-
-                                frappe.model.with_doc(
-                                    "Serial and Batch Bundle",
-                                    row.serial_and_batch_bundle,
-                                    function () {
-                                        let bundle = frappe.model.get_doc(
-                                            "Serial and Batch Bundle",
-                                            row.serial_and_batch_bundle
+                                    if (r.message.status === "not_found") {
+                                        frappe.msgprint(
+                                            `❌ No matching batch found for: ${batch_no}`
                                         );
-
-                                        if (bundle && bundle.entries) {
-                                            bundle.entries.forEach(entry => {
-                                                if (entry.batch_no === batch_no) {
-                                                    matched = true;
-
-                                                    if (row.custom_batch_validation !== "Matched") {
-                                                        frappe.model.set_value(
-                                                            row.doctype,
-                                                            row.name,
-                                                            "custom_batch_validation",
-                                                            "Matched"
-                                                        );
-                                                        changed = true;
-                                                    }
-                                                }
-                                            });
-                                        }
-
-                                        pending--;
-
-                                        // ✅ Decide result ONLY after all bundles checked
-                                        if (pending === 0) {
-                                            frm.refresh_field("items");
-
-                                            if (!matched) {
-                                                frappe.msgprint(
-                                                    `❌ No matching batch found for: ${batch_no}`
-                                                );
-                                            } else {
-                                                frappe.show_alert({
-                                                    message: `✅ Batch ${batch_no} matched and updated!`,
-                                                    indicator: "green"
-                                                });
-
-                                                if (changed) {
-                                                    if (frm.doc.docstatus === 0) {
-                                                        // Draft → normal save
-                                                        frm.save();
-                                                    } else if (frm.doc.docstatus === 1) {
-                                                        // Submitted → Update After Submit
-                                                        frm.save('Update');
-                                                    }
-                                                }
-
-
-                                            }
-                                        }
                                     }
-                                );
+
+                                    if (r.message.status === "matched") {
+                                        frappe.msgprint({
+                                            title: __('Batch Updated'),
+                                            message: `✅ Batch ${batch_no} matched and updated!`,
+                                            indicator: "green"
+                                        });
+                                    }
+                                }
                             });
 
                             return;
                         }
+
                     }
 
                     requestAnimationFrame(tick);
