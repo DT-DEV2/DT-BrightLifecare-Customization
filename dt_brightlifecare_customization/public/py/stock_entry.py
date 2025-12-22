@@ -428,3 +428,56 @@ def consumed_qty_calculation_in_wo(doc, method):
             })
 
     wo.save()
+
+
+
+
+
+
+
+import frappe
+
+@frappe.whitelist()
+def validate_scanned_batch_submitted(docname, doctype, batch_no):
+    doc = frappe.get_doc(doctype, docname)
+
+    if doc.docstatus != 1:
+        frappe.throw("This function is only for Submitted documents")
+
+    matched = False
+    changed = False
+
+    for row in doc.items:
+        if not row.serial_and_batch_bundle:
+            continue
+
+        bundle = frappe.get_doc(
+            "Serial and Batch Bundle",
+            row.serial_and_batch_bundle
+        )
+
+        for entry in bundle.entries:
+            if entry.batch_no == batch_no:
+                matched = True
+
+                if row.custom_batch_validation != "Matched":
+                    row.custom_batch_validation = "Matched"
+                    changed = True
+                break
+
+    if not matched:
+        return {
+            "status": "not_found",
+            "batch_no": batch_no
+        }
+
+    if changed:
+        # ✅ Update After Submit (CORRECT way)
+        doc.flags.ignore_validate_update_after_submit = True
+        doc.save(ignore_permissions=True)
+
+    return {
+        "status": "matched",
+        "batch_no": batch_no,
+        "changed": changed
+    }
