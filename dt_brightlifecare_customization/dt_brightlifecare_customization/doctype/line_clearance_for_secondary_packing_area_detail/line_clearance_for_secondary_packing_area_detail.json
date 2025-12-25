@@ -7,8 +7,8 @@
  "engine": "InnoDB",
  "field_order": [
   "check_point",
-  "observation_by_packing_supervisor",
-  "observation_by_quality_in_charge"
+  "packing_supervisor",
+  "quality_in_charge"
  ],
  "fields": [
   {
@@ -19,23 +19,23 @@
    "read_only": 1
   },
   {
-   "fieldname": "observation_by_packing_supervisor",
+   "fieldname": "packing_supervisor",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Observation by Packing Supervisor"
+   "label": "Packing Supervisor"
   },
   {
-   "fieldname": "observation_by_quality_in_charge",
+   "fieldname": "quality_in_charge",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Observation by Quality In-Charge"
+   "label": "Quality In-Charge"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-09 12:39:06.578683",
+ "modified": "2025-12-25 15:49:23.053733",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Line Clearance for Secondary Packing Area Detail",

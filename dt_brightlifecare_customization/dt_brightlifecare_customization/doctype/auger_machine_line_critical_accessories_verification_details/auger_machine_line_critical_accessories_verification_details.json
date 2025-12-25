@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-12-25 15:54:03.037291",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "auger_machine_line_parts",
+  "no_of_nutsbolts",
+  "status",
+  "done_by_engg",
+  "checked_by_prod",
+  "verified_by_ipqa"
+ ],
+ "fields": [
+  {
+   "fieldname": "auger_machine_line_parts",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Auger Machine Line Parts"
+  },
+  {
+   "fieldname": "no_of_nutsbolts",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "No. of Nuts/Bolts"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "\nOk\nNot Ok"
+  },
+  {
+   "fieldname": "done_by_engg",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Done By (Engg.)"
+  },
+  {
+   "fieldname": "checked_by_prod",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Checked By (Prod.)"
+  },
+  {
+   "fieldname": "verified_by_ipqa",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Verified By (IPQA)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-12-25 15:57:29.361627",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Auger Machine Line Critical Accessories Verification Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
