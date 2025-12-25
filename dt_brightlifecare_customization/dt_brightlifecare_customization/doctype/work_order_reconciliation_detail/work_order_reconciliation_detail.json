@@ -1,0 +1,97 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-12-25 16:23:20.494106",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "from_production",
+  "packed",
+  "actual_packing_yield",
+  "dispatched",
+  "total_barcodes_tagged",
+  "barcodes_file",
+  "unit_weight_variation_report",
+  "weighing_record",
+  "collected",
+  "requested_to_ho"
+ ],
+ "fields": [
+  {
+   "fieldname": "from_production",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "From Production"
+  },
+  {
+   "fieldname": "packed",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Packed"
+  },
+  {
+   "fieldname": "actual_packing_yield",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Actual Packing Yield"
+  },
+  {
+   "fieldname": "dispatched",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Dispatched"
+  },
+  {
+   "fieldname": "total_barcodes_tagged",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total Barcodes Tagged"
+  },
+  {
+   "fieldname": "barcodes_file",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "Barcodes File"
+  },
+  {
+   "fieldname": "unit_weight_variation_report",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "Unit Weight Variation Report"
+  },
+  {
+   "fieldname": "weighing_record",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "Weighing Record"
+  },
+  {
+   "fieldname": "collected",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Collected"
+  },
+  {
+   "fieldname": "requested_to_ho",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Requested to HO"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-12-25 16:33:22.964334",
+ "modified_by": "Administrator",
+ "module": "DT-BrightLifecare-Customization",
+ "name": "Work Order Reconciliation Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

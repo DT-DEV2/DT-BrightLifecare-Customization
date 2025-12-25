@@ -94,13 +94,6 @@
   "performed_by_rh",
   "column_break_eezr",
   "select_qa_rh",
-  "primary_packaging_sealing_integrity_tab",
-  "frequency_ppsi",
-  "primary_packaging_sealing_integrity_detail",
-  "section_break_lpsa",
-  "performed_by_primary",
-  "column_break_wgma",
-  "select_qa_primary",
   "line_clearance_for_coding_machine_tab",
   "machine_id",
   "product_previous_lccm",
@@ -112,6 +105,13 @@
   "performed_by_coding",
   "column_break_wzgv",
   "select_qa_coding",
+  "primary_packaging_sealing_integrity_tab",
+  "frequency_ppsi",
+  "primary_packaging_sealing_integrity_detail",
+  "section_break_lpsa",
+  "performed_by_primary",
+  "column_break_wgma",
+  "select_qa_primary",
   "primary_packing_defects_monitoring_tab",
   "frequency_ppdm",
   "primary_packing_defects_monitoring_detail",
@@ -187,8 +187,6 @@
   "material_issued_by",
   "column_break_ctqz",
   "quality_in_charge",
-  "column_break_itqd",
-  "quality_manager",
   "section_break_ycsb",
   "performed_by_excess",
   "column_break_viiu",
@@ -225,8 +223,11 @@
   "select_qa_finished",
   "bar_weight_during_fg_inspection_tab",
   "balance_id_no_bwfgi",
+  "resource_on_scoop_duty",
+  "resource_on_secondary_packaging_inspection_duty",
   "column_break_ykkr",
   "std_weight_bwfgi",
+  "resource_on_primary_packaging_inspection_duty",
   "section_break_vdsi",
   "bar_weight_during_fg_inspection_detail",
   "section_break_rphu",
@@ -253,7 +254,11 @@
   "section_break_oltb",
   "performed_by_deviation",
   "column_break_npsi",
-  "select_qa_deviation"
+  "select_qa_deviation",
+  "auger_machine_line_critical_accessories_verification_tab",
+  "auger_machine_line_critical_accessories_verification_details",
+  "work_order_reconciliation_tab",
+  "work_order_reconciliation_detail"
  ],
  "fields": [
   {
@@ -387,22 +392,22 @@
   {
    "fieldname": "area_cleaned_by",
    "fieldtype": "Data",
-   "label": "Area Cleaned By"
+   "label": "Previous Area Cleaned By"
   },
   {
    "fieldname": "area_cleaned_date",
    "fieldtype": "Date",
-   "label": "Area Cleaned Date"
+   "label": "Previous Area Cleaned Date"
   },
   {
    "fieldname": "cleanliness_checked_by",
    "fieldtype": "Data",
-   "label": "Cleanliness Checked By"
+   "label": "Previous Cleanliness Checked By"
   },
   {
    "fieldname": "cleanliness_checked_date",
    "fieldtype": "Date",
-   "label": "Cleanliness Checked Date"
+   "label": "Previous Cleanliness Checked Date"
   },
   {
    "fieldname": "section_break_ncjt",
@@ -454,7 +459,7 @@
   {
    "fieldname": "batch_no_lcppa",
    "fieldtype": "Link",
-   "label": "Batch No",
+   "label": "Previous Batch No",
    "options": "Batch"
   },
   {
@@ -523,7 +528,7 @@
   {
    "fieldname": "area",
    "fieldtype": "Data",
-   "label": "Area"
+   "label": "Previous Area"
   },
   {
    "fieldname": "column_break_zngp",
@@ -538,28 +543,28 @@
   {
    "fieldname": "batch_no_lcspa",
    "fieldtype": "Link",
-   "label": "Batch No",
+   "label": "Previous Batch No",
    "options": "Batch"
   },
   {
    "fieldname": "area_cleaned_by_lcspa",
    "fieldtype": "Data",
-   "label": "Area Cleaned By"
+   "label": "Previous Area Cleaned By"
   },
   {
    "fieldname": "area_cleaned_date_lcspa",
    "fieldtype": "Date",
-   "label": "Area Cleaned Date"
+   "label": "Previous Area Cleaned Date"
   },
   {
    "fieldname": "cleanliness_checked_by_lcspa",
    "fieldtype": "Data",
-   "label": "Cleanliness Checked By"
+   "label": "Previous Cleanliness Checked By"
   },
   {
    "fieldname": "cleanliness_checked_date_lcspa",
    "fieldtype": "Date",
-   "label": "Cleanliness Checked Date"
+   "label": "Previous Cleanliness Checked Date"
   },
   {
    "fieldname": "section_break_nwyd",
@@ -572,12 +577,12 @@
   {
    "fieldname": "status_updated_by_lcspa",
    "fieldtype": "Data",
-   "label": "Status Updated By"
+   "label": "Previous Status Updated By"
   },
   {
    "fieldname": "status_updated_date_lcspa",
    "fieldtype": "Date",
-   "label": "Status Updated Date"
+   "label": "Previous Status Updated Date"
   },
   {
    "fieldname": "online_inspectionsecondary_packing_tab",
@@ -674,11 +679,6 @@
    "fieldname": "quality_in_charge",
    "fieldtype": "Data",
    "label": "Quality In-charge"
-  },
-  {
-   "fieldname": "quality_manager",
-   "fieldtype": "Data",
-   "label": "Quality Manager"
   },
   {
    "fieldname": "shipper_weighing_tab",
@@ -1093,10 +1093,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "column_break_itqd",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "column_break_fwty",
    "fieldtype": "Column Break"
   },
@@ -1491,13 +1487,50 @@
    "fieldtype": "Link",
    "label": "Select QA",
    "options": "User"
+  },
+  {
+   "fieldname": "auger_machine_line_critical_accessories_verification_details",
+   "fieldtype": "Table",
+   "label": "Auger Machine Line Critical Accessories Verification Details",
+   "options": "Auger Machine Line Critical Accessories Verification Details"
+  },
+  {
+   "fieldname": "auger_machine_line_critical_accessories_verification_tab",
+   "fieldtype": "Tab Break",
+   "label": "Auger Machine Line Critical Accessories Verification"
+  },
+  {
+   "fieldname": "work_order_reconciliation_tab",
+   "fieldtype": "Tab Break",
+   "label": "Work Order Reconciliation"
+  },
+  {
+   "fieldname": "work_order_reconciliation_detail",
+   "fieldtype": "Table",
+   "label": "Work Order Reconciliation Detail",
+   "options": "Work Order Reconciliation Detail"
+  },
+  {
+   "fieldname": "resource_on_scoop_duty",
+   "fieldtype": "Data",
+   "label": "Resource on Scoop Duty"
+  },
+  {
+   "fieldname": "resource_on_secondary_packaging_inspection_duty",
+   "fieldtype": "Data",
+   "label": "Resource on Secondary Packaging Inspection Duty"
+  },
+  {
+   "fieldname": "resource_on_primary_packaging_inspection_duty",
+   "fieldtype": "Data",
+   "label": "Resource on Primary Packaging Inspection Duty"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-18 12:07:19.786224",
+ "modified": "2025-12-25 16:56:43.861892",
  "modified_by": "Administrator",
  "module": "DT-BrightLifecare-Customization",
  "name": "Batch Packaging Record - BPR",
