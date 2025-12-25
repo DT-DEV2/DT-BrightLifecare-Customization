@@ -869,3 +869,78 @@ def get_external_qc_stock_entries(qi_name):
         },
         fields=["name", "stock_entry_type"]
     )
+
+import frappe
+import json
+
+
+@frappe.whitelist()
+@frappe.validate_and_sanitize_search_inputs
+def get_sample_batch_warehouses(
+    doctype,
+    txt,
+    searchfield,
+    start,
+    page_len,
+    filters=None
+):
+    if filters and isinstance(filters, str):
+        filters = json.loads(filters)
+
+    qi_name = filters.get("qi_name") if filters else None
+    if not qi_name:
+        return []
+
+    qi = frappe.get_doc("Quality Inspection", qi_name)
+
+    if not qi.custom_sample_batch or not qi.item_code:
+        return []
+
+    txt = f"%{txt}%" if txt else "%"
+
+    warehouses = frappe.db.sql(
+    """
+    SELECT
+        wh.warehouse
+    FROM (
+        SELECT
+            COALESCE(sbb.warehouse, sle.warehouse) AS warehouse,
+            SUM(sle.actual_qty) AS balance_qty
+        FROM `tabStock Ledger Entry` sle
+
+        /* Join Serial and Batch Bundle */
+        LEFT JOIN `tabSerial and Batch Bundle` sbb
+            ON sbb.name = sle.serial_and_batch_bundle
+            AND sbb.is_cancelled = 0
+
+        /* Join bundle child table to confirm batch */
+        LEFT JOIN `tabSerial and Batch Entry` sbbi
+            ON sbbi.parent = sbb.name
+            AND sbbi.batch_no = %(batch_no)s
+
+        WHERE sle.is_cancelled = 0
+          AND sle.item_code = %(item_code)s
+          AND (
+                sle.batch_no = %(batch_no)s
+                OR sbbi.batch_no IS NOT NULL
+              )
+
+        GROUP BY COALESCE(sbb.warehouse, sle.warehouse)
+    ) wh
+    WHERE wh.balance_qty != 0
+      AND wh.warehouse IS NOT NULL
+      AND wh.warehouse LIKE %(txt)s
+
+    ORDER BY wh.warehouse
+    LIMIT %(start)s, %(page_len)s
+    """,
+    {
+        "batch_no": qi.custom_sample_batch,
+        "item_code": qi.item_code,
+        "txt": txt,
+        "start": start,
+        "page_len": page_len,
+    },
+)
+
+    return warehouses
