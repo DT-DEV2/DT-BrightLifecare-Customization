@@ -112,38 +112,37 @@ frappe.ui.form.on("Quality Inspection", {
         if (frm.doc.docstatus === 0 && frm.doc.custom_sample_status === "Sample Collected") {
             frm.add_custom_button(__("NRGP"), () => {
 
-                // Step 1 → Choose NRGP Type
+        // STEP 1 → Choose NRGP Type
                 let step1 = new frappe.ui.Dialog({
                     title: __("Choose NRGP Type"),
                     fields: [
-                        { 
-                            fieldtype: "Select", 
-                            label: "NRGP Type", 
-                            fieldname: "nrgp_type", 
-                            options: ["Internal", "External"], 
-                            reqd: 1 
+                        {
+                            fieldtype: "Select",
+                            label: "NRGP Type",
+                            fieldname: "nrgp_type",
+                            options: ["Internal", "External"],
+                            reqd: 1
                         }
                     ],
                     primary_action_label: __("Next"),
                     primary_action(values) {
                         step1.hide();
 
-                        // ------------------- External NRGP -------------------
+                        // ================= EXTERNAL NRGP =================
                         if (values.nrgp_type === "External") {
                             let readings_data = [];
 
-                            // Fetch readings first
                             frappe.call({
                                 method: "frappe.client.get",
                                 args: {
                                     doctype: "Quality Inspection",
                                     name: frm.doc.name
                                 },
-                                callback: function (res) {
+                                callback(res) {
                                     if (res.message && res.message.readings) {
                                         readings_data = res.message.readings.map(r => ({
                                             parameter: r.specification || r.parameter || "",
-                                            test_cost: 0.0
+                                            test_cost: 0
                                         }));
                                     }
 
@@ -153,7 +152,28 @@ frappe.ui.form.on("Quality Inspection", {
                                             {
                                                 fieldtype: "Check",
                                                 label: "FOSCOS",
-                                                fieldname: "foscos",
+                                                fieldname: "foscos"
+                                            },
+                                            {
+                                                fieldtype: "Link",
+                                                label: "Source Warehouse",
+                                                fieldname: "source_warehouse",
+                                                options: "Warehouse",
+                                                reqd: 1,
+                                                get_query: function() {
+                                                    // Make sure frm.doc.name exists and is the current QI name
+                                                    if (!cur_frm || !cur_frm.doc || !cur_frm.doc.name) {
+                                                        console.error("No current form or document found");
+                                                        return;
+                                                    }
+                                                    
+                                                    return {
+                                                        query: "dt_brightlifecare_customization.public.py.quality_inspection.get_sample_batch_warehouses",
+                                                        filters: {
+                                                            qi_name: cur_frm.doc.name
+                                                        }
+                                                    };
+                                                }
                                             },
                                             {
                                                 fieldtype: "Link",
@@ -194,9 +214,13 @@ frappe.ui.form.on("Quality Inspection", {
                                                 ]
                                             }
                                         ],
+
+                                        // ---- DRAFT ----
                                         primary_action_label: __("Add Transporter Details"),
                                         primary_action(values) {
-                                            const selected_rows = address_dialog.fields_dict.parameters_table.grid.get_selected_children();
+                                            const selected_rows =
+                                                address_dialog.fields_dict.parameters_table.grid.get_selected_children();
+
                                             const parameters = (selected_rows || []).map(r => ({
                                                 parameter: r.parameter,
                                                 total_cost: r.test_cost || 0
@@ -206,6 +230,7 @@ frappe.ui.form.on("Quality Inspection", {
                                                 method: "dt_brightlifecare_customization.public.py.quality_inspection.make_external_nrgp",
                                                 args: {
                                                     qi_name: frm.doc.name,
+                                                    source_warehouse: values.source_warehouse,
                                                     ship_to_address: values.ship_to_address,
                                                     custom_qty: values.custom_qty,
                                                     draft: true,
@@ -213,20 +238,27 @@ frappe.ui.form.on("Quality Inspection", {
                                                 },
                                                 callback(r) {
                                                     frm.reload_doc();
-                                                    if (r.message && r.message.stock_entry) {
+                                                    if (r.message?.stock_entry) {
                                                         frappe.msgprint({
-                                                            message: __('External QC NRGP created in Draft: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
-                                                            indicator: 'green'
+                                                            message: __(
+                                                                'External QC NRGP created in Draft: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>',
+                                                                [r.message.stock_entry]
+                                                            ),
+                                                            indicator: "green"
                                                         });
                                                     }
                                                 }
                                             });
                                             address_dialog.hide();
                                         },
+
+                                        // ---- SUBMIT ----
                                         secondary_action_label: __("Submit"),
                                         secondary_action() {
                                             const vals = address_dialog.get_values();
-                                            const selected_rows = address_dialog.fields_dict.parameters_table.grid.get_selected_children();
+                                            const selected_rows =
+                                                address_dialog.fields_dict.parameters_table.grid.get_selected_children();
+
                                             const parameters = (selected_rows || []).map(r => ({
                                                 parameter: r.parameter,
                                                 total_cost: r.test_cost || 0
@@ -236,6 +268,7 @@ frappe.ui.form.on("Quality Inspection", {
                                                 method: "dt_brightlifecare_customization.public.py.quality_inspection.make_external_nrgp",
                                                 args: {
                                                     qi_name: frm.doc.name,
+                                                    source_warehouse: vals.source_warehouse,
                                                     ship_to_address: vals.ship_to_address,
                                                     custom_qty: vals.custom_qty,
                                                     draft: false,
@@ -243,10 +276,13 @@ frappe.ui.form.on("Quality Inspection", {
                                                 },
                                                 callback(r) {
                                                     frm.reload_doc();
-                                                    if (r.message && r.message.stock_entry) {
+                                                    if (r.message?.stock_entry) {
                                                         frappe.msgprint({
-                                                            message: __('External QC NRGP created & Submitted: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>', [r.message.stock_entry]),
-                                                            indicator: 'green'
+                                                            message: __(
+                                                                'External QC NRGP created & Submitted: <a href="/app/stock-entry/{0}" target="_blank">{0}</a>',
+                                                                [r.message.stock_entry]
+                                                            ),
+                                                            indicator: "green"
                                                         });
                                                     }
                                                 }
@@ -255,7 +291,7 @@ frappe.ui.form.on("Quality Inspection", {
                                         }
                                     });
 
-                                    // Add Back button
+                                    // BACK BUTTON
                                     $(`<button class="btn btn-default">${__("Back")}</button>`)
                                         .prependTo(address_dialog.$wrapper.find(".modal-footer"))
                                         .on("click", () => {
@@ -263,23 +299,22 @@ frappe.ui.form.on("Quality Inspection", {
                                             step1.show();
                                         });
 
-                                    // Populate Parameters Table
+                                    // LOAD PARAMETERS
                                     address_dialog.fields_dict.parameters_table.df.data = readings_data;
                                     address_dialog.fields_dict.parameters_table.refresh();
 
-                                    address_dialog.show();
-
-                                    // ✅ Disable delete (trash) button and prevent deletion
+                                    // LOCK ROW DELETE
                                     let grid = address_dialog.fields_dict.parameters_table.grid;
                                     grid.cannot_delete_rows = true;
-                                    grid.wrapper.find('.grid-remove-rows').hide();
+                                    grid.wrapper.find(".grid-remove-rows").hide();
+
+                                    address_dialog.show();
                                 }
                             });
-                        // }
 
-                        // ------------------- Internal NRGP -------------------
+                        // ================= INTERNAL NRGP (UNCHANGED) =================
                         } else {
-                            let readings_data = [];
+                             let readings_data = [];
 
                             // Fetch readings data first
                             frappe.call({
