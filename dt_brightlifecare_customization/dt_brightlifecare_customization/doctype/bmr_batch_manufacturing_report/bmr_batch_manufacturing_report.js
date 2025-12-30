@@ -102,4 +102,27 @@ frappe.ui.form.on("BMR-Batch Manufacturing Report", {
     }
 });
 
+frappe.ui.form.on('BMR-Batch Manufacturing Report', {
+    check_rinse_test_of_equipment_is_done_qc_report_available(frm) {
+        const value = frm.doc.check_rinse_test_of_equipment_is_done_qc_report_available;
+
+        if (!value) return;
+
+        const fields_to_update = [
+            'check_general_cleanliness_and_housekeeping_of_the_area',
+            'check_any_person_exposed_to_the_product',
+            'check_cleaning_of_duct_filter_equipment',
+            'check_testing_equipment_such_as_wet_and_dry',
+            'check_weighing_balance_verified_recorded',
+            'check_all_tools_are_properly_clean_in_good_condition',
+            'check_no_leakage_in_sifter',
+            'check_adequate_light_in_area',
+            'check_the_waste_bins_are_empty_and_labeled_properly'
+        ];
+
+        fields_to_update.forEach(fieldname => {
+            frm.set_value(fieldname, value);
+        });
+    }
+});
 
