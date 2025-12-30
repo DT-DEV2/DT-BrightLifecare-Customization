@@ -210,6 +210,36 @@ frappe.ui.form.on("Batch Packaging Record - BPR", {
                 }
             });
 
+            frappe.call({
+                method: "frappe.client.get_list",
+                args: {
+                    doctype: "Auger Machine Line Critical Accessories Verification Template",
+                    filters: { is_default: 1 },
+                    fields: ["name"],
+                    limit_page_length: 1
+                },
+                callback: function (r) {
+                    if (r.message && r.message.length > 0) {
+                        const default_template = r.message[0].name;
+                        frappe.call({
+                            method: "frappe.client.get",
+                            args: { doctype: "Auger Machine Line Critical Accessories Verification Template", name: default_template },
+                            callback: function (res) {
+                                if (res.message) {
+                                    frm.clear_table("auger_machine_line_critical_accessories_verification_details");
+                                    (res.message.detail || []).forEach(detail => {
+                                        let row = frm.add_child("auger_machine_line_critical_accessories_verification_details");
+                                        row.auger_machine_line_parts = detail.auger_machine_line_parts;
+                                        row.no_of_nutsbolts = detail.no_of_nutsbolts;
+                                    });
+                                    frm.refresh_field("auger_machine_line_critical_accessories_verification_details");
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
         }
     },
 });
