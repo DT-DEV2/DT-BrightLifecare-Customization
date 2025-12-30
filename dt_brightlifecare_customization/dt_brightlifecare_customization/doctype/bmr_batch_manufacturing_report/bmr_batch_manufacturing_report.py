@@ -163,7 +163,36 @@ class BMRBatchManufacturingReport(Document):
                 "custom_area_used"
             )
             self.area_used = area_used or 0.00
+        
+        if not self.created_by_line_clearance:
+            self.created_by_line_clearance = self.owner
 
+        if not self.created_by_bill_of_material:
+            self.created_by_bill_of_material = self.owner
+
+        if not self.created_by_rm:
+            self.created_by_rm = self.owner
+
+        if not self.created_by_powder:
+            self.created_by_powder = self.owner
+
+        if not self.created_by_sieve:
+            self.created_by_sieve = self.owner
+        
+        if not self.created_by_manufacture:
+            self.created_by_manufacture = self.owner
+        
+        if not self.created_by_blend:
+            self.created_by_blend = self.owner
+        
+        if not self.created_by_label:
+            self.created_by_label = self.owner
+        
+        if not self.created_by_enclosure:
+            self.created_by_enclosure = self.owner
+        
+        if not self.created_by_reconcile:
+            self.created_by_reconcile = self.owner
     def before_save(self):
         # 1️⃣ Fetch item_batch_size from Work Order
         if self.reference_name:

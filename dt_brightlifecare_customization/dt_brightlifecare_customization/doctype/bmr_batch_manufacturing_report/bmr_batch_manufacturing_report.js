@@ -103,12 +103,13 @@ frappe.ui.form.on("BMR-Batch Manufacturing Report", {
 });
 
 frappe.ui.form.on('BMR-Batch Manufacturing Report', {
-    check_rinse_test_of_equipment_is_done_qc_report_available(frm) {
-        const value = frm.doc.check_rinse_test_of_equipment_is_done_qc_report_available;
+    select(frm) {
+        if (frm.doc.select === undefined || frm.doc.select === null) return;
 
-        if (!value) return;
+        const value = frm.doc.select;
 
         const fields_to_update = [
+            'check_rinse_test_of_equipment_is_done_qc_report_available',
             'check_general_cleanliness_and_housekeeping_of_the_area',
             'check_any_person_exposed_to_the_product',
             'check_cleaning_of_duct_filter_equipment',
@@ -121,8 +122,10 @@ frappe.ui.form.on('BMR-Batch Manufacturing Report', {
         ];
 
         fields_to_update.forEach(fieldname => {
-            frm.set_value(fieldname, value);
+            frm.doc[fieldname] = value;   // force set
         });
+
+        frm.refresh_fields(fields_to_update); // force UI refresh
     }
 });
 
